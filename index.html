@@ -9,23 +9,27 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;550;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- 1. Updated Spline Viewer library -->
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.15.0/build/spline-viewer.js"></script>
+    <!-- 1. REMOVED Spline Viewer -->
+    
+    <!-- 2. ADDED Three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
         :root {
-            --primary-blue: #22d3ee; /* Tailwind cyan-400 */
-            --dark-bg-start: #0f172a; /* slate-900 */
-            --dark-bg-mid: #1e3a8a;  /* blue-900 */
-            --dark-bg-end: #3b0764;  /* purple-900 */
+            /* ... existing variables ... */
+            --primary-blue: #22d3ee;
+            --dark-bg-start: #0f172a;
+            --dark-bg-mid: #1e3a8a;
+            --dark-bg-end: #3b0764;
             --accent-silver: rgba(229, 231, 235, 0.2);
         }
 
         body {
+            /* ... existing body styles ... */
             font-family: 'Poppins', sans-serif;
             background-color: var(--dark-bg-start);
             background-image: linear-gradient(
@@ -39,9 +43,13 @@
             animation: gradientBG 25s ease infinite;
             color: #e2e8f0;
             line-height: 1.7;
+            /* 1. Add CSS variables for mouse position */
+            --mouse-x: 50%;
+            --mouse-y: 50%;
         }
 
         @keyframes gradientBG {
+            /* ... existing keyframes ... */
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -51,24 +59,52 @@
             scroll-behavior: smooth;
         }
 
+        /* 2. Re-styled the circuit background for the "Tron" effect */
         #circuit-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 1; /* Sits just behind content */
+            z-index: 1;
             pointer-events: none;
-            overflow: hidden; /* Hide particles that move off-screen */
+            /* A CSS-only generated circuit pattern */
+            background-image: 
+                linear-gradient(rgba(34, 211, 238, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 211, 238, 0.15) 1px, transparent 1px),
+                linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px);
+            background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+            background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+            
+            /* 3. This is the "spotlight" mask */
+            /* mask-image: radial-gradient(
+                circle 400px at var(--mouse-x) var(--mouse-y), 
+                white 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 70%
+            );
+            mask-repeat: no-repeat; */
+            /* New: Make the tracks move with the mouse */
+            background-position: 
+                var(--mouse-x-bg, -1px) var(--mouse-y-bg, -1px), 
+                var(--mouse-x-bg, -1px) var(--mouse-y-bg, -1px), 
+                var(--mouse-x-bg, -1px) var(--mouse-y-bg, -1px), 
+                var(--mouse-x-bg, -1px) var(--mouse-y-bg, -1px);
+            transition: background-position 0.2s ease-out;
+            will-change: background-position;
+            opacity: 0.7; /* Overall brightness of the effect */
+        }
+ 
+                white 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 70%
+            );
+            mask-repeat: no-repeat;
+            opacity: 0.7; /* Overall brightness of the effect */
         }
 
-        .circuit-particle {
-            position: absolute;
-            background-color: var(--primary-blue);
-            border-radius: 50%;
-            transition: transform 0.1s ease-out; /* Smooth parallax movement */
-            will-change: transform;
-        }
+        /* 4. REMOVED the old .circuit-particle styles */
         
         header, main, footer, .modal {
             position: relative;
@@ -76,7 +112,8 @@
         }
 
         @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7); } /* cyan-400 */
+            /* ... existing keyframes ... */
+            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
             100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
         }
@@ -86,31 +123,33 @@
         }
 
         .modal {
+            /* ... existing modal styles ... */
             transition: opacity 0.25s ease, transform 0.25s ease;
             z-index: 100;
         }
         .modal.hidden {
+            /* ... existing modal styles ... */
             opacity: 0;
             transform: scale(0.95);
             pointer-events: none;
         }
         .modal-backdrop {
+            /* ... existing modal styles ... */
             transition: opacity 0.25s ease;
             z-index: 99;
         }
         .modal.hidden .modal-backdrop {
+            /* ... existing modal styles ... */
             opacity: 0;
         }
 
         h1, h2, h3 {
-            text-shadow: 0px 0px 8px rgba(34, 211, 238, 0.2); /* cyan glow */
+            /* ... existing text shadow ... */
+            text-shadow: 0px 0px 8px rgba(34, 211, 238, 0.2);
         }
         
-        /* * =============================================
-         * START: NEW CHATBOT STYLES
-         * =============================================
-        */
         #chat-float-btn {
+            /* ... existing chat styles ... */
             position: fixed;
             bottom: 1.5rem;
             right: 1.5rem;
@@ -119,8 +158,8 @@
         }
 
         #chat-modal {
-            /* Sits on top of the backdrop, but below the main modals */
-            z-index: 100; 
+            /* ... existing chat styles ... */
+            z-index: 100;
         }
 
         #chat-log {
@@ -132,19 +171,21 @@
         }
 
         .chat-bubble-user {
-            background-color: #06b6d4; /* cyan-500 */
-            color: #0f172a; /* slate-900 */
+            /* ... existing chat styles ... */
+            background-color: #06b6d4;
+            color: #0f172a;
             align-self: flex-end;
         }
 
         .chat-bubble-bot {
-            background-color: #334155; /* slate-700 */
-            color: #e2e8f0; /* slate-200 */
+            /* ... existing chat styles ... */
+            background-color: #334155;
+            color: #e2e8f0;
             align-self: flex-start;
         }
         
-        /* Loading spinner for chat */
         .chat-loader {
+            /* ... existing chat styles ... */
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -157,14 +198,18 @@
         }
 
         @keyframes chat-spin {
+            /* ... existing keyframes ... */
             33% { background: #cbd5e1; box-shadow: -12px 0 #64748b, 12px 0 #cbd5e1; }
             66% { background: #64748b; box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1; }
             100% { background: #cbd5e1; box-shadow: -12px 0 #cbd5e1, 12px 0 #64748b; }
         }
-        /* =============================================
-         * END: NEW CHATBOT STYLES
-         * =============================================
-        */
+
+        /* 3. Style for the new three.js canvas */
+        #three-canvas {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
 
     </style>
 </head>
@@ -174,13 +219,13 @@
 
     <script>
         tailwind.config = {
+            /* ... existing tailwind config ... */
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
                     },
                     colors: {
-                        /* ... existing tailwind config ... */
                         cyan: {
                             50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9',
                             400: '#22d3ee', /* Used for primary accents */
@@ -226,7 +271,6 @@
 
     <main>
         <section id="hero" class="pt-24 pb-32">
-            <!-- ... existing hero section ... -->
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                     
@@ -242,15 +286,11 @@
                         </a>
                     </div>
                     
+                    <!-- 4. REPLACED Spline-viewer with a Canvas for three.js -->
                     <div data-aos="fade-left" data-aos-duration="800" class="h-[300px] md:h-[450px] relative mt-10 md:mt-0">
-                        <!-- 2. FIXED: New, stable Spline scene URL -->
-                        <spline-viewer
-                            url="https://prod.spline.design/7y-5-tXN4j-CN1-X/scene.splinecode"
-                            events-target="global"
-                            loading-anim="true"
-                            class="rounded-lg absolute inset-0 w-full h-full">
-                        </spline-viewer>
-                        <p class="text-xs absolute bottom-2 left-0 right-0 text-center text-slate-500">
+                        <canvas id="three-canvas" class="rounded-lg absolute inset-0 w-full h-full"></canvas>
+                        <!-- This text is now hidden, but good for accessibility -->
+                        <p class="sr-only">
                             Interactive 3D Object. Click and drag to rotate.
                         </p>
                     </div>
@@ -297,8 +337,9 @@
         </div>
     </footer>
     
-    <!-- Enrollment Modal -->
+    <!-- Enrollment Modal (No AI) -->
     <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
+        <!-- ... existing enroll modal (no changes) ... -->
         <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
         <div class="bg-slate-800 rounded-lg shadow-2xl z-[101] w-full max-w-md border border-slate-700">
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
@@ -322,14 +363,11 @@
                         <input type="text" id="enroll-course-name-display" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed">
                     </div>
 
-                    <!-- 3. FIXED: Removed the AI Assistant block from here -->
-
                     <input type="hidden" name="courseName" id="enroll-course-name">
                     <input type="hidden" name="_subject" value="New VLSInEasy Course Enrollment!">
                     <input type="hidden" name="_cc" value="yasmeenms0512@gmail.com">
                     <input type="hidden" name="_autoresponse" value="Thank you for enrolling! We will contact you shortly with the next steps.">
                 </div>
-                <!-- 3. FIXED: This button is now visible -->
                 <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg">
                     <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg transform hover:-translate-y-0.5">
                         Complete Free Enrollment
@@ -341,9 +379,9 @@
     
     <!-- Contact Us Modal -->
     <div id="contact-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
+        <!-- ... existing contact modal (no changes) ... -->
         <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
         <div class="bg-slate-800 rounded-lg shadow-2xl z-[101] w-full max-w-md border border-slate-700">
-            <!-- ... existing contact modal ... -->
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
                 <h3 class="text-xl font-semibold text-white">Contact Us</h3>
                 <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
@@ -376,18 +414,15 @@
         </div>
     </div>
 
-    <!-- 
-      ***************************************************
-      * NEW: AI CHATBOT
-      ***************************************************
-    -->
+    <!-- AI CHATBOT -->
     <button id="chat-float-btn" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 p-4 rounded-full shadow-xl transform hover:scale-110 transition-all">
+        <!-- ... existing chat button svg ... -->
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
     </button>
-    
     <div id="chat-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
+        <!-- ... existing chat modal (no changes) ... -->
         <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
         <div class="bg-slate-800 rounded-lg shadow-2xl z-[101] w-full max-w-md border border-slate-700 max-h-[80vh] flex flex-col">
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
@@ -396,7 +431,6 @@
             </div>
             
             <div id="chat-log" class="p-4 flex-grow space-y-3 overflow-y-auto flex flex-col">
-                <!-- Chat messages will appear here -->
                 <div class="chat-bubble chat-bubble-bot p-3 rounded-lg">
                     Hi! I'm the VLSInEasy AI assistant. How can I help you with our courses today?
                 </div>
@@ -427,6 +461,7 @@
     <script>
         // --- COURSE DATA with UNIQUE THEMES ---
         const courses = [
+            // ... existing courses array (no changes) ...
             {
                 id: 'de',
                 title: 'Digital Electronics Fundamentals',
@@ -488,59 +523,23 @@
         // --- DYNAMIC RENDERING & MODAL SCRIPT ---
         document.addEventListener('DOMContentLoaded', () => {
             
-            const particleContainer = document.getElementById('circuit-background');
-            const particles = [];
-            const particleCount = 50; 
+            /* 5. REMOVED all particle generation code (was here) */
 
-            if (particleContainer) {
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'circuit-particle';
-                    
-                    const x = Math.random() * 100;
-                    const y = Math.random() * 100;
-                    const size = Math.random() * 3 + 1; 
-                    const depth = Math.random() * 0.8 + 0.1; 
-                    
-                    particle.style.width = `${size}px`;
-                    particle.style.height = `${size < 2 ? size : Math.random() > 0.7 ? size * 3 : size}px`; 
-                    particle.style.left = `${x}vw`;
-                    particle.style.top = `${y}vh`;
-                    particle.style.opacity = `${Math.random() * 0.3 + 0.1}`; 
-                    particle.style.backgroundColor = Math.random() > 0.3 ? '#22d3ee' : '#e2e8f0'; 
-                    particle.style.borderRadius = Math.random() > 0.5 ? '50%' : '0'; 
-                    
-                    particleContainer.appendChild(particle);
-                    particles.push({
-                        element: particle,
-                        depth: depth,
-                        baseX: x,
-                        baseY: y
-                    });
-                }
-            }
-
-            function updateParallax(e) {
-                const x = (e.clientX - window.innerWidth / 2) / window.innerWidth;
-                const y = (e.clientY - window.innerHeight / 2) / window.innerHeight;
-
-                particles.forEach(p => {
-                    const moveX = -x * 100 * p.depth; 
-                    const moveY = -y * 100 * p.depth;
-                    p.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                });
-            }
-            
+            /* 6. REPURPOSED the mousemove listener to control the mask spotlight */
+            /* This is now handled by the three.js mousemove listener */
+            /*
             document.addEventListener('mousemove', (e) => {
-                updateParallax(e);
+                document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+                document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
             });
+            */
 
-            // --- Existing Logic ---
+            // --- Course Rendering Logic ---
             const courseListContainer = document.getElementById('course-list');
             document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-            // Render Courses
             if (courseListContainer) {
+                // ... existing course render loop (no changes) ...
                 courses.forEach((course, index) => {
                     const card = document.createElement('div');
                     card.className = `rounded-lg shadow-xl overflow-hidden flex flex-col transform hover:scale-[1.03] transition-transform duration-300 border ${course.theme.card}`;
@@ -574,7 +573,7 @@
                 });
             }
 
-            // Modal Logic
+            // --- Modal Logic ---
             const enrollModal = document.getElementById('enroll-modal');
             const contactModal = document.getElementById('contact-modal');
             const enrollCourseNameInput = document.getElementById('enroll-course-name');
@@ -602,7 +601,7 @@
                 backdrop.addEventListener('click', (e) => { closeModal(e.currentTarget.closest('.modal')); });
             });
 
-            // Initialize AOS
+            // --- Initialize AOS ---
             AOS.init({
                 duration: 700,
                 once: true,
@@ -610,7 +609,113 @@
             });
 
             // =============================================
-            // START: NEW CHATBOT SCRIPT
+            // START: NEW THREE.JS ANIMATION SCRIPT
+            // =============================================
+            const canvas = document.getElementById('three-canvas');
+            if (canvas) {
+                let scene, camera, renderer, core;
+                let mouseX = 0, mouseY = 0;
+
+                function initThree() {
+                    // *** BUG FIX: Get container size *first* ***
+                    const container = canvas.parentElement;
+                    if (!container) return; // Safety check
+
+                    const width = container.clientWidth;
+                    const height = container.clientHeight;
+                    
+                    // Prevent NaN error if container is 0x0 on load
+                    if (width === 0 || height === 0) {
+                        console.warn("Canvas container has no size on init. Retrying.");
+                        requestAnimationFrame(initThree); // Try again next frame
+                        return;
+                    }
+
+                    scene = new THREE.Scene();
+                    
+                    camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+                    camera.position.z = 3.5;
+
+                    renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+                    renderer.setSize(width, height);
+                    renderer.setPixelRatio(window.devicePixelRatio);
+
+                    // Create the "Tech Core"
+                    const geometry = new THREE.IcosahedronGeometry(1.5, 1); // A complex shape
+                    const material = new THREE.MeshStandardMaterial({
+                        color: 0x22d3ee, // cyan-400
+                        wireframe: true,
+                        metalness: 0.5,
+                        roughness: 0.3
+                    });
+                    core = new THREE.Mesh(geometry, material);
+                    scene.add(core);
+
+                    // Add Lighting
+                    const pointLight = new THREE.PointLight(0xffffff, 1.5);
+                    pointLight.position.set(5, 5, 5);
+                    scene.add(pointLight);
+
+                    const ambientLight = new THREE.AmbientLight(0x404040, 2); // Softer ambient
+                    scene.add(ambientLight);
+
+                    // Handle Mouse Move
+                    document.addEventListener('mousemove', onDocumentMouseMove);
+                    // Handle Resize
+                    window.addEventListener('resize', onWindowResize);
+                    onWindowResize(); // Set initial size
+                }
+
+                function onWindowResize() {
+                    const container = canvas.parentElement;
+                    if (container) {
+                        canvas.width = container.clientWidth;
+                        canvas.height = container.clientHeight;
+                        camera.aspect = container.clientWidth / container.clientHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(container.clientWidth, container.clientHeight);
+                    }
+                }
+
+                function onDocumentMouseMove(event) {
+                    // Convert mouse position to normalized device coordinates (-1 to +1)
+                    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                    // New: Control the background "PCB Track" parallax
+                    // Use 0-1 range for this calculation
+                    const xNorm = event.clientX / window.innerWidth;
+                    const yNorm = event.clientY / window.innerHeight;
+                    // Move background in the *opposite* direction of the mouse for a parallax feel
+                    document.documentElement.style.setProperty('--mouse-x-bg', `${-xNorm * 50}px`);
+                    document.documentElement.style.setProperty('--mouse-y-bg', `${-yNorm * 50}px`);
+                }
+
+                function animate() {
+                    requestAnimationFrame(animate);
+
+                    // Auto-rotation
+                    core.rotation.x += 0.001;
+                    core.rotation.y += 0.002;
+
+                    // Mouse interaction (lerp for smoothness)
+                    camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.05;
+                    camera.position.y += (mouseY * 1.5 - camera.position.y) * 0.05;
+                    camera.lookAt(scene.position);
+
+                    renderer.render(scene, camera);
+                }
+
+                initThree();
+                animate();
+            }
+            // =============================================
+            // END: NEW THREE.JS ANIMATION SCRIPT
+            // =============================================
+
+
+            // =============================================
+            // START: CHATBOT SCRIPT (Unchanged)
             // =============================================
             
             const chatFloatBtn = document.getElementById('chat-float-btn');
@@ -620,32 +725,28 @@
             const chatSendBtn = document.getElementById('chat-send-btn');
             const chatLoading = document.getElementById('chat-loading');
 
-            // This holds the conversation history for the Gemini API
             let chatHistory = []; 
 
             if (chatFloatBtn) {
                 chatFloatBtn.addEventListener('click', () => {
                     openModal(chatModal);
-                    chatFloatBtn.classList.add('hidden'); // Hide float btn when modal is open
+                    chatFloatBtn.classList.add('hidden');
                 });
             }
 
-            // Close chat modal
             chatModal.querySelector('.modal-close-btn').addEventListener('click', () => {
                 closeModal(chatModal);
-                chatFloatBtn.classList.remove('hidden'); // Show float btn when modal is closed
+                chatFloatBtn.classList.remove('hidden');
             });
             chatModal.querySelector('.modal-backdrop').addEventListener('click', () => {
                 closeModal(chatModal);
-                chatFloatBtn.classList.remove('hidden'); // Show float btn when modal is closed
+                chatFloatBtn.classList.remove('hidden');
             });
 
-            // Send message on button click
             if (chatSendBtn) {
                 chatSendBtn.addEventListener('click', handleChatSend);
             }
 
-            // Send message on Enter key press
             if (chatInput) {
                 chatInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
@@ -663,9 +764,7 @@
                 chatInput.value = '';
                 chatLoading.classList.remove('hidden');
                 
-                // Add to history for API
                 chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
-
                 getChatbotResponse();
             }
 
@@ -674,7 +773,6 @@
                 bubble.className = `chat-bubble p-3 rounded-lg ${sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot'}`;
                 bubble.innerText = message;
                 chatLog.appendChild(bubble);
-                // Scroll to bottom
                 chatLog.scrollTop = chatLog.scrollHeight;
             }
 
@@ -682,14 +780,10 @@
                 const apiKey = ""; // Leave empty
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
-                // Create a summary of all course titles and topics for context
                 const courseContext = courses.map(c => `Course: "${c.title}", Topics: "${c.topics.join(', ')}"`).join('\n');
-
                 const systemPrompt = `You are a friendly, helpful AI chatbot for "VLSInEasy", an online VLSI course website. Your goal is to answer student questions about VLSI, our courses, or enrollment. Keep your answers concise and conversational.
-                
                 Here are the courses we offer:
                 ${courseContext}
-                
                 Do not make up courses or pricing. If you don't know an answer, politely say so.`;
                 
                 const payload = {
@@ -732,7 +826,6 @@
 
                     if (botMessage) {
                         appendMessage(botMessage, 'bot');
-                        // Add bot's response to history
                         chatHistory.push({ role: "model", parts: [{ text: botMessage }] });
                     } else {
                         throw new Error('No content in AI response.');
@@ -743,12 +836,11 @@
                     appendMessage("Sorry, I'm having trouble connecting to my brain right now. Please try again in a moment.", 'bot');
                 } finally {
                     chatLoading.classList.add('hidden');
-                    // Ensure chat is still scrolled to bottom
                     chatLog.scrollTop = chatLog.scrollHeight;
                 }
             }
             // =============================================
-            // END: NEW CHATBOT SCRIPT
+            // END: CHATBOT SCRIPT
             // =============================================
 
         });
