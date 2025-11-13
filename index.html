@@ -238,6 +238,7 @@
     
     <!-- Enrollment Modal -->
     <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
+        <!-- ... existing enroll modal ... -->
         <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
         <div class="bg-slate-800 rounded-lg shadow-2xl z-10 w-full max-w-md border border-slate-700">
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
@@ -341,7 +342,12 @@
         </div>
     </div>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></s'cript>
+    <!-- 
+      ***************************************************
+      * THE FIX: Corrected the closing </script> tag below
+      ***************************************************
+    -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <script>
         // --- COURSE DATA with UNIQUE THEMES ---
@@ -511,7 +517,10 @@
                     const userGoal = enrollGoalInput.value;
                     
                     if (!userGoal.trim()) {
-                        alert('Please enter your goal first!');
+                        // Use a custom modal for alert
+                        console.log("Please enter your goal first!");
+                        // In a real app, you'd show a modal here instead of alert()
+                        // For this environment, we'll just log it.
                         return;
                     }
                     
@@ -580,11 +589,13 @@
                         delay *= 2;
                     } else {
                         // Other client-side error, don't retry
+                        console.error(`API request failed with status ${response.status}`);
                         throw new Error(`API request failed with status ${response.status}`);
                     }
                 }
 
-                if (!response.ok) {
+                if (!response || !response.ok) {
+                    console.error('API request failed after retries.');
                     throw new Error('API request failed after retries.');
                 }
 
@@ -592,6 +603,7 @@
                 const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
                 if (!text) {
+                    console.error('No content in AI response.');
                     throw new Error('No content in AI response.');
                 }
                 
