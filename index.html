@@ -11,9 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;550;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- 1. REMOVED Spline Viewer -->
-    
-    <!-- 2. ADDED Three.js library -->
+    <!-- 1. ADDED Three.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -43,9 +41,6 @@
             animation: gradientBG 25s ease infinite;
             color: #e2e8f0;
             line-height: 1.7;
-            /* 1. Add CSS variables for mouse position */
-            --mouse-x: 50%;
-            --mouse-y: 50%;
         }
 
         @keyframes gradientBG {
@@ -59,8 +54,8 @@
             scroll-behavior: smooth;
         }
 
-        /* 2. Re-styled the circuit background for the "Tron" effect */
-        #circuit-background {
+        #logic-gate-background {
+            /* ... existing background canvas styles ... */
             position: fixed;
             top: 0;
             left: 0;
@@ -68,43 +63,7 @@
             height: 100vh;
             z-index: 1;
             pointer-events: none;
-            /* A CSS-only generated circuit pattern */
-            background-image: 
-                linear-gradient(rgba(34, 211, 238, 0.15) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(34, 211, 238, 0.15) 1px, transparent 1px),
-                linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px);
-            background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
-            background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
-            
-            /* 3. This is the "spotlight" mask */
-            /* mask-image: radial-gradient(
-                circle 400px at var(--mouse-x) var(--mouse-y), 
-                white 0%, 
-                rgba(255, 255, 255, 0.3) 50%, 
-                transparent 70%
-            );
-            mask-repeat: no-repeat; */
-            /* New: Make the tracks move with the mouse */
-            background-position: 
-                var(--mouse-x-bg, -1px) var(--mouse-y-bg, -1px), 
-                var(--mouse-x-bg, -1px) var(--mouse-y-bg, -1px), 
-                var(--mouse-x-bg, -1px) var(--mouse-y-bg, -1px), 
-                var(--mouse-x-bg, -1px) var(--mouse-y-bg, -1px);
-            transition: background-position 0.2s ease-out;
-            will-change: background-position;
-            opacity: 0.7; /* Overall brightness of the effect */
         }
- 
-                white 0%, 
-                rgba(255, 255, 255, 0.3) 50%, 
-                transparent 70%
-            );
-            mask-repeat: no-repeat;
-            opacity: 0.7; /* Overall brightness of the effect */
-        }
-
-        /* 4. REMOVED the old .circuit-particle styles */
         
         header, main, footer, .modal {
             position: relative;
@@ -148,6 +107,51 @@
             text-shadow: 0px 0px 8px rgba(34, 211, 238, 0.2);
         }
         
+        /* 1. NEW: 3D Steel Text Effect */
+        .text-3d-steel {
+            color: #e0e0e0; /* Light silver */
+            text-shadow: 
+                /* 3D Depth */
+                1px 1px 0px #9e9e9e,
+                2px 2px 0px #8d8d8d,
+                3px 3px 0px #7b7b7b,
+                4px 4px 0px #6a6a6a,
+                /* Inner Glow (Shine) */
+                0px 0px 5px rgba(255, 255, 255, 0.5),
+                0px 0px 15px rgba(34, 211, 238, 0.5), /* Cyan glow */
+                /* Outer Glow */
+                1px 1px 20px rgba(34, 211, 238, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .text-3d-steel:hover {
+            transform: scale(1.02);
+        }
+
+        /* 2. NEW: Shine on hover for nav links */
+        .nav-link-shine {
+            position: relative;
+            overflow: hidden;
+            transition: color 0.3s ease;
+        }
+        .nav-link-shine::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.4s ease;
+        }
+        .nav-link-shine:hover {
+            color: #ffffff;
+        }
+        .nav-link-shine:hover::before {
+            left: 100%;
+        }
+
+
         #chat-float-btn {
             /* ... existing chat styles ... */
             position: fixed;
@@ -204,7 +208,6 @@
             100% { background: #cbd5e1; box-shadow: -12px 0 #cbd5e1, 12px 0 #64748b; }
         }
 
-        /* 3. Style for the new three.js canvas */
         #three-canvas {
             width: 100%;
             height: 100%;
@@ -215,7 +218,7 @@
 </head>
 <body class="overflow-x-hidden">
 
-    <div id="circuit-background"></div>
+    <canvas id="logic-gate-background"></canvas>
 
     <script>
         tailwind.config = {
@@ -244,17 +247,18 @@
     </script>
 
     <header class="bg-slate-900/70 border-b border-slate-700/50 sticky top-0 z-50 backdrop-blur-md">
-        <!-- ... existing header ... -->
         <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0">
-                    <a href="#" class="text-2xl font-extrabold text-white tracking-wide">VLSInEasy</a>
+                    <!-- 3. Applied new 3D Steel Text class -->
+                    <a href="#" class="text-3d-steel text-2xl font-extrabold tracking-wide">VLSInEasy</a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#hero" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
-                        <a href="#courses" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Courses</a>
-                        <a href="#about" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
+                        <!-- 4. Applied new Nav Link Shine class -->
+                        <a href="#hero" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="#courses" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium">Courses</a>
+                        <a href="#about" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium">About</a>
                         <button id="contact-nav-link" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400 px-4 py-2 rounded-md text-sm font-bold shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-0.5">
                             Contact Us
                         </button>
@@ -275,7 +279,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                     
                     <div data-aos="fade-right" data-aos-duration="800">
-                        <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6 tracking-tight">
+                        <!-- 5. Applied new 3D Steel Text class -->
+                        <h1 class="text-3d-steel text-4xl md:text-6xl font-extrabold leading-tight mb-6 tracking-tight">
                             Stop Searching.<br>Start Learning.
                         </h1>
                         <p class="max-w-xl text-lg md:text-xl text-slate-300 mb-10 leading-relaxed">
@@ -286,13 +291,10 @@
                         </a>
                     </div>
                     
-                    <!-- 4. REPLACED Spline-viewer with a Canvas for three.js -->
-                    <div data-aos="fade-left" data-aos-duration="800" class="h-[300px] md:h-[450px] relative mt-10 md:mt-0">
+                    <!-- 6. BUG FIX: Removed data-aos="fade-left" from this container -->
+                    <div class="h-[300px] md:h-[450px] relative mt-10 md:mt-0">
                         <canvas id="three-canvas" class="rounded-lg absolute inset-0 w-full h-full"></canvas>
-                        <!-- This text is now hidden, but good for accessibility -->
-                        <p class="sr-only">
-                            Interactive 3D Object. Click and drag to rotate.
-                        </p>
+                        <!-- 7. REMOVED the confusing fallback text -->
                     </div>
 
                 </div>
@@ -300,7 +302,6 @@
         </section>
 
         <section id="courses" class="py-20 bg-slate-900/80 border-t border-b border-white/10">
-            <!-- ... existing courses section ... -->
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16" data-aos="fade-up">
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Core Courses</h2>
@@ -316,30 +317,76 @@
         </section>
 
         <section id="about" class="py-20">
-            <!-- ... existing about section ... -->
-            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">About Your Instructor</h2>
-                <img src="https://placehold.co/150x150/22d3ee/0f172a?text=You" alt="Course Instructor" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-cyan-500/50">
-                <p class="text-xl text-slate-300 mb-4">
-                    Hi, I'm [Your Name], a senior VLSI engineer with [X] years of experience. My passion is to bridge the gap between academic knowledge and the real-world skills you need.
-                </p>
-                <p class="text-slate-400">
-                    I've designed these courses to be practical, project-based, and focused on making complex VLSI topics easy to understand.
-                </p>
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Meet Your Instructors</h2>
+                    <p class="text-lg text-slate-400">Our courses are led by industry experts with a passion for teaching.</p>
+                </div>
+                
+                <!-- NEW: 3-column grid for instructors -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    
+                    <!-- Instructor 1 -->
+                    <div class="text-center">
+                        <!-- 
+                          CHANGE THIS: 
+                          Replace "john-doe.jpg" with the exact file name you uploaded for your first instructor.
+                        -->
+                        <img src="yasmeen.jpg" alt="Instructor 1" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-cyan-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/22d3ee?text=Team+1'; this.onerror=null;">
+                        <h3 class="text-2xl font-bold text-white mb-2">[Instructor Name 1]</h3>
+                        <p class="text-cyan-400 mb-4">Lead, Digital Design</p>
+                        <p class="text-slate-400">
+                            [Instructor 1's bio. E.g., Senior VLSI engineer with 10+ years of experience in ASIC/FPGA design.]
+                        </p>
+                    </div>
+
+                    <!-- Instructor 2 -->
+                    <div class="text-center">
+                        <!-- 
+                          CHANGE THIS: 
+                          Replace "jane-smith.png" with the exact file name you uploaded for your second instructor.
+                        -->
+                        <img src="rachana.png" alt="Instructor 2" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-purple-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/c084fc?text=Team+2'; this.onerror=null;">
+                        <h3 class="text-2xl font-bold text-white mb-2">[Instructor Name 2]</h3>
+                        <p class="text-purple-400 mb-4">Specialist, Low Power VLSI</p>
+                        <p class="text-slate-400">
+                            [Instructor 2's bio. E.g., Expert in low power techniques and power integrity analysis.]
+                        </p>
+                    </div>
+
+                    <!-- Instructor 3 -->
+                    <div class="text-center">
+                        <!-- 
+                          CHANGE THIS: 
+                          Replace "alex-lee.jpg" with the exact file name you uploaded for your third instructor.
+                        -->
+                        <img src="chetan.jpg" alt="Instructor 3" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-orange-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/fb923c?text=Team+3'; this.onerror=null;">
+                        <h3 class="text-2xl font-bold text-white mb-2">[Instructor Name 3]</h3>
+                        <p class="text-orange-400 mb-4">Head, FPGA & Projects</p>
+                        <p class="text-slate-400">
+                            [Instructor 3's bio. E.g., Certified Xilinx specialist with a focus on practical, project-based learning.]
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </section>
-    </main>
 
+    </main>
+    
+    <!-- ============================================= -->
+    <!-- START: FIXED/RESTORED HTML -->
+    <!-- ============================================= -->
+
+    <!-- Footer -->
     <footer class="bg-slate-900 border-t border-slate-700/50 text-slate-400 py-12">
-        <!-- ... existing footer ... -->
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p>&copy; <span id="footer-year"></span> VLSInEasy. All rights reserved.</p>
         </div>
     </footer>
-    
-    <!-- Enrollment Modal (No AI) -->
+
+    <!-- Enrollment Modal (Restored) -->
     <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
-        <!-- ... existing enroll modal (no changes) ... -->
         <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
         <div class="bg-slate-800 rounded-lg shadow-2xl z-[101] w-full max-w-md border border-slate-700">
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
@@ -347,7 +394,7 @@
                 <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
             </div>
             
-            <form action="https://formspree.io/f/YOUR_UNIQUE_ID_HERE" method="POST">
+            <form action="https://formspree.io/f/xjkjkpdr" method="POST">
                 <div class="p-6 space-y-4">
                     <p class="text-slate-300">Complete this (free) enrollment to get started. We'll contact you with the course details!</p>
                     <div>
@@ -377,6 +424,10 @@
         </div>
     </div>
     
+    <!-- ============================================= -->
+    <!-- END: FIXED/RESTORED HTML -->
+    <!-- ============================================= -->
+    
     <!-- Contact Us Modal -->
     <div id="contact-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
         <!-- ... existing contact modal (no changes) ... -->
@@ -387,7 +438,7 @@
                 <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
             </div>
             
-            <form action="https://formspree.io/f/YOUR_UNIQUE_ID_HERE" method="POST">
+            <form action="https://formspree.io/f/xjkjkpdr" method="POST">
                 <div class="p-6 space-y-4">
                     <p class="text-slate-300">Have a question? Fill out the form below and we'll get back to you.</p>
                     <div>
@@ -459,9 +510,8 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <script>
-        // --- COURSE DATA with UNIQUE THEMES ---
+        // 8. NEW: Updated Course Data with Image URLs
         const courses = [
-            // ... existing courses array (no changes) ...
             {
                 id: 'de',
                 title: 'Digital Electronics Fundamentals',
@@ -469,6 +519,7 @@
                 topics: ['Logic Gates', 'Boolean Algebra', 'Combinational', 'Sequential', 'K-Maps', 'State Machines'],
                 originalPrice: '₹999',
                 price: '₹500',
+                imageUrl: 'https://placehold.co/600x400/0f172a/22d3ee?text=Digital+Logic',
                 theme: {
                     card: 'bg-slate-800 border-cyan-500/50',
                     topics: 'bg-cyan-900/50 text-cyan-300',
@@ -483,6 +534,7 @@
                 topics: ['Verilog Syntax', 'RTL Modeling', 'Testbenches', 'Simulation', 'Synthesis', 'FPGA Flow'],
                 originalPrice: '₹999',
                 price: '₹500',
+                imageUrl: 'https://placehold.co/600x400/0f172a/34d399?text=RTL+Code',
                 theme: {
                     card: 'bg-slate-800 border-emerald-500/50',
                     topics: 'bg-emerald-900/50 text-emerald-300',
@@ -494,9 +546,10 @@
                 id: 'lp-vlsi',
                 title: 'Low Power VLSI Techniques',
                 description: 'Master essential techniques for designing power-efficient circuits, a critical skill in modern chip design.',
-                topics: ['Power Gating', 'Clock Gating', 'DVFS', 'Multi-Vdd', 'Leakage Power', 'UPF'],
+                topics: ['Power Gating', 'Clock GGating', 'DVFS', 'Multi-Vdd', 'Leakage Power', 'UPF'],
                 originalPrice: '₹999',
                 price: '₹500',
+                imageUrl: 'https://placehold.co/600x400/0f172a/c084fc?text=Low+Power',
                 theme: {
                     card: 'bg-slate-800 border-purple-500/50',
                     topics: 'bg-purple-900/50 text-purple-300',
@@ -511,6 +564,7 @@
                 topics: ['FPGA Architecture', 'Vivado Suite', 'Project Flow', 'Simulation', 'Hardware Debug', 'IP Integrator'],
                 originalPrice: '₹999',
                 price: '₹500',
+                imageUrl: 'https://placehold.co/600x400/0f172a/fb923c?text=FPGA+Project',
                 theme: {
                     card: 'bg-slate-800 border-orange-500/50',
                     topics: 'bg-orange-900/50 text-orange-300',
@@ -523,23 +577,160 @@
         // --- DYNAMIC RENDERING & MODAL SCRIPT ---
         document.addEventListener('DOMContentLoaded', () => {
             
-            /* 5. REMOVED all particle generation code (was here) */
+            // --- Logic Gate Background Script (unchanged) ---
+            const bgCanvas = document.getElementById('logic-gate-background');
+            if (bgCanvas) {
+                // ... (all the particle canvas logic is here, no changes) ...
+                const ctx = bgCanvas.getContext('2d');
+                let particles = [];
+                let mouse = { x: undefined, y: undefined, radius: 150 };
 
-            /* 6. REPURPOSED the mousemove listener to control the mask spotlight */
-            /* This is now handled by the three.js mousemove listener */
-            /*
-            document.addEventListener('mousemove', (e) => {
-                document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
-                document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
-            });
-            */
+                function resizeCanvas() {
+                    bgCanvas.width = window.innerWidth;
+                    bgCanvas.height = window.innerHeight;
+                }
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                window.addEventListener('mousemove', (e) => {
+                    mouse.x = e.x;
+                    mouse.y = e.y;
+                });
+                window.addEventListener('mouseout', () => {
+                    mouse.x = undefined;
+                    mouse.y = undefined;
+                });
+
+                class Particle {
+                    constructor(x, y, size, type, color, vx, vy) {
+                        this.x = x;
+                        this.y = y;
+                        this.size = size;
+                        this.type = type;
+                        this.color = color;
+                        this.vx = vx;
+                        this.vy = vy;
+                        this.baseX = this.x;
+                        this.baseY = this.y;
+                        this.density = (Math.random() * 30) + 1; // How much it's affected by mouse
+                        this.attractionStrength = 0.03;
+                        this.friction = 0.95; // "zero-g" dampening
+                    }
+
+                    draw() {
+                        ctx.fillStyle = this.color;
+                        ctx.strokeStyle = this.color;
+                        ctx.lineWidth = 1;
+
+                        if (this.type === 'line') {
+                            ctx.beginPath();
+                            ctx.moveTo(this.x, this.y);
+                            ctx.lineTo(this.x + this.size * 2, this.y);
+                            ctx.stroke();
+                        } else if (this.type === 'and') {
+                            ctx.beginPath();
+                            ctx.moveTo(this.x, this.y - this.size / 2);
+                            ctx.lineTo(this.x, this.y + this.size / 2);
+                            ctx.arc(this.x, this.y, this.size / 2, -Math.PI / 2, Math.PI / 2);
+                            ctx.closePath();
+                            ctx.stroke();
+                        } else if (this.type === 'not') {
+                            ctx.beginPath();
+                            ctx.moveTo(this.x, this.y - this.size / 2);
+                            ctx.lineTo(this.x, this.y + this.size / 2);
+                            ctx.lineTo(this.x + this.size, this.y);
+                            ctx.closePath();
+                            ctx.stroke();
+                            ctx.beginPath();
+                            ctx.arc(this.x + this.size + 2, this.y, 2, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+
+                    update() {
+                        // Mouse attraction
+                        if (mouse.x !== undefined) {
+                            let dx = mouse.x - this.x;
+                            let dy = mouse.y - this.y;
+                            let distance = Math.sqrt(dx * dx + dy * dy);
+                            if (distance < mouse.radius + this.size) {
+                                // Calculate force vector
+                                let forceX = dx / distance;
+                                let forceY = dy / distance;
+                                // Apply force
+                                this.vx += forceX * this.attractionStrength * this.density;
+                                this.vy += forceY * this.attractionStrength * this.density;
+                            }
+                        }
+                        
+                        // "Zero-G" drift + friction
+                        this.vx *= this.friction;
+                        this.vy *= this.friction;
+                        
+                        // Apply velocity
+                        this.x += this.vx;
+                        this.y += this.vy;
+
+                        // Screen wrap
+                        if (this.x > bgCanvas.width + this.size) this.x = -this.size;
+                        if (this.x < -this.size) this.x = bgCanvas.width + this.size;
+                        if (this.y > bgCanvas.height + this.size) this.y = -this.size;
+                        if (this.y < -this.size) this.y = bgCanvas.height + this.size;
+                    }
+                }
+
+                function initParticles() {
+                    particles = [];
+                    let numberOfParticles = (bgCanvas.width * bgCanvas.height) / 9000;
+                    for (let i = 0; i < numberOfParticles; i++) {
+                        let size = Math.random() * 5 + 3;
+                        let x = Math.random() * bgCanvas.width;
+                        let y = Math.random() * bgCanvas.height;
+                        let type = ['and', 'not', 'line'][Math.floor(Math.random() * 3)];
+                        let color = Math.random() > 0.5 ? 'rgba(34, 211, 238, 0.4)' : 'rgba(226, 232, 240, 0.4)';
+                        let vx = (Math.random() - 0.5) * 0.3; // Initial drift
+                        let vy = (Math.random() - 0.5) * 0.3;
+                        particles.push(new Particle(x, y, size, type, color, vx, vy));
+                    }
+                }
+
+                function animateParticles() {
+                    ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+                    for (let i = 0; i < particles.length; i++) {
+                        particles[i].update();
+                        particles[i].draw();
+                    }
+                    requestAnimationFrame(animateParticles);
+                }
+
+                initParticles();
+                animateParticles();
+
+                // Re-init on resize
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(() => {
+                        resizeCanvas();
+                        initParticles();
+                    }, 250);
+                });
+            }
+
 
             // --- Course Rendering Logic ---
             const courseListContainer = document.getElementById('course-list');
-            document.getElementById('footer-year').textContent = new Date().getFullYear();
+            
+            // **** THIS IS THE FIX ****
+            // Check if the element exists before setting its textContent
+            const footerYearEl = document.getElementById('footer-year');
+            if (footerYearEl) {
+                footerYearEl.textContent = new Date().getFullYear();
+            } else {
+                console.warn('Could not find #footer-year element.');
+            }
 
             if (courseListContainer) {
-                // ... existing course render loop (no changes) ...
                 courses.forEach((course, index) => {
                     const card = document.createElement('div');
                     card.className = `rounded-lg shadow-xl overflow-hidden flex flex-col transform hover:scale-[1.03] transition-transform duration-300 border ${course.theme.card}`;
@@ -550,10 +741,15 @@
                         `<span class="text-xs font-semibold px-3 py-1 rounded-full ${course.theme.topics}">${topic}</span>`
                     ).join('');
 
+                    // 9. NEW: Updated card.innerHTML to include the image
                     card.innerHTML = `
-                        <div class="p-6 flex-grow">
+                        <div class="relative h-48 w-full overflow-hidden">
+                            <img src="${course.imageUrl}" alt="${course.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/0f172a/64748b?text=Image+Error'; this.onerror=null;">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
                             <h3 class="text-2xl font-bold text-white mb-3">${course.title}</h3>
-                            <p class="text-slate-400 mb-6">${course.description}</p>
+                            <p class="text-slate-400 mb-6 flex-grow">${course.description}</p>
+                            
                             <h4 class="text-sm font-semibold text-slate-500 mb-3 uppercase tracking-wider">Key Topics</h4>
                             <div class="flex flex-wrap gap-2 mb-6">
                                 ${topicPills}
@@ -573,7 +769,7 @@
                 });
             }
 
-            // --- Modal Logic ---
+            // --- Modal Logic (unchanged) ---
             const enrollModal = document.getElementById('enroll-modal');
             const contactModal = document.getElementById('contact-modal');
             const enrollCourseNameInput = document.getElementById('enroll-course-name');
@@ -591,8 +787,15 @@
                 });
             });
 
-            document.getElementById('contact-nav-link').addEventListener('click', () => { openModal(contactModal); });
-            document.getElementById('contact-nav-link-mobile').addEventListener('click', () => { openModal(contactModal); });
+            const contactNavLink = document.getElementById('contact-nav-link');
+            if (contactNavLink) {
+                contactNavLink.addEventListener('click', () => { openModal(contactModal); });
+            }
+            const contactNavLinkMobile = document.getElementById('contact-nav-link-mobile');
+            if (contactNavLinkMobile) {
+                contactNavLinkMobile.addEventListener('click', () => { openModal(contactModal); });
+            }
+
 
             document.querySelectorAll('.modal-close-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => { closeModal(e.currentTarget.closest('.modal')); });
@@ -601,7 +804,7 @@
                 backdrop.addEventListener('click', (e) => { closeModal(e.currentTarget.closest('.modal')); });
             });
 
-            // --- Initialize AOS ---
+            // --- Initialize AOS (unchanged) ---
             AOS.init({
                 duration: 700,
                 once: true,
@@ -609,27 +812,31 @@
             });
 
             // =============================================
-            // START: NEW THREE.JS ANIMATION SCRIPT
+            // START: THREE.JS ANIMATION SCRIPT (with bug fix)
             // =============================================
             const canvas = document.getElementById('three-canvas');
             if (canvas) {
                 let scene, camera, renderer, core;
                 let mouseX = 0, mouseY = 0;
+                let isInitialized = false;
 
                 function initThree() {
-                    // *** BUG FIX: Get container size *first* ***
-                    const container = canvas.parentElement;
-                    if (!container) return; // Safety check
-
-                    const width = container.clientWidth;
-                    const height = container.clientHeight;
+                    if (isInitialized) return; // Prevent double-init
                     
-                    // Prevent NaN error if container is 0x0 on load
+                    const container = canvas.parentElement;
+                    if (!container) return; 
+
+                    const width = container.offsetWidth;
+                    const height = container.offsetHeight;
+                    
                     if (width === 0 || height === 0) {
-                        console.warn("Canvas container has no size on init. Retrying.");
+                        console.warn("Canvas container has no size on init. Retrying...");
                         requestAnimationFrame(initThree); // Try again next frame
                         return;
                     }
+
+                    console.log("Initializing three.js with size:", width, height);
+                    isInitialized = true;
 
                     scene = new THREE.Scene();
                     
@@ -663,40 +870,43 @@
                     document.addEventListener('mousemove', onDocumentMouseMove);
                     // Handle Resize
                     window.addEventListener('resize', onWindowResize);
-                    onWindowResize(); // Set initial size
+                    
+                    // Start animation loop
+                    animate();
                 }
 
                 function onWindowResize() {
+                    if (!isInitialized) return;
                     const container = canvas.parentElement;
                     if (container) {
-                        canvas.width = container.clientWidth;
-                        canvas.height = container.clientHeight;
-                        camera.aspect = container.clientWidth / container.clientHeight;
-                        camera.updateProjectionMatrix();
-                        renderer.setSize(container.clientWidth, container.clientHeight);
+                        const width = container.offsetWidth;
+                        const height = container.offsetHeight;
+                        
+                        if(width > 0 && height > 0) {
+                            camera.aspect = width / height;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(width, height);
+                        }
                     }
                 }
 
                 function onDocumentMouseMove(event) {
-                    // Convert mouse position to normalized device coordinates (-1 to +1)
+                    if (!isInitialized) return;
+                    // This listener now ONLY controls the 3D object
                     mouseX = (event.clientX / window.innerWidth) * 2 - 1;
                     mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-
-                    // New: Control the background "PCB Track" parallax
-                    // Use 0-1 range for this calculation
-                    const xNorm = event.clientX / window.innerWidth;
-                    const yNorm = event.clientY / window.innerHeight;
-                    // Move background in the *opposite* direction of the mouse for a parallax feel
-                    document.documentElement.style.setProperty('--mouse-x-bg', `${-xNorm * 50}px`);
-                    document.documentElement.style.setProperty('--mouse-y-bg', `${-yNorm * 50}px`);
                 }
 
                 function animate() {
                     requestAnimationFrame(animate);
 
+                    if (!isInitialized) return; // Don't run if not ready
+
                     // Auto-rotation
-                    core.rotation.x += 0.001;
-                    core.rotation.y += 0.002;
+                    if (core) {
+                        core.rotation.x += 0.001;
+                        core.rotation.y += 0.002;
+                    }
 
                     // Mouse interaction (lerp for smoothness)
                     camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.05;
@@ -706,11 +916,11 @@
                     renderer.render(scene, camera);
                 }
 
+                // Start the initialization
                 initThree();
-                animate();
             }
             // =============================================
-            // END: NEW THREE.JS ANIMATION SCRIPT
+            // END: THREE.JS ANIMATION SCRIPT
             // =============================================
 
 
@@ -734,14 +944,16 @@
                 });
             }
 
-            chatModal.querySelector('.modal-close-btn').addEventListener('click', () => {
-                closeModal(chatModal);
-                chatFloatBtn.classList.remove('hidden');
-            });
-            chatModal.querySelector('.modal-backdrop').addEventListener('click', () => {
-                closeModal(chatModal);
-                chatFloatBtn.classList.remove('hidden');
-            });
+            if (chatModal) {
+                chatModal.querySelector('.modal-close-btn').addEventListener('click', () => {
+                    closeModal(chatModal);
+                    chatFloatBtn.classList.remove('hidden');
+                });
+                chatModal.querySelector('.modal-backdrop').addEventListener('click', () => {
+                    closeModal(chatModal);
+                    chatFloatBtn.classList.remove('hidden');
+                });
+            }
 
             if (chatSendBtn) {
                 chatSendBtn.addEventListener('click', handleChatSend);
