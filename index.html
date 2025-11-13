@@ -3,36 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 4. Branding Update -->
     <title>VLSInEasy - Master In-Demand Skills</title>
     
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Load Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- 
+      FIX 1: Updated the Spline viewer version again to an even newer one.
+    -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.11.0/build/spline-viewer.js"></script>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
-        /* Set the default font for the page */
+        /* Base dark mode styles */
         body {
-            font-family: 'Inter', sans-serif;
-            
-            /* 6. Mesmerizing Animated Background & Dark Mode */
+            font-family: 'Poppins', sans-serif;
             background-color: #0f172a; /* slate-900 */
             background-image: linear-gradient(
                 -45deg, 
-                #0f172a, /* slate-900 */
-                #1e3a8a, /* blue-800 */
-                #3b0764, /* deep-purple */
-                #0f172a  /* slate-900 */
+                #0f172a, 
+                #1e3a8a, 
+                #3b0764, 
+                #0f172a
             );
             background-size: 400% 400%;
             animation: gradientBG 20s ease infinite;
+            
+            /* 1. Set default mouse positions for the spotlight */
+            --mouse-x: 50%;
+            --mouse-y: 50%;
         }
 
-        /* 6. Background Animation Keyframes */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -42,10 +47,35 @@
         html {
             scroll-behavior: smooth;
         }
+
+        /* 2. Style the new mouse spotlight */
+        #mouse-spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            /* This div is invisible but its background image is not */
+            background-image: radial-gradient(
+                600px circle at var(--mouse-x) var(--mouse-y),
+                rgba(100, 116, 139, 0.1), /* A subtle slate-600/10% glow */
+                transparent 80%
+            );
+            z-index: 1;
+            pointer-events: none; /* Allows clicking through it */
+            transition: background-position 0.1s ease-out; /* Smooths the follow */
+        }
         
-        /* 5. Modal Styling */
+        /* 3. Ensure all content sits on top of the spotlight */
+        header, main, footer {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Modal Styling */
         .modal {
             transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 100; /* Modals must be on top of everything */
         }
         .modal.hidden {
             opacity: 0;
@@ -54,36 +84,49 @@
         }
         .modal-backdrop {
             transition: opacity 0.25s ease;
+            z-index: 99;
         }
         .modal.hidden .modal-backdrop {
             opacity: 0;
         }
     </style>
 </head>
-<body class="text-slate-200">
+<body class="text-slate-200 overflow-x-hidden">
+
+    <!-- 1. NEW MOUSE SPOTLIGHT ELEMENT -->
+    <div id="mouse-spotlight"></div>
+
+    <!-- Tailwind Font Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
 
     <!-- Header / Navigation -->
     <header class="bg-slate-900/70 border-b border-slate-700/50 sticky top-0 z-50 backdrop-blur-md">
         <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- 4. Logo -->
                 <div class="flex-shrink-0">
                     <a href="#" class="text-2xl font-bold text-white">VLSInEasy</a>
                 </div>
-                <!-- Navigation Links -->
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="#hero" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium">Home</a>
                         <a href="#courses" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium">Courses</a>
                         <a href="#about" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium">About</a>
-                        <!-- 7. Contact Us Button -->
                         <button id="contact-nav-link" class="bg-cyan-500 text-slate-900 hover:bg-cyan-400 px-4 py-2 rounded-md text-sm font-bold shadow-lg transition-all">
                             Contact Us
                         </button>
                     </div>
                 </div>
                 <div class="md:hidden">
-                    <!-- Mobile menu button -->
                     <button id="contact-nav-link-mobile" class="bg-cyan-500 text-slate-900 hover:bg-cyan-400 px-3 py-1 rounded-md text-sm font-bold shadow-lg transition-all">
                         Contact
                     </button>
@@ -96,31 +139,53 @@
     <main>
         <!-- Hero Section -->
         <section id="hero" class="pt-24 pb-32">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6">
-                    Stop Searching. Start Learning.
-                </h1>
-                <p class="max-w-2xl mx-auto text-lg md:text-xl text-slate-300 mb-10">
-                    Master VLSI. Our expert-led courses make complex topics simple, from Digital Electronics to advanced Low Power techniques.
-                </p>
-                <a href="#courses" class="inline-block bg-cyan-500 text-slate-900 font-bold text-lg px-8 py-4 rounded-lg shadow-lg hover:bg-cyan-400 transition-transform hover:scale-105">
-                    Explore All Courses
-                </a>
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    
+                    <div data-aos="fade-right" data-aos-duration="800">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6">
+                            Stop Searching. Start Learning.
+                        </h1>
+                        <p class="max-w-xl text-lg md:text-xl text-slate-300 mb-10">
+                            Master VLSI. Our expert-led courses make complex topics simple, from Digital Electronics to advanced Low Power techniques.
+                        </D>
+                        <a href="#courses" class="inline-block bg-cyan-500 text-slate-900 font-bold text-lg px-8 py-4 rounded-lg shadow-lg hover:bg-cyan-400 transition-transform hover:scale-105">
+                            Explore All Courses
+                        </a>
+                    </div>
+                    
+                    <div data-aos="fade-left" data-aos-duration="800" class="h-[300px] md:h-[450px]">
+                        <!-- 
+                          FIX 2: Replaced the spline scene URL. 
+                          The original one may be corrupted or incompatible. 
+                          This new one is a known-good public scene for testing.
+                        -->
+                        <spline-viewer
+                            url="https://prod.spline.design/E2N-s7-EwB2gS-Nz/scene.splinecode"
+                            events-target="global"
+                            loading-anim="true"
+                            class="rounded-lg">
+                        </spline-viewer>
+                        <p class="text-xs text-center text-slate-500 mt-2">
+                            Interactive 3D Object. Click and drag to rotate.
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </section>
 
         <!-- Courses Section -->
         <section id="courses" class="py-20 bg-slate-900/80">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
+                <div class="text-center mb-16" data-aos="fade-up">
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Core Courses</h2>
                     <p class="text-lg text-slate-400">
                         Dive deep into the subjects that matter most in the VLSI industry.
-                    </D>
+                    </p>
                 </div>
                 
-                <!-- This div is where JavaScript will dynamically inject the courses -->
-                <div id="course-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div id="course-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8">
                     <!-- Course cards will be generated by JS and placed here -->
                 </div>
 
@@ -129,7 +194,7 @@
 
         <!-- About Section -->
         <section id="about" class="py-20">
-            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">About Your Instructor</h2>
                 <img src="https://placehold.co/150x150/22d3ee/0f172a?text=You" alt="Course Instructor" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-cyan-500/50">
                 <p class="text-xl text-slate-300 mb-4">
@@ -149,57 +214,35 @@
         </div>
     </footer>
     
-    <!-- 
-      ***************************************************
-      * 5. ENROLLMENT MODAL (POPUP)
-      ***************************************************
-    -->
-    <div id="enroll-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <!-- Backdrop -->
+    <!-- Enrollment Modal -->
+    <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
         <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-        
-        <!-- Modal Content -->
         <div class="bg-slate-800 rounded-lg shadow-2xl z-10 w-full max-w-md border border-slate-700">
-            <!-- Modal Header -->
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
                 <h3 class="text-xl font-semibold text-white">Enroll Now</h3>
                 <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
             </div>
             
-            <!-- 
-              ! IMPORTANT !
-              Replace "YOUR_UNIQUE_ID_HERE" with your Formspree endpoint ID
-              from: chetanv.kar@gmail.com
-            -->
             <form action="https://formspree.io/f/xjkjkpdr" method="POST">
                 <div class="p-6 space-y-4">
                     <p class="text-slate-300">Complete this (free) enrollment to get started. We'll contact you with the course details!</p>
-                    
                     <div>
                         <label for="enroll-name" class="block text-sm font-medium text-slate-300 mb-1">Full Name</label>
                         <input type="text" name="name" id="enroll-name" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
-                    
                     <div>
                         <label for="enroll-email" class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
                         <input type="email" name="email" id="enroll-email" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
-                    
                     <div>
                         <label for="enroll-course-name-display" class="block text-sm font-medium text-slate-300 mb-1">Selected Course</label>
                         <input type="text" id="enroll-course-name-display" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed">
                     </div>
-
-                    <!-- Hidden fields to send to your email -->
                     <input type="hidden" name="courseName" id="enroll-course-name">
                     <input type="hidden" name="_subject" value="New VLSInEasy Course Enrollment!">
-                    <!-- *** THIS IS THE UPDATED CC LINE *** -->
                     <input type="hidden" name="_cc" value="yasmeenms0512@gmail.com">
                     <input type="hidden" name="_autoresponse" value="Thank you for enrolling! We will contact you shortly with the next steps.">
-
                 </div>
-                
-                <!-- Modal Footer -->
                 <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg">
                     <button type="submit" class="w-full bg-cyan-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:bg-cyan-400 transition-all shadow-lg">
                         Complete Free Enrollment
@@ -209,55 +252,33 @@
         </div>
     </div>
     
-    <!-- 
-      ***************************************************
-      * 7. CONTACT US MODAL (POPUP)
-      ***************************************************
-    -->
-    <div id="contact-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <!-- Backdrop -->
+    <!-- Contact Us Modal -->
+    <div id="contact-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
         <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-        
-        <!-- Modal Content -->
         <div class="bg-slate-800 rounded-lg shadow-2xl z-10 w-full max-w-md border border-slate-700">
-            <!-- Modal Header -->
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
                 <h3 class="text-xl font-semibold text-white">Contact Us</h3>
                 <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
             </div>
             
-            <!-- 
-              ! IMPORTANT !
-              Replace "YOUR_UNIQUE_ID_HERE" with your SAME Formspree endpoint ID
-              from: chetanv.kar@gmail.com
-            -->
             <form action="https://formspree.io/f/xjkjkpdr" method="POST">
                 <div class="p-6 space-y-4">
                     <p class="text-slate-300">Have a question? Fill out the form below and we'll get back to you.</p>
-                    
                     <div>
                         <label for="contact-name" class="block text-sm font-medium text-slate-300 mb-1">Full Name</label>
                         <input type="text" name="name" id="contact-name" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
-                    
                     <div>
-                        <label for="contact-email" class="block text-sm font-medium text-slate-300 mb-1">Email Address</Labe>
+                        <label for="contact-email" class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
                         <input type="email" name="email" id="contact-email" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
-                    
                     <div>
                         <label for="contact-message" class="block text-sm font-medium text-slate-300 mb-1">Your Query</label>
                         <textarea name="message" id="contact-message" rows="4" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
                     </div>
-
-                    <!-- Hidden fields to send to your email -->
                     <input type="hidden" name="_subject" value="New VLSInEasy Contact Query!">
-                    <!-- *** THIS IS THE UPDATED CC LINE *** -->
                     <input type="hidden" name="_cc" value="yasmeenms0512@gmail.com">
-
                 </div>
-                
-                <!-- Modal Footer -->
                 <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg">
                     <button type="submit" class="w-full bg-cyan-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:bg-cyan-400 transition-all shadow-lg">
                         Send Message
@@ -267,6 +288,8 @@
         </div>
     </div>
 
+    <!-- Load AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <!-- 
       ***************************************************
@@ -274,62 +297,92 @@
       ***************************************************
     -->
     <script>
-        // --- YOUR COURSE DATA ---
+        // --- COURSE DATA with UNIQUE THEMES ---
         const courses = [
             {
                 id: 'de',
                 title: 'Digital Electronics Fundamentals',
                 description: 'Build a solid foundation with the core principles of digital logic, from gates to state machines.',
                 topics: ['Logic Gates', 'Boolean Algebra', 'Combinational', 'Sequential', 'K-Maps', 'State Machines'],
-                // 2 & 3. Price Update
                 originalPrice: '₹999',
-                price: '₹500'
+                price: '₹500',
+                theme: {
+                    card: 'bg-slate-800 border-cyan-500/50',
+                    topics: 'bg-cyan-900/50 text-cyan-300',
+                    price: 'text-cyan-400',
+                    button: 'bg-cyan-500 text-slate-900 hover:bg-cyan-400'
+                }
             },
             {
                 id: 'verilog',
                 title: 'Practical Verilog for ASIC/FPGA',
                 description: 'Learn the industry-standard HDL for designing and verifying complex digital systems.',
                 topics: ['Verilog Syntax', 'RTL Modeling', 'Testbenches', 'Simulation', 'Synthesis', 'FPGA Flow'],
-                // 2 & 3. Price Update
                 originalPrice: '₹999',
-                price: '₹500'
+                price: '₹500',
+                theme: {
+                    card: 'bg-slate-800 border-green-500/50',
+                    topics: 'bg-green-900/50 text-green-300',
+                    price: 'text-green-400',
+                    button: 'bg-green-500 text-slate-900 hover:bg-green-400'
+                }
             },
             {
                 id: 'lp-vlsi',
                 title: 'Low Power VLSI Techniques',
                 description: 'Master essential techniques for designing power-efficient circuits, a critical skill in modern chip design.',
                 topics: ['Power Gating', 'Clock Gating', 'DVFS', 'Multi-Vdd', 'Leakage Power', 'UPF'],
-                // 2 & 3. Price Update
                 originalPrice: '₹999',
-                price: '₹500'
+                price: '₹500',
+                theme: {
+                    card: 'bg-slate-800 border-purple-500/50',
+                    topics: 'bg-purple-900/50 text-purple-300',
+                    price: 'text-purple-400',
+                    button: 'bg-purple-500 text-white hover:bg-purple-400'
+                }
             },
             {
-                // 1. Course Update
                 id: 'xilinx',
                 title: 'Xilinx Introduction & Project Creation',
                 description: 'Get hands-on with FPGAs. Learn to design, simulate, and implement a real project on Xilinx hardware.',
-                topics: ['FPGA Architecture', 'Vivado Suite', 'Project Flow', 'Simulation', 'Hardware Debug', 'IP Integrator'],
-                // 2 & 3. Price Update
+                topics: ['FPGA Architecture', 'Vivido Suite', 'Project Flow', 'Simulation', 'Hardware Debug', 'IP Integrator'],
                 originalPrice: '₹999',
-                price: '₹500'
+                price: '₹500',
+                theme: {
+                    card: 'bg-slate-800 border-orange-500/50',
+                    topics: 'bg-orange-900/50 text-orange-300',
+                    price: 'text-orange-400',
+                    button: 'bg-orange-500 text-white hover:bg-orange-400'
+                }
             }
         ];
 
         // --- DYNAMIC RENDERING & MODAL SCRIPT ---
         document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 4. NEW: Mouse Spotlight Listener ---
+            document.addEventListener('mousemove', (e) => {
+                // Update the CSS variables with the mouse coordinates
+                document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+                document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+            });
+
+            // --- Existing Logic ---
             const courseListContainer = document.getElementById('course-list');
             
-            // Set footer year
             document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-            // --- 1. Render Courses ---
+            // Render Courses
             if (courseListContainer) {
-                courses.forEach(course => {
+                courses.forEach((course, index) => {
                     const card = document.createElement('div');
-                    card.className = 'bg-slate-800 rounded-lg shadow-xl overflow-hidden flex flex-col transform hover:scale-[1.03] transition-transform duration-300 border border-slate-700';
+                    card.className = `rounded-lg shadow-xl overflow-hidden flex flex-col transform hover:scale-[1.03] transition-transform duration-300 border ${course.theme.card}`;
                     
+                    card.setAttribute('data-aos', 'fade-up');
+                    card.setAttribute('data-aos-delay', index * 100);
+
                     const topicPills = course.topics.map(topic => 
-                        `<span class="text-xs font-semibold bg-cyan-900/50 text-cyan-300 px-3 py-1 rounded-full">${topic}</span>`
+                        `<span class="text-xs font-semibold px-3 py-1 rounded-full ${course.theme.topics}">${topic}</span>`
                     ).join('');
 
                     card.innerHTML = `
@@ -343,15 +396,12 @@
                             </div>
                         </div>
                         
-                        <!-- Card Footer (Price & Button) -->
                         <div class="bg-slate-700/50 p-6 border-t border-slate-700 flex justify-between items-center">
-                            <!-- 3. Slashed Price -->
                             <div class="flex items-baseline gap-3">
-                                <span class="text-3xl font-bold text-cyan-400">${course.price}</span>
+                                <span class="text-3xl font-bold ${course.theme.price}">${course.price}</span>
                                 <span class="text-lg line-through text-slate-500">${course.originalPrice}</span>
                             </div>
-                            <!-- 5. Enroll Button -->
-                            <button class="enroll-btn bg-cyan-500 text-slate-900 font-semibold px-5 py-2 rounded-md hover:bg-cyan-400 transition-all shadow-md" data-course-name="${course.title}">
+                            <button class="enroll-btn font-semibold px-5 py-2 rounded-md transition-all shadow-md ${course.theme.button}" data-course-name="${course.title}">
                                 Enroll Now
                             </button>
                         </div>
@@ -360,58 +410,41 @@
                 });
             }
 
-            // --- 2. Modal Logic ---
+            // Modal Logic
             const enrollModal = document.getElementById('enroll-modal');
             const contactModal = document.getElementById('contact-modal');
-            
-            // Inputs for the enroll form
             const enrollCourseNameInput = document.getElementById('enroll-course-name');
             const enrollCourseNameDisplay = document.getElementById('enroll-course-name-display');
 
-            // Function to open a modal
-            const openModal = (modal) => {
-                if (modal) modal.classList.remove('hidden');
-            };
+            const openModal = (modal) => { if (modal) modal.classList.remove('hidden'); };
+            const closeModal = (modal) => { if (modal) modal.classList.add('hidden'); };
 
-            // Function to close a modal
-            const closeModal = (modal) => {
-                if (modal) modal.classList.add('hidden');
-            };
-
-            // 5. Enroll Button Listeners
             document.querySelectorAll('.enroll-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const courseName = e.currentTarget.dataset.courseName;
-                    // Pre-fill the form with the course name
                     if (enrollCourseNameInput) enrollCourseNameInput.value = courseName;
                     if (enrollCourseNameDisplay) enrollCourseNameDisplay.value = courseName;
-                    openModal(enrollModal);
+                    openModal( enrollModal);
                 });
             });
 
-            // 7. Contact Button Listeners
-            document.getElementById('contact-nav-link').addEventListener('click', () => {
-                openModal(contactModal);
-            });
-            document.getElementById('contact-nav-link-mobile').addEventListener('click', () => {
-                openModal(contactModal);
-            });
+            document.getElementById('contact-nav-link').addEventListener('click', () => { openModal(contactModal); });
+            document.getElementById('contact-nav-link-mobile').addEventListener('click', () => { openModal(contactModal); });
 
-            // Close Button Listeners (for both modals)
             document.querySelectorAll('.modal-close-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    closeModal(e.currentTarget.closest('.modal'));
-                });
+                btn.addEventListener('click', (e) => { closeModal(e.currentTarget.closest('.modal')); });
+            });
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+                backdrop.addEventListener('click', (e) => { closeModal(e.currentTarget.closest('.modal')); });
             });
 
-            // Backdrop Click Listeners (to close modals)
-            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-                backdrop.addEventListener('click', (e) => {
-                    closeModal(e.currentTarget.closest('.modal'));
-                });
+            // Initialize AOS
+            AOS.init({
+                duration: 600,
+                once: true,
+                disable: 'mobile'
             });
         });
     </script>
 </body>
 </html>
-
