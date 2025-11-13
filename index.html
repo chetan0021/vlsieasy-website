@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VLSInEasy - Master In-Demand Skills</title>
+    <title>VLSIeasy - Master In-Demand Skills</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -259,7 +259,7 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0">
                     <!-- 4. Applied new 3D Logo Text class -->
-                    <a href="#" class="text-3d-logo text-2xl font-extrabold tracking-wide">VLSInEasy</a>
+                    <a href="#" class="text-3d-logo text-2xl font-extrabold tracking-wide">VLSIeasy</a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
@@ -371,7 +371,7 @@
     <!-- Footer -->
     <footer class="bg-slate-900 border-t border-slate-700/50 text-slate-400 py-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; <span id="footer-year"></span> VLSInEasy. All rights reserved.</p>
+            <p>&copy; <span id="footer-year"></span> VLSIeasy. All rights reserved.</p>
         </div>
     </footer>
 
@@ -972,7 +972,7 @@
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
                 const courseContext = courses.map(c => `Course: "${c.title}", Topics: "${c.topics.join(', ')}"`).join('\n');
-                const systemPrompt = `You are a friendly, helpful AI chatbot for "VLSInEasy", an online VLSI course website. Your goal is to answer student questions about VLSI, our courses, or enrollment. Keep your answers concise and conversational.
+                const systemPrompt = `You are a friendly, helpful AI chatbot for "VLSIeasy", an online VLSI course website. Your goal is to answer student questions about VLSI, our courses, or enrollment. Keep your answers concise and conversational.
                 Here are the courses we offer:
                 ${courseContext}
                 Do not make up courses or pricing. If you don't know an answer, politely say so.`;
@@ -1038,3 +1038,4 @@
     </script>
 </body>
 </html>
+
