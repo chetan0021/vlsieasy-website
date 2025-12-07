@@ -24,12 +24,11 @@
             --dark-bg-start: #000000;
             --dark-bg-mid: #240032;
             --dark-bg-end: #000000;
-            --accent-silver: rgba(229, 231, 235, 0.2);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--dark-bg-start); /* Fallback */
+            background-color: var(--dark-bg-start);
             background-image: linear-gradient(
                 -45deg, 
                 var(--dark-bg-start), 
@@ -49,33 +48,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* AI Features Styles */
-        .ai-explanation-box {
-            background: rgba(15, 23, 42, 0.9);
-            border-left: 3px solid #22d3ee;
-            padding: 1rem;
-            margin-top: 0.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            font-size: 0.9rem;
-            color: #e2e8f0;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .ai-loading-pulse {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #22d3ee;
-            animation: pulse-glow 1s infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        /* Logic Gate Background Canvas */
         #logic-gate-background {
             position: fixed;
             top: 0;
@@ -88,41 +61,9 @@
         
         header, footer, .modal, #view-home, #view-details {
             position: relative;
-            z-index: 5; /* Increased z-index to be above background */
+            z-index: 5;
         }
 
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
-        }
-
-        .btn-premium-glow {
-            animation: pulse-glow 2s infinite;
-        }
-
-        /* Modal Styles */
-        .modal {
-            transition: opacity 0.25s ease, transform 0.25s ease;
-            z-index: 100;
-        }
-        .modal.hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-        .modal-backdrop {
-            transition: opacity 0.25s ease;
-            z-index: 99;
-        }
-        .modal.hidden .modal-backdrop {
-            opacity: 0;
-        }
-
-        h1, h2, h3 {
-            text-shadow: 0px 0px 10px rgba(34, 211, 238, 0.3);
-        }
-        
         /* 3D Steel Text */
         .text-3d-steel {
             color: #e0e0e0;
@@ -136,7 +77,7 @@
         }
         .text-3d-steel:hover { transform: scale(1.02); }
 
-        /* FLASHLIGHT SHINE EFFECT */
+        /* Flashlight Shine Effect for Nav */
         .nav-link-shine {
             position: relative;
             overflow: hidden;
@@ -158,44 +99,41 @@
             left: 100%;
         }
 
-        /* Chatbot Styles */
-        #chat-float-btn {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            z-index: 90;
-            transition: all 0.3s ease;
+        .btn-premium-glow {
+            animation: pulse-glow 2s infinite;
         }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+        }
+
+        /* Modal Styles */
+        .modal { transition: opacity 0.25s ease, transform 0.25s ease; z-index: 100; }
+        .modal.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; }
+        .modal-backdrop { transition: opacity 0.25s ease; z-index: 99; }
+        .modal.hidden .modal-backdrop { opacity: 0; }
+
+        /* Chatbot Styles */
+        #chat-float-btn { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 90; transition: all 0.3s ease; }
         #chat-modal { z-index: 100; }
         #chat-log { height: 300px; }
         .chat-bubble { max-width: 80%; }
         .chat-bubble-user { background-color: #06b6d4; color: #0f172a; align-self: flex-end; }
         .chat-bubble-bot { background-color: #334155; color: #e2e8f0; align-self: flex-start; }
-        
-        .chat-loader {
-            width: 8px; height: 8px; border-radius: 50%; display: block; margin: 2px; position: relative;
-            background: #cbd5e1;
-            box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1;
-            animation: chat-spin 1.5s ease-in-out infinite;
-        }
-        @keyframes chat-spin {
-            33% { background: #cbd5e1; box-shadow: -12px 0 #64748b, 12px 0 #cbd5e1; }
-            66% { background: #64748b; box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1; }
-            100% { background: #cbd5e1; box-shadow: -12px 0 #cbd5e1, 12px 0 #64748b; }
-        }
+        .chat-loader { width: 8px; height: 8px; border-radius: 50%; display: block; margin: 2px; position: relative; background: #cbd5e1; box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1; animation: chat-spin 1.5s ease-in-out infinite; }
+        @keyframes chat-spin { 33% { background: #cbd5e1; box-shadow: -12px 0 #64748b, 12px 0 #cbd5e1; } 66% { background: #64748b; box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1; } 100% { background: #cbd5e1; box-shadow: -12px 0 #cbd5e1, 12px 0 #64748b; } }
 
         #three-canvas { width: 100%; height: 100%; cursor: grab; }
         .hidden-view { display: none !important; }
-        
-        /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
 <body class="overflow-x-hidden bg-black text-slate-200">
 
+    <!-- Logic Gate Physics Background -->
     <canvas id="logic-gate-background"></canvas>
 
     <script>
@@ -223,9 +161,9 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <button onclick="switchView('home')" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">Home</button>
-                        <a href="#courses" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">Courses</a>
-                        <a href="#about" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">About</a>
+                        <button onclick="switchView('home')" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">Home</button>
+                        <a href="#courses" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">Courses</a>
+                        <a href="#about" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">About</a>
                         <button id="contact-nav-link" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400 px-4 py-2 rounded-md text-sm font-bold shadow-lg transition-all transform hover:-translate-y-0.5">
                             Contact Us
                         </button>
@@ -241,6 +179,7 @@
             <section id="hero" class="pt-24 pb-32">
                 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                        <!-- Headline -->
                         <div>
                             <h1 class="text-3d-steel text-4xl md:text-6xl font-extrabold leading-tight mb-6 tracking-tight">
                                 Stop Searching.<br>Start Learning.
@@ -252,6 +191,7 @@
                                 Explore All Courses
                             </a>
                         </div>
+                        <!-- 3D Animation Container -->
                         <div class="h-[300px] md:h-[450px] relative mt-10 md:mt-0">
                             <canvas id="three-canvas" class="rounded-lg absolute inset-0 w-full h-full"></canvas>
                         </div>
@@ -311,12 +251,8 @@
                             <div class="h-1 w-20 bg-cyan-500 rounded mb-6"></div>
                             <p id="detail-desc" class="text-slate-300 text-lg mb-8"></p>
                             
-                            <div class="mb-8 p-4 bg-slate-950/50 rounded-lg border border-slate-700/50">
-                                <h4 class="text-white font-semibold mb-2 flex items-center"><span class="mr-2">✨</span> AI Insight</h4>
-                                <div id="ai-outcome-result" class="text-sm text-slate-400 hidden"></div>
-                                <button id="ai-outcome-btn" class="text-xs bg-cyan-500/10 text-cyan-400 px-3 py-2 rounded border border-cyan-500/20 hover:bg-cyan-500/20 transition-all flex items-center">What will I achieve in this course?</button>
-                            </div>
-
+                            <!-- AI Insight removed per request to clean up UI -->
+                            
                             <div class="mt-auto">
                                 <div class="flex items-end gap-2 mb-6">
                                     <span id="detail-price" class="text-4xl font-bold text-white"></span>
@@ -340,7 +276,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"><p>&copy; <span id="footer-year"></span> VLSIeasy. All rights reserved.</p></div>
     </footer>
 
-    <!-- Enrollment Form Modal (Updated with more fields) -->
+    <!-- Enrollment Form Modal (Full Details) -->
     <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
         <div class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
         <div class="bg-slate-800 rounded-lg shadow-2xl w-full max-w-2xl border border-slate-700 relative z-[201] max-h-[90vh] overflow-y-auto custom-scrollbar">
@@ -352,113 +288,40 @@
             <form id="google-sheet-form">
                 <div class="p-6 space-y-4">
                     <p class="text-slate-300 text-sm">Please fill all details to complete your enrollment.</p>
-                    
-                    <!-- Grid for 2-column layout -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        
-                        <!-- Personal Details -->
-                        <div class="md:col-span-2">
-                            <h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Personal Details</h4>
-                        </div>
+                        <div class="md:col-span-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Personal Details</h4></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Full Name</label><input type="text" name="name" required placeholder="John Doe" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Email Address</label><input type="email" name="email" required placeholder="john@example.com" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Phone Number</label><input type="tel" name="phone" required placeholder="+91 9876543210" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">WhatsApp Number</label><input type="tel" name="whatsapp" required placeholder="For updates" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Date of Birth</label><input type="date" name="dob" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Gender</label><select name="gender" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"><option value="" disabled selected>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
 
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Full Name</label>
-                            <input type="text" name="name" required placeholder="John Doe" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Email Address</label>
-                            <input type="email" name="email" required placeholder="john@example.com" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Phone Number</label>
-                            <input type="tel" name="phone" required placeholder="+91 9876543210" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">WhatsApp Number</label>
-                            <input type="tel" name="whatsapp" required placeholder="For updates" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Date of Birth</label>
-                            <input type="date" name="dob" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Gender</label>
-                            <select name="gender" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                                <option value="" disabled selected>Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
+                        <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Academic / Professional</h4></div>
+                        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">College / Company Name</label><input type="text" name="college_company" required placeholder="e.g. IIT Bombay / Intel" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Branch / Stream</label><input type="text" name="branch" required placeholder="e.g. ECE / EEE" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Year of Passing</label><input type="text" name="year_passing" required placeholder="e.g. 2024" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
 
-                        <!-- Academic / Professional -->
-                        <div class="md:col-span-2 mt-2">
-                            <h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Academic / Professional</h4>
-                        </div>
+                        <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Address Details</h4></div>
+                        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Residence Address</label><input type="text" name="address" required placeholder="Street Address, Area" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">City</label><input type="text" name="city" required placeholder="e.g. Bangalore" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">State</label><input type="text" name="state" required placeholder="e.g. Karnataka" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Country</label><input type="text" name="country" required placeholder="e.g. India" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
 
-                        <div class="md:col-span-2">
-                            <label class="block text-xs text-slate-400 mb-1">College / Company Name</label>
-                            <input type="text" name="college_company" required placeholder="e.g. IIT Bombay / Intel" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Branch / Stream</label>
-                            <input type="text" name="branch" required placeholder="e.g. ECE / EEE" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Year of Passing</label>
-                            <input type="text" name="year_passing" required placeholder="e.g. 2024" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-
-                        <!-- Address -->
-                        <div class="md:col-span-2 mt-2">
-                            <h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Address Details</h4>
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <label class="block text-xs text-slate-400 mb-1">Residence Address</label>
-                            <input type="text" name="address" required placeholder="Street Address, Area" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">City</label>
-                            <input type="text" name="city" required placeholder="e.g. Bangalore" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">State</label>
-                            <input type="text" name="state" required placeholder="e.g. Karnataka" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-xs text-slate-400 mb-1">Country</label>
-                            <input type="text" name="country" required placeholder="e.g. India" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
-                        </div>
-
-                        <!-- Goal -->
-                        <div class="md:col-span-2 mt-2">
-                            <h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Your Objective</h4>
-                        </div>
-                        
-                        <div class="md:col-span-2">
-                            <label class="block text-xs text-slate-400 mb-1">Goal to achieve in this course</label>
-                            <textarea name="goal" rows="2" placeholder="e.g. To get a job in Physical Design..." class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></textarea>
-                        </div>
+                        <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Your Objective</h4></div>
+                        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Goal to achieve in this course</label><textarea name="goal" rows="2" placeholder="e.g. To get a job in Physical Design..." class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></textarea></div>
                     </div>
                     
-                    <!-- Selected Course (Readonly) -->
                     <div class="mt-4 pt-4 border-t border-slate-700">
                         <label class="block text-xs text-slate-400 mb-1">Selected Course</label>
                         <input type="text" id="enroll-course-name-display" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed font-semibold">
                     </div>
-
                     <input type="hidden" name="courseName" id="enroll-course-name">
                 </div>
-                
                 <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg sticky bottom-0 z-10 bg-slate-800">
                     <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg flex justify-center items-center">
                         <span>Submit Enrollment</span>
-                        <!-- Loading Spinner (Hidden by default) -->
-                        <svg id="submit-spinner" class="animate-spin ml-3 h-5 w-5 text-slate-900 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                        <svg id="submit-spinner" class="animate-spin ml-3 h-5 w-5 text-slate-900 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     </button>
                     <p id="submit-message" class="text-center text-sm mt-2 hidden"></p>
                 </div>
@@ -555,12 +418,11 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Logic Gate Background with "Particle Physics" ---
+            // --- Logic Gate Particle Physics ---
             const bgCanvas = document.getElementById('logic-gate-background');
             if (bgCanvas) {
                 const ctx = bgCanvas.getContext('2d');
-                let particles = []; 
-                let mouse = { x: undefined, y: undefined, radius: 150 };
+                let particles = []; let mouse = { x: undefined, y: undefined, radius: 150 };
                 function resizeCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
                 resizeCanvas(); window.addEventListener('resize', resizeCanvas);
                 window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
@@ -570,50 +432,50 @@
                     constructor(x, y, size, type, color, vx, vy) {
                         this.x = x; this.y = y; this.size = size; this.type = type; this.color = color;
                         this.vx = vx; this.vy = vy; this.friction = 0.95;
-                        this.density = (Math.random() * 30) + 1; // mass/density for attraction
-                        this.attractionStrength = 0.03; // Strength of mouse pull
+                        this.density = (Math.random() * 30) + 1; // mass for attraction
+                        this.attractionStrength = 0.05; // Strength
                     }
                     draw() {
                         ctx.fillStyle = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 1;
+                        // Draw Logic Gates
                         if (this.type === 'line') {
-                            ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.size * 2, this.y); ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.size*2, this.y); ctx.stroke();
                         } else if (this.type === 'and') {
-                            ctx.beginPath(); ctx.moveTo(this.x, this.y - this.size / 2); ctx.lineTo(this.x, this.y + this.size / 2); ctx.arc(this.x, this.y, this.size / 2, -Math.PI / 2, Math.PI / 2); ctx.closePath(); ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(this.x, this.y - this.size/2); ctx.lineTo(this.x, this.y + this.size/2); ctx.arc(this.x, this.y, this.size/2, -Math.PI/2, Math.PI/2); ctx.closePath(); ctx.stroke();
                         } else if (this.type === 'not') {
-                            ctx.beginPath(); ctx.moveTo(this.x, this.y - this.size / 2); ctx.lineTo(this.x, this.y + this.size / 2); ctx.lineTo(this.x + this.size, this.y); ctx.closePath(); ctx.stroke();
-                            ctx.beginPath(); ctx.arc(this.x + this.size + 2, this.y, 2, 0, Math.PI * 2); ctx.fill();
+                            ctx.beginPath(); ctx.moveTo(this.x, this.y - this.size/2); ctx.lineTo(this.x, this.y + this.size/2); ctx.lineTo(this.x + this.size, this.y); ctx.closePath(); ctx.stroke();
+                            ctx.beginPath(); ctx.arc(this.x + this.size + 2, this.y, 2, 0, Math.PI*2); ctx.fill();
                         }
                     }
                     update() {
-                        // Attraction Physics
                         if (mouse.x !== undefined) {
                             let dx = mouse.x - this.x; let dy = mouse.y - this.y;
                             let distance = Math.sqrt(dx*dx + dy*dy);
                             if (distance < mouse.radius + this.size) {
                                 let forceX = dx/distance; let forceY = dy/distance;
-                                // Apply attraction force based on density
-                                this.vx += forceX * this.attractionStrength * this.density;
-                                this.vy += forceY * this.attractionStrength * this.density;
+                                // Stronger attraction logic
+                                this.vx += forceX * this.attractionStrength * this.density * 0.05; 
+                                this.vy += forceY * this.attractionStrength * this.density * 0.05;
                             }
                         }
-                        this.vx *= this.friction; this.vy *= this.friction;
-                        this.x += this.vx; this.y += this.vy;
-                        // Wrap
-                        if (this.x > bgCanvas.width + this.size) this.x = -this.size; if (this.x < -this.size) this.x = bgCanvas.width + this.size;
-                        if (this.y > bgCanvas.height + this.size) this.y = -this.size; if (this.y < -this.size) this.y = bgCanvas.height + this.size;
+                        this.vx *= this.friction; this.vy *= this.friction; this.x += this.vx; this.y += this.vy;
+                        if (this.x > bgCanvas.width + 50) this.x = -50; if (this.x < -50) this.x = bgCanvas.width + 50;
+                        if (this.y > bgCanvas.height + 50) this.y = -50; if (this.y < -50) this.y = bgCanvas.height + 50;
                     }
                 }
+
                 function initParticles() {
                     particles = [];
-                    let count = (bgCanvas.width * bgCanvas.height) / 9000;
+                    // Increased count for "powder" effect
+                    let count = (bgCanvas.width * bgCanvas.height) / 5000; 
                     for (let i = 0; i < count; i++) {
-                        let size = Math.random() * 5 + 3;
+                        let size = Math.random() * 4 + 2;
                         let x = Math.random() * bgCanvas.width;
                         let y = Math.random() * bgCanvas.height;
-                        let types = ['and', 'not', 'line'];
-                        let type = types[Math.floor(Math.random() * 3)];
-                        let color = Math.random() > 0.5 ? 'rgba(34, 211, 238, 0.4)' : 'rgba(226, 232, 240, 0.4)';
-                        let vx = (Math.random() - 0.5) * 0.3; let vy = (Math.random() - 0.5) * 0.3;
+                        let types = ['and', 'not', 'line', 'line', 'line']; // More lines for connections
+                        let type = types[Math.floor(Math.random() * types.length)];
+                        let color = Math.random() > 0.5 ? 'rgba(34, 211, 238, 0.6)' : 'rgba(226, 232, 240, 0.4)';
+                        let vx = (Math.random() - 0.5) * 0.5; let vy = (Math.random() - 0.5) * 0.5;
                         particles.push(new Particle(x, y, size, type, color, vx, vy));
                     }
                 }
@@ -683,16 +545,6 @@
                                 </div>
                             </li>`).join('');
                         
-                        // Setup AI Outcome
-                        const aiBtn = document.getElementById('ai-outcome-btn');
-                        const aiResult = document.getElementById('ai-outcome-result');
-                        if (aiResult) { aiResult.classList.add('hidden'); aiResult.innerHTML = ''; aiBtn.classList.remove('hidden'); }
-                        aiBtn.onclick = async () => {
-                            aiBtn.innerHTML = '<span class="ai-loading-pulse mr-2"></span> Analyzing...';
-                            const res = await askGemini(`For the VLSI course "${course.title}", list 3 career outcomes.`);
-                            aiBtn.classList.add('hidden'); aiResult.innerHTML = res.replace(/\n/g, '<br>'); aiResult.classList.remove('hidden');
-                        };
-
                         // Setup Enroll
                         const detailEnrollBtn = document.getElementById('detail-enroll-btn');
                         detailEnrollBtn.onclick = () => {
@@ -809,7 +661,7 @@
 
             // !!! IMPORTANT !!!
             // Replace this URL with your actual Google Apps Script Web App URL
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyJaff-NHDJQog01HWY0B0mXIXJP2ZxFsoFgQmsveZhxrojBD8odr2wczF15ehD7JzouQ/exec'; 
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwWpQRt8k0VQvupix0vgRRufVn3AlSWnC9zpFDV7VI4df2dA2Z9Tay6w0h31LxL5PDqAg/exec'; 
 
             if (form) {
                 form.addEventListener('submit', e => {
@@ -856,4 +708,3 @@
     </script>
 </body>
 </html>
-
