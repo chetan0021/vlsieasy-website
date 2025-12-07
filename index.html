@@ -11,23 +11,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;550;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Three.js library --><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
+    <!-- AOS Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
         :root {
-            /* 1. UPDATED: New Black/Violet Theme */
-            --primary-blue: #22d3ee; /* Cyan-400 */
-            --dark-bg-start: #000000;  /* Pure Black */
-            --dark-bg-mid: #240032;   /* Dark Violet */
-            --dark-bg-end: #000000;    /* Pure Black */
+            /* Black/Violet Theme */
+            --primary-blue: #22d3ee;
+            --dark-bg-start: #000000;
+            --dark-bg-mid: #240032;
+            --dark-bg-end: #000000;
             --accent-silver: rgba(229, 231, 235, 0.2);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--dark-bg-start);
+            background-color: var(--dark-bg-start); /* Fallback */
             background-image: linear-gradient(
                 -45deg, 
                 var(--dark-bg-start), 
@@ -47,8 +49,31 @@
             100% { background-position: 0% 50%; }
         }
 
-        html {
-            scroll-behavior: smooth;
+        /* AI Features Styles */
+        .ai-explanation-box {
+            background: rgba(15, 23, 42, 0.9);
+            border-left: 3px solid #22d3ee;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .ai-loading-pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #22d3ee;
+            animation: pulse-glow 1s infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         #logic-gate-background {
@@ -61,9 +86,9 @@
             pointer-events: none;
         }
         
-        header, main, footer, .modal {
+        header, footer, .modal, #view-home, #view-details {
             position: relative;
-            z-index: 2;
+            z-index: 5; /* Increased z-index to be above background */
         }
 
         @keyframes pulse-glow {
@@ -76,6 +101,7 @@
             animation: pulse-glow 2s infinite;
         }
 
+        /* Modal Styles */
         .modal {
             transition: opacity 0.25s ease, transform 0.25s ease;
             z-index: 100;
@@ -94,30 +120,23 @@
         }
 
         h1, h2, h3 {
-            text-shadow: 0px 0px 8px rgba(34, 211, 238, 0.2);
+            text-shadow: 0px 0px 10px rgba(34, 211, 238, 0.3);
         }
         
-        /* "Steel" Text Effect (Headline) */
+        /* 3D Steel Text */
         .text-3d-steel {
-            color: #e0e0e0; /* Light silver */
+            color: #e0e0e0;
             text-shadow: 
-                /* 3D Depth */
                 1px 1px 0px #9e9e9e,
                 2px 2px 0px #8d8d8d,
                 3px 3px 0px #7b7b7b,
-                4px 4px 0px #6a6a6a,
-                /* Inner Glow (Shine) */
                 0px 0px 5px rgba(255, 255, 255, 0.5),
-                0px 0px 15px rgba(34, 211, 238, 0.5), /* Cyan glow */
-                /* Outer Glow */
-                1px 1px 20px rgba(34, 211, 238, 0.2);
+                0px 0px 15px rgba(34, 211, 238, 0.5);
             transition: all 0.2s ease-in-out;
         }
-        .text-3d-steel:hover {
-            transform: scale(1.02);
-        }
+        .text-3d-steel:hover { transform: scale(1.02); }
 
-        /* Shine on hover for nav links */
+        /* FLASHLIGHT SHINE EFFECT */
         .nav-link-shine {
             position: relative;
             overflow: hidden;
@@ -130,17 +149,16 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.4s ease;
+            /* Strong flashlight gradient */
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transition: left 0.5s ease;
         }
-        .nav-link-shine:hover {
-            color: #ffffff;
-        }
+        .nav-link-shine:hover { color: #ffffff; }
         .nav-link-shine:hover::before {
             left: 100%;
         }
 
-
+        /* Chatbot Styles */
         #chat-float-btn {
             position: fixed;
             bottom: 1.5rem;
@@ -148,58 +166,35 @@
             z-index: 90;
             transition: all 0.3s ease;
         }
-
-        #chat-modal {
-            z-index: 100;
-        }
-
-        #chat-log {
-            height: 300px;
-        }
-
-        .chat-bubble {
-            max-width: 80%;
-        }
-
-        .chat-bubble-user {
-            background-color: #06b6d4;
-            color: #0f172a;
-            align-self: flex-end;
-        }
-
-        .chat-bubble-bot {
-            background-color: #334155;
-            color: #e2e8f0;
-            align-self: flex-start;
-        }
+        #chat-modal { z-index: 100; }
+        #chat-log { height: 300px; }
+        .chat-bubble { max-width: 80%; }
+        .chat-bubble-user { background-color: #06b6d4; color: #0f172a; align-self: flex-end; }
+        .chat-bubble-bot { background-color: #334155; color: #e2e8f0; align-self: flex-start; }
         
         .chat-loader {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: block;
-            margin: 2px;
-            position: relative;
+            width: 8px; height: 8px; border-radius: 50%; display: block; margin: 2px; position: relative;
             background: #cbd5e1;
             box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1;
             animation: chat-spin 1.5s ease-in-out infinite;
         }
-
         @keyframes chat-spin {
             33% { background: #cbd5e1; box-shadow: -12px 0 #64748b, 12px 0 #cbd5e1; }
             66% { background: #64748b; box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1; }
             100% { background: #cbd5e1; box-shadow: -12px 0 #cbd5e1, 12px 0 #64748b; }
         }
 
-        #three-canvas {
-            width: 100%;
-            height: 100%;
-            cursor: grab;
-        }
-
+        #three-canvas { width: 100%; height: 100%; cursor: grab; }
+        .hidden-view { display: none !important; }
+        
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body class="overflow-x-hidden bg-black text-slate-200">
 
     <canvas id="logic-gate-background"></canvas>
 
@@ -207,809 +202,657 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'], },
                     colors: {
-                        cyan: {
-                            50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9',
-                            400: '#22d3ee', /* Used for primary accents */
-                            500: '#06b6d4', 600: '#0891b2', 700: '#0e7490', 800: '#0f4e64',
-                            900: '#164e63', 950: '#083344'
-                        },
-                        slate: {
-                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1',
-                            400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155',
-                            800: '#1e293b', 900: '#0f172a', 950: '#020617'
-                        }
+                        cyan: { 50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 700: '#0e7490', 800: '#0f4e64', 900: '#164e63', 950: '#083344' },
+                        slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' }
                     }
                 },
             },
         };
     </script>
 
-    <header class="bg-slate-900/70 border-b border-slate-700/50 sticky top-0 z-50 backdrop-blur-md">
+    <header class="bg-slate-900/80 border-b border-slate-700/50 sticky top-0 z-50 backdrop-blur-md">
         <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0">
-                    <a href="#" class="flex items-center space-x-2 group">
-                        
-                        <!-- REPLACED the SVG code with this img tag -->
-                        <img src="Logo.png" 
-                             alt="VLSIeasy Logo" 
-                             class="h-10 w-auto group-hover:scale-110 transition-transform" 
-                             onerror="this.src='https://placehold.co/100x100/0f172a/22d3ee?text=LOGO'; this.onerror=null;">
-                        
-                        <!-- Updated Brand Name --><span class="text-2xl font-extrabold text-white group-hover:text-cyan-400 transition-colors">VLSIeasy</span>
+                    <a href="#" class="flex items-center space-x-2 group" onclick="location.reload()">
+                        <img src="logo.png" alt="VLSIeasy Logo" class="h-10 w-auto group-hover:scale-110 transition-transform" onerror="this.src='https://placehold.co/100x100/0f172a/22d3ee?text=LOGO'; this.onerror=null;">
+                        <span class="text-2xl font-extrabold text-white group-hover:text-cyan-400 transition-colors">VLSIeasy</span>
                     </a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#hero" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                        <a href="#courses" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium">Courses</a>
-                        <a href="#about" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium">About</a>
-                        <button id="contact-nav-link" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400 px-4 py-2 rounded-md text-sm font-bold shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-0.5">
+                        <button onclick="switchView('home')" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">Home</button>
+                        <a href="#courses" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">Courses</a>
+                        <a href="#about" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">About</a>
+                        <button id="contact-nav-link" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400 px-4 py-2 rounded-md text-sm font-bold shadow-lg transition-all transform hover:-translate-y-0.5">
                             Contact Us
                         </button>
                     </div>
-                </div>
-                <div class="md:hidden">
-                    <button id="contact-nav-link-mobile" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400 px-3 py-1 rounded-md text-sm font-bold shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-0.5">
-                        Contact
-                    </button>
                 </div>
             </div>
         </nav>
     </header>
 
     <main>
-        <section id="hero" class="pt-24 pb-32">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                    
-                    <div data-aos="fade-right" data-aos-duration="800">
-                        <h1 class="text-3d-steel text-4xl md:text-6xl font-extrabold leading-tight mb-6 tracking-tight">
-                            Stop Searching.<br>Start Learning.
-                        </h1>
-                        <p class="max-w-xl text-lg md:text-xl text-slate-300 mb-10 leading-relaxed">
-                            Master VLSI. Our expert-led courses make complex topics simple, from Digital Electronics to advanced Low Power techniques.
-                        </p>
-                        <a href="#courses" class="inline-block bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold text-lg px-8 py-4 rounded-lg shadow-xl hover:from-cyan-400 hover:to-sky-400 transition-all duration-300 ease-in-out transform hover:scale-105 btn-premium-glow">
-                            Explore All Courses
-                        </a>
+        <!-- ==================== VIEW: HOME ==================== -->
+        <div id="view-home">
+            <section id="hero" class="pt-24 pb-32">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                        <div>
+                            <h1 class="text-3d-steel text-4xl md:text-6xl font-extrabold leading-tight mb-6 tracking-tight">
+                                Stop Searching.<br>Start Learning.
+                            </h1>
+                            <p class="max-w-xl text-lg md:text-xl text-slate-300 mb-10 leading-relaxed">
+                                Master VLSI. Our expert-led courses make complex topics simple, from Digital Electronics to advanced Low Power techniques.
+                            </p>
+                            <a href="#courses" class="inline-block bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold text-lg px-8 py-4 rounded-lg shadow-xl hover:from-cyan-400 hover:to-sky-400 transition-all duration-300 ease-in-out transform hover:scale-105 btn-premium-glow">
+                                Explore All Courses
+                            </a>
+                        </div>
+                        <div class="h-[300px] md:h-[450px] relative mt-10 md:mt-0">
+                            <canvas id="three-canvas" class="rounded-lg absolute inset-0 w-full h-full"></canvas>
+                        </div>
                     </div>
-                    
-                    <div class="h-[300px] md:h-[450px] relative mt-10 md:mt-0">
-                        <canvas id="three-canvas" class="rounded-lg absolute inset-0 w-full h-full"></canvas>
-                    </div>
+                </div>
+            </section>
 
+            <section id="courses" class="py-20 bg-slate-900/80 border-t border-b border-white/10">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16" data-aos="fade-up">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Core Courses</h2>
+                        <p class="text-lg text-slate-400">Dive deep into the subjects that matter most in the VLSI industry.</p>
+                    </div>
+                    <div id="course-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Course cards injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="py-20">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Meet Your Instructors</h2>
+                        <p class="text-lg text-slate-400">Our courses are led by industry experts with a passion for teaching.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                        <div class="text-center p-6 bg-slate-900/50 rounded-xl border border-cyan-500/20 hover:border-cyan-500/50 transition-all">
+                            <img src="yasmeen.jpg" alt="Yasmeen" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-cyan-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/22d3ee?text=Yasmeen'; this.onerror=null;">
+                            <h3 class="text-2xl font-bold text-white mb-2">Yasmeen</h3>
+                            <p class="text-cyan-400 mb-4">VLSI & Digital Logic Expert</p>
+                            <p class="text-slate-400 text-sm">Specializes in Digital Electronics, Low Power VLSI Design, and Verilog.</p>
+                        </div>
+                        <div class="text-center p-6 bg-slate-900/50 rounded-xl border border-purple-500/20 hover:border-purple-500/50 transition-all">
+                            <img src="rachana.jpg" alt="Rachana" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-purple-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/c084fc?text=Rachana'; this.onerror=null;">
+                            <h3 class="text-2xl font-bold text-white mb-2">Rachana</h3>
+                            <p class="text-purple-400 mb-4">Physical Design & DFT Specialist</p>
+                            <p class="text-slate-400 text-sm">Expert in Digital VLSI Design (STA), Testing & Verification (DFT), and Physical Design.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== VIEW: COURSE DETAILS ==================== -->
+        <div id="view-details" class="hidden-view pt-24 pb-20 min-h-screen">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <button onclick="switchView('home')" class="mb-8 flex items-center text-cyan-400 hover:text-white transition-colors font-semibold">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Back to Courses
+                </button>
+
+                <div class="bg-slate-900 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <div class="p-8 bg-gradient-to-br from-slate-800 to-slate-900 flex flex-col">
+                            <span id="detail-instructor" class="inline-block self-start px-3 py-1 rounded-full text-xs font-semibold bg-cyan-900/50 text-cyan-300 mb-4 border border-cyan-500/30"></span>
+                            <h2 id="detail-title" class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"></h2>
+                            <div class="h-1 w-20 bg-cyan-500 rounded mb-6"></div>
+                            <p id="detail-desc" class="text-slate-300 text-lg mb-8"></p>
+                            
+                            <div class="mb-8 p-4 bg-slate-950/50 rounded-lg border border-slate-700/50">
+                                <h4 class="text-white font-semibold mb-2 flex items-center"><span class="mr-2">✨</span> AI Insight</h4>
+                                <div id="ai-outcome-result" class="text-sm text-slate-400 hidden"></div>
+                                <button id="ai-outcome-btn" class="text-xs bg-cyan-500/10 text-cyan-400 px-3 py-2 rounded border border-cyan-500/20 hover:bg-cyan-500/20 transition-all flex items-center">What will I achieve in this course?</button>
+                            </div>
+
+                            <div class="mt-auto">
+                                <div class="flex items-end gap-2 mb-6">
+                                    <span id="detail-price" class="text-4xl font-bold text-white"></span>
+                                    <span id="detail-original-price" class="text-xl text-slate-500 line-through mb-1"></span>
+                                </div>
+                                <button id="detail-enroll-btn" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold text-lg px-8 py-4 rounded-xl hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg transform hover:-translate-y-1">Proceed to Enrollment</button>
+                            </div>
+                        </div>
+
+                        <div class="p-8 bg-slate-950/50 border-t md:border-t-0 md:border-l border-slate-700">
+                            <h3 class="text-xl font-bold text-white mb-6 flex items-center border-b border-slate-700 pb-3">Course Syllabus</h3>
+                            <ul id="detail-syllabus" class="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2"></ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <section id="courses" class="py-20 bg-slate-900/80 border-t border-b border-white/10">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16" data-aos="fade-up">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Core Courses</h2>
-                    <p class="text-lg text-slate-400">
-                        Dive deep into the subjects that matter most in the VLSI industry.
-                    </p>
-                </div>
-                
-                <div id="course-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8">
-                    <!-- Course cards will be generated by JS and placed here --></div>
-
-            </div>
-        </section>
-
-        <section id="about" class="py-20">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Meet Your Instructors</h2>
-                    <p class="text-lg text-slate-400">Our courses are led by industry experts with a passion for teaching.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    
-                    <!-- Instructor 1 --><div class="text-center">
-                        <img src="yasmeen.jpg" alt="Instructor 1" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-cyan-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/22d3ee?text=Team+1'; this.onerror=null;">
-                        <h3 class="text-2xl font-bold text-white mb-2">Yasmeen MS</h3>
-                        <p class="text-cyan-400 mb-4">Lead, Digital Design</p>
-                        <p class="text-slate-400">
-                            [Yasmeen's bio. E.g., Senior VLSI engineer with 10+ years of experience in ASIC/FPGA design.]
-                        </p>
-                    </div>
-
-                    <!-- Instructor 2 --><div class="text-center">
-                        <img src="rachana.png" alt="Instructor 2" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-purple-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/c084fc?text=Team+2'; this.onerror=null;">
-                        <h3 class="text-2xl font-bold text-white mb-2">Rachana P</h3>
-                        <p class="text-purple-400 mb-4">Specialist, Low Power VLSI</p>
-                        <p class="text-slate-400">
-                            [Rachana's bio. E.g., Expert in low power techniques and power integrity analysis.]
-                        </p>
-                    </div>
-
-                    <!-- Instructor 3 --><div class="text-center">
-                        <img src="chetan.jpg" alt="Instructor 3" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-orange-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/fb923c?text=Team+3'; this.onerror=null;">
-                        <h3 class="text-2xl font-bold text-white mb-2">Chetan V</h3>
-                        <p class="text-orange-400 mb-4">Head, FPGA & Projects</p>
-                        <p class="text-slate-400">
-                            [Chetan's bio. E.g., Certified Xilinx specialist with a focus on practical, project-based learning.]
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
+        </div>
     </main>
 
-    <!-- Footer --><footer class="bg-slate-900 border-t border-slate-700/50 text-slate-400 py-12">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; <span id="footer-year"></span> VLSIeasy. All rights reserved.</p>
-        </div>
+    <footer class="bg-slate-900 border-t border-slate-700/50 text-slate-400 py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"><p>&copy; <span id="footer-year"></span> VLSIeasy. All rights reserved.</p></div>
     </footer>
 
-    <!-- Enrollment Modal --><div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="bg-slate-800 rounded-lg shadow-2xl z-[101] w-full max-w-md border border-slate-700">
-            <div class="flex justify-between items-center p-5 border-b border-slate-700">
-                <h3 class="text-xl font-semibold text-white">Enroll Now</h3>
+    <!-- Enrollment Form Modal (Updated with more fields) -->
+    <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
+        <div class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div class="bg-slate-800 rounded-lg shadow-2xl w-full max-w-2xl border border-slate-700 relative z-[201] max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center p-5 border-b border-slate-700 sticky top-0 bg-slate-800 z-10">
+                <h3 class="text-xl font-semibold text-white">Enrollment Form</h3>
                 <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
             </div>
             
-            <form action="https://formspree.io/f/xjkjkpdr" method="POST">
+            <form id="google-sheet-form">
                 <div class="p-6 space-y-4">
-                    <p class="text-slate-300">Complete this (free) enrollment to get started. We'll contact you with the course details!</p>
-                    <div>
-                        <label for="enroll-name" class="block text-sm font-medium text-slate-300 mb-1">Full Name</label>
-                        <input type="text" name="name" id="enroll-name" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <p class="text-slate-300 text-sm">Please fill all details to complete your enrollment.</p>
+                    
+                    <!-- Grid for 2-column layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <!-- Personal Details -->
+                        <div class="md:col-span-2">
+                            <h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Personal Details</h4>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Full Name</label>
+                            <input type="text" name="name" required placeholder="John Doe" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Email Address</label>
+                            <input type="email" name="email" required placeholder="john@example.com" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Phone Number</label>
+                            <input type="tel" name="phone" required placeholder="+91 9876543210" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">WhatsApp Number</label>
+                            <input type="tel" name="whatsapp" required placeholder="For updates" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Date of Birth</label>
+                            <input type="date" name="dob" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Gender</label>
+                            <select name="gender" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Academic / Professional -->
+                        <div class="md:col-span-2 mt-2">
+                            <h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Academic / Professional</h4>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs text-slate-400 mb-1">College / Company Name</label>
+                            <input type="text" name="college_company" required placeholder="e.g. IIT Bombay / Intel" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Branch / Stream</label>
+                            <input type="text" name="branch" required placeholder="e.g. ECE / EEE" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Year of Passing</label>
+                            <input type="text" name="year_passing" required placeholder="e.g. 2024" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+
+                        <!-- Address -->
+                        <div class="md:col-span-2 mt-2">
+                            <h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Address Details</h4>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs text-slate-400 mb-1">Residence Address</label>
+                            <input type="text" name="address" required placeholder="Street Address, Area" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">City</label>
+                            <input type="text" name="city" required placeholder="e.g. Bangalore" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">State</label>
+                            <input type="text" name="state" required placeholder="e.g. Karnataka" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs text-slate-400 mb-1">Country</label>
+                            <input type="text" name="country" required placeholder="e.g. India" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none">
+                        </div>
+
+                        <!-- Goal -->
+                        <div class="md:col-span-2 mt-2">
+                            <h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Your Objective</h4>
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label class="block text-xs text-slate-400 mb-1">Goal to achieve in this course</label>
+                            <textarea name="goal" rows="2" placeholder="e.g. To get a job in Physical Design..." class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></textarea>
+                        </div>
                     </div>
-                    <div>
-                        <label for="enroll-email" class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
-                        <input type="email" name="email" id="enroll-email" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    </div>
-                    <div>
-                        <label for="enroll-course-name-display" class="block text-sm font-medium text-slate-300 mb-1">Selected Course</label>
-                        <input type="text" id="enroll-course-name-display" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed">
+                    
+                    <!-- Selected Course (Readonly) -->
+                    <div class="mt-4 pt-4 border-t border-slate-700">
+                        <label class="block text-xs text-slate-400 mb-1">Selected Course</label>
+                        <input type="text" id="enroll-course-name-display" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed font-semibold">
                     </div>
 
                     <input type="hidden" name="courseName" id="enroll-course-name">
-                    <input type="hidden" name="_subject" value="New VLSIeasy Course Enrollment!">
-                    <input type="hidden" name="_cc" value="yasmeenms0512@gmail.com">
-                    <input type="hidden" name="_autoresponse" value="Thank you for enrolling! We will contact you shortly with the next steps.">
                 </div>
-                <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg">
-                    <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg transform hover:-translate-y-0.5">
-                        Complete Free Enrollment
+                
+                <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg sticky bottom-0 z-10 bg-slate-800">
+                    <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg flex justify-center items-center">
+                        <span>Submit Enrollment</span>
+                        <!-- Loading Spinner (Hidden by default) -->
+                        <svg id="submit-spinner" class="animate-spin ml-3 h-5 w-5 text-slate-900 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
                     </button>
+                    <p id="submit-message" class="text-center text-sm mt-2 hidden"></p>
                 </div>
             </form>
         </div>
     </div>
     
-    <!-- Contact Us Modal --><div id="contact-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="bg-slate-800 rounded-lg shadow-2xl z-[101] w-full max-w-md border border-slate-700">
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
+        <div class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div class="bg-slate-800 rounded-lg shadow-2xl w-full max-w-md border border-slate-700 relative z-[201]">
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
                 <h3 class="text-xl font-semibold text-white">Contact Us</h3>
                 <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
             </div>
-            
             <form action="https://formspree.io/f/xjkjkpdr" method="POST">
                 <div class="p-6 space-y-4">
-                    <p class="text-slate-300">Have a question? Fill out the form below and we'll get back to you.</p>
-                    <div>
-                        <label for="contact-name" class="block text-sm font-medium text-slate-300 mb-1">Full Name</label>
-                        <input type="text" name="name" id="contact-name" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    </div>
-                    <div>
-                        <label for="contact-email" class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
-                        <input type="email" name="email" id="contact-email" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    </div>
-                    <div>
-                        <label for="contact-message" class="block text-sm font-medium text-slate-300 mb-1">Your Query</label>
-                        <textarea name="message" id="contact-message" rows="4" required class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
-                    </div>
-                    <input type="hidden" name="_subject" value="New VLSIeasy Contact Query!">
+                    <input type="text" name="name" required placeholder="Full Name" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white">
+                    <input type="email" name="email" required placeholder="Email" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white">
+                    <textarea name="message" rows="4" required placeholder="Your Query" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white"></textarea>
+                    <input type="hidden" name="_subject" value="New VLSIeasy Contact">
                     <input type="hidden" name="_cc" value="yasmeenms0512@gmail.com">
                 </div>
                 <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg">
-                    <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg transform hover:-translate-y-0.5">
-                        Send Message
-                    </button>
+                    <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg">Send</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- AI CHATBOT --><button id="chat-float-btn" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 p-4 rounded-full shadow-xl transform hover:scale-110 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
+    <!-- Chatbot -->
+    <button id="chat-float-btn" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 p-4 rounded-full shadow-xl transform hover:scale-110 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
     </button>
-    <div id="chat-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4">
-        <div class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-        <div class="bg-slate-800 rounded-lg shadow-2xl z-[101] w-full max-w-md border border-slate-700 max-h-[80vh] flex flex-col">
+    <div id="chat-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
+        <div class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div class="bg-slate-800 rounded-lg shadow-2xl w-full max-w-md border border-slate-700 max-h-[80vh] flex flex-col relative z-[201]">
             <div class="flex justify-between items-center p-5 border-b border-slate-700">
                 <h3 class="text-xl font-semibold text-white">✨ AI Assistant</h3>
                 <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
             </div>
-            
             <div id="chat-log" class="p-4 flex-grow space-y-3 overflow-y-auto flex flex-col">
-                <div class="chat-bubble chat-bubble-bot p-3 rounded-lg">
-                    Hi! I'm the VLSIeasy AI assistant. How can I help you with our courses today?
-                </div>
+                <div class="chat-bubble chat-bubble-bot p-3 rounded-lg">Hi! I'm the VLSIeasy AI assistant. How can I help you?</div>
             </div>
-            
-            <div id="chat-loading" class="hidden p-4">
-                <div class="chat-bubble-bot p-3 rounded-lg inline-block">
-                    <span class="chat-loader"></span>
-                </div>
-            </div>
-
+            <div id="chat-loading" class="hidden p-4"><span class="chat-loader"></span></div>
             <div class="p-4 border-t border-slate-700 bg-slate-800/50 rounded-b-lg">
                 <div class="flex space-x-2">
-                    <input type="text" id="chat-input" placeholder="Ask about courses or VLSI..." class="flex-grow bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    <button id="chat-send-btn" class="p-3 bg-cyan-500 text-slate-900 rounded-md font-bold hover:bg-cyan-400 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </button>
+                    <input type="text" id="chat-input" placeholder="Ask question..." class="flex-grow bg-slate-700 border border-slate-600 rounded-md p-3 text-white">
+                    <button id="chat-send-btn" class="p-3 bg-cyan-500 text-slate-900 rounded-md font-bold hover:bg-cyan-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></button>
                 </div>
             </div>
         </div>
     </div>
 
-
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <script>
-        // Updated Course Data with Image URLs
         const courses = [
-            {
-                id: 'de',
-                title: 'Digital Electronics Fundamentals',
-                description: 'Build a solid foundation with the core principles of digital logic, from gates to state machines.',
-                topics: ['Logic Gates', 'Boolean Algebra', 'Combinational', 'Sequential', 'K-Maps', 'State Machines'],
-                originalPrice: '₹999',
-                price: '₹500',
-                imageUrl: 'https://placehold.co/600x400/0f172a/22d3ee?text=Digital+Logic',
-                theme: {
-                    card: 'bg-slate-800 border-cyan-500/50',
-                    topics: 'bg-cyan-900/50 text-cyan-300',
-                    price: 'text-cyan-400',
-                    button: 'bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400'
-                }
-            },
-            {
-                id: 'verilog',
-                title: 'Practical Verilog for ASIC/FPGA',
-                description: 'Learn the industry-standard HDL for designing and verifying complex digital systems.',
-                topics: ['Verilog Syntax', 'RTL Modeling', 'Testbenches', 'Simulation', 'Synthesis', 'FPGA Flow'],
-                originalPrice: '₹999',
-                price: '₹500',
-                imageUrl: 'https://placehold.co/600x400/0f172a/34d399?text=RTL+Code',
-                theme: {
-                    card: 'bg-slate-800 border-emerald-500/50',
-                    topics: 'bg-emerald-900/50 text-emerald-300',
-                    price: 'text-emerald-400',
-                    button: 'bg-gradient-to-r from-emerald-500 to-green-500 text-slate-900 hover:from-emerald-400 hover:to-green-400'
-                }
-            },
-            {
-                id: 'lp-vlsi',
-                title: 'Low Power VLSI Techniques',
-                description: 'Master essential techniques for designing power-efficient circuits, a critical skill in modern chip design.',
-                topics: ['Power Gating', 'Clock GGating', 'DVFS', 'Multi-Vdd', 'Leakage Power', 'UPF'],
-                originalPrice: '₹999',
-                price: '₹500',
-                imageUrl: 'https://placehold.co/600x400/0f172a/c084fc?text=Low+Power',
-                theme: {
-                    card: 'bg-slate-800 border-purple-500/50',
-                    topics: 'bg-purple-900/50 text-purple-300',
-                    price: 'text-purple-400',
-                    button: 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white hover:from-purple-400 hover:to-fuchsia-400'
-                }
-            },
-            {
-                id: 'xilinx',
-                title: 'Xilinx Introduction & Project Creation',
-                description: 'Get hands-on with FPGAs. Learn to design, simulate, and implement a real project on Xilinx hardware.',
-                topics: ['FPGA Architecture', 'Vivado Suite', 'Project Flow', 'Simulation', 'Hardware Debug', 'IP Integrator'],
-                originalPrice: '₹999',
-                price: '₹500',
-                imageUrl: 'https://placehold.co/600x400/0f172a/fb923c?text=FPGA+Project',
-                theme: {
-                    card: 'bg-slate-800 border-orange-500/50',
-                    topics: 'bg-orange-900/50 text-orange-300',
-                    price: 'text-orange-400',
-                    button: 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400'
-                }
-            }
+            { id: 'vlsi-fundamentals', title: 'VLSI Fundamentals', instructor: 'Yasmeen', description: 'Intro to VLSI, CMOS tech and MOS theory.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/22d3ee?text=VLSI+Fundamentals', theme: { card: 'bg-slate-900 border-cyan-500/30', topics: 'bg-cyan-900/50 text-cyan-300', price: 'text-cyan-400', button: 'bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400' }, topics: ['CMOS', 'MOS Transistor', 'Alternate Tech'], syllabus: ['Basics of CMOS technology', 'MOS Transistor Theory', 'Alternate CMOS Technologies', 'Switching Characteristics', 'Trends in VLSI'] },
+            { id: 'digital-electronics', title: 'Digital Electronics', instructor: 'Yasmeen', description: 'Building blocks of digital systems.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/34d399?text=Digital+Electronics', theme: { card: 'bg-slate-900 border-emerald-500/30', topics: 'bg-emerald-900/50 text-emerald-300', price: 'text-emerald-400', button: 'bg-gradient-to-r from-emerald-500 to-green-500 text-slate-900 hover:from-emerald-400 hover:to-green-400' }, topics: ['Number Systems', 'Logic Gates', 'Circuits'], syllabus: ['Basics', 'Number System', 'Logic Gates', 'Solving problems', 'Combinational Designs', 'Sequential Circuits'] },
+            { id: 'low-power-vlsi', title: 'Low Power VLSI Design', instructor: 'Yasmeen', description: 'Techniques to reduce power consumption.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/c084fc?text=Low+Power', theme: { card: 'bg-slate-900 border-purple-500/30', topics: 'bg-purple-900/50 text-purple-300', price: 'text-purple-400', button: 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white hover:from-purple-400 hover:to-fuchsia-400' }, topics: ['Power Types', 'Reduction Techniques'], syllabus: ['Types of Power', 'Techniques to reduce power', 'Dynamic Switching Power', 'Power Gating & Clock Gating'] },
+            { id: 'verilog', title: 'Verilog Mastery', instructor: 'Yasmeen', description: 'Verilog HDL for design and verification.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/fb923c?text=Verilog', theme: { card: 'bg-slate-900 border-orange-500/30', topics: 'bg-orange-900/50 text-orange-300', price: 'text-orange-400', button: 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400' }, topics: ['Basics', 'Advanced', 'RTL'], syllabus: ['Basics to Advanced', 'Blocking vs Non-Blocking Assignments', 'Procedural Blocks', 'Testbench Design'] },
+            { id: 'digital-vlsi-sta', title: 'Digital VLSI Design – STA', instructor: 'Rachana', description: 'Static Timing Analysis & timing closure.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/f472b6?text=STA+&+Timing', theme: { card: 'bg-slate-900 border-pink-500/30', topics: 'bg-pink-900/50 text-pink-300', price: 'text-pink-400', button: 'bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-400 hover:to-rose-400' }, topics: ['STA Fundamentals', 'Timing Closure', 'Primetime'], syllabus: ['STA fundamentals: setup, hold, skew, jitter', 'Clock domain crossings & synchronizers', 'Path analysis and derating', 'Fixing timing violations', 'ECO-based timing closure', 'Hands-on workflows'] },
+            { id: 'vlsi-testing', title: 'VLSI Testing & Verification', instructor: 'Rachana', description: 'DFT, Scan, and BIST mastery.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/60a5fa?text=DFT+&+Testing', theme: { card: 'bg-slate-900 border-blue-500/30', topics: 'bg-blue-900/50 text-blue-300', price: 'text-blue-400', button: 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-400 hover:to-indigo-400' }, topics: ['Fault Modeling', 'ATPG', 'Scan/BIST'], syllabus: ['Fault modeling: stuck-at, transition, bridging', 'ATPG basics', 'Scan chain insertion', 'LBIST and MBIST', 'MISR/LFSR architecture'] },
+            { id: 'physical-design', title: 'Physical Design (PnR)', instructor: 'Rachana', description: 'Innovus-style design flow.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/a78bfa?text=Physical+Design', theme: { card: 'bg-slate-900 border-violet-500/30', topics: 'bg-violet-900/50 text-violet-300', price: 'text-violet-400', button: 'bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:from-violet-400 hover:to-purple-400' }, topics: ['Floorplanning', 'CTS/Routing', 'Signoff'], syllabus: ['Floorplanning, placement, power', 'CTS and routing', 'IR drop, EM, DRC/LVS', 'PPA optimization', 'Full Innovus-style flow'] }
         ];
 
-        // --- DYNAMIC RENDERING & MODAL SCRIPT ---
+        async function askGemini(prompt) {
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                if (!response.ok) throw new Error('API Error');
+                const result = await response.json();
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
+            } catch (e) { return "AI connection error."; }
+        }
+
+        // Global View Switcher
+        window.switchView = function(viewName) {
+            const homeView = document.getElementById('view-home');
+            const detailsView = document.getElementById('view-details');
+            if (viewName === 'details') {
+                homeView.classList.add('hidden-view');
+                detailsView.classList.remove('hidden-view');
+            } else {
+                detailsView.classList.add('hidden-view');
+                homeView.classList.remove('hidden-view');
+            }
+            window.scrollTo(0, 0);
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- Logic Gate Background Script (unchanged) ---
+            // --- Logic Gate Background with "Particle Physics" ---
             const bgCanvas = document.getElementById('logic-gate-background');
             if (bgCanvas) {
                 const ctx = bgCanvas.getContext('2d');
-                let particles = [];
+                let particles = []; 
                 let mouse = { x: undefined, y: undefined, radius: 150 };
-
-                function resizeCanvas() {
-                    bgCanvas.width = window.innerWidth;
-                    bgCanvas.height = window.innerHeight;
-                }
-                resizeCanvas();
-                window.addEventListener('resize', resizeCanvas);
-
-                window.addEventListener('mousemove', (e) => {
-                    mouse.x = e.x;
-                    mouse.y = e.y;
-                });
-                window.addEventListener('mouseout', () => {
-                    mouse.x = undefined;
-                    mouse.y = undefined;
-                });
+                function resizeCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
+                resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+                window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+                window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
 
                 class Particle {
                     constructor(x, y, size, type, color, vx, vy) {
-                        this.x = x;
-                        this.y = y;
-                        this.size = size;
-                        let types = ['and', 'not', 'line'];
-                        this.type = types[Math.floor(Math.random() * types.length)]; // Randomly assign gate type
-                        this.color = color;
-                        this.vx = vx;
-                        this.vy = vy;
-                        this.baseX = this.x;
-                        this.baseY = this.y;
-                        this.density = (Math.random() * 30) + 1; // How much it's affected by mouse
-                        this.attractionStrength = 0.03;
-                        this.friction = 0.95; // "zero-g" dampening
+                        this.x = x; this.y = y; this.size = size; this.type = type; this.color = color;
+                        this.vx = vx; this.vy = vy; this.friction = 0.95;
+                        this.density = (Math.random() * 30) + 1; // mass/density for attraction
+                        this.attractionStrength = 0.03; // Strength of mouse pull
                     }
-
                     draw() {
-                        ctx.fillStyle = this.color;
-                        ctx.strokeStyle = this.color;
-                        ctx.lineWidth = 1;
-
+                        ctx.fillStyle = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 1;
                         if (this.type === 'line') {
-                            ctx.beginPath();
-                            ctx.moveTo(this.x, this.y);
-                            ctx.lineTo(this.x + this.size * 2, this.y);
-                            ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.size * 2, this.y); ctx.stroke();
                         } else if (this.type === 'and') {
-                            ctx.beginPath();
-                            ctx.moveTo(this.x, this.y - this.size / 2);
-                            ctx.lineTo(this.x, this.y + this.size / 2);
-                            ctx.arc(this.x, this.y, this.size / 2, -Math.PI / 2, Math.PI / 2);
-                            ctx.closePath();
-                            ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(this.x, this.y - this.size / 2); ctx.lineTo(this.x, this.y + this.size / 2); ctx.arc(this.x, this.y, this.size / 2, -Math.PI / 2, Math.PI / 2); ctx.closePath(); ctx.stroke();
                         } else if (this.type === 'not') {
-                            ctx.beginPath();
-                            ctx.moveTo(this.x, this.y - this.size / 2);
-                            ctx.lineTo(this.x, this.y + this.size / 2);
-                            ctx.lineTo(this.x + this.size, this.y);
-                            ctx.closePath();
-                            ctx.stroke();
-                            ctx.beginPath();
-                            ctx.arc(this.x + this.size + 2, this.y, 2, 0, Math.PI * 2);
-                            ctx.fill();
+                            ctx.beginPath(); ctx.moveTo(this.x, this.y - this.size / 2); ctx.lineTo(this.x, this.y + this.size / 2); ctx.lineTo(this.x + this.size, this.y); ctx.closePath(); ctx.stroke();
+                            ctx.beginPath(); ctx.arc(this.x + this.size + 2, this.y, 2, 0, Math.PI * 2); ctx.fill();
                         }
                     }
-
                     update() {
-                        // Mouse attraction
+                        // Attraction Physics
                         if (mouse.x !== undefined) {
-                            let dx = mouse.x - this.x;
-                            let dy = mouse.y - this.y;
-                            let distance = Math.sqrt(dx * dx + dy * dy);
+                            let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                            let distance = Math.sqrt(dx*dx + dy*dy);
                             if (distance < mouse.radius + this.size) {
-                                // Calculate force vector
-                                let forceX = dx / distance;
-                                let forceY = dy / distance;
-                                // Apply force
+                                let forceX = dx/distance; let forceY = dy/distance;
+                                // Apply attraction force based on density
                                 this.vx += forceX * this.attractionStrength * this.density;
                                 this.vy += forceY * this.attractionStrength * this.density;
                             }
                         }
-                        
-                        // "Zero-G" drift + friction
-                        this.vx *= this.friction;
-                        this.vy *= this.friction;
-                        
-                        // Apply velocity
-                        this.x += this.vx;
-                        this.y += this.vy;
-
-                        // Screen wrap
-                        if (this.x > bgCanvas.width + this.size) this.x = -this.size;
-                        if (this.x < -this.size) this.x = bgCanvas.width + this.size;
-                        if (this.y > bgCanvas.height + this.size) this.y = -this.size;
-                        if (this.y < -this.size) this.y = bgCanvas.height + this.size;
+                        this.vx *= this.friction; this.vy *= this.friction;
+                        this.x += this.vx; this.y += this.vy;
+                        // Wrap
+                        if (this.x > bgCanvas.width + this.size) this.x = -this.size; if (this.x < -this.size) this.x = bgCanvas.width + this.size;
+                        if (this.y > bgCanvas.height + this.size) this.y = -this.size; if (this.y < -this.size) this.y = bgCanvas.height + this.size;
                     }
                 }
-
                 function initParticles() {
                     particles = [];
-                    let numberOfParticles = (bgCanvas.width * bgCanvas.height) / 9000;
-                    for (let i = 0; i < numberOfParticles; i++) {
+                    let count = (bgCanvas.width * bgCanvas.height) / 9000;
+                    for (let i = 0; i < count; i++) {
                         let size = Math.random() * 5 + 3;
                         let x = Math.random() * bgCanvas.width;
                         let y = Math.random() * bgCanvas.height;
-                        let type = ['and', 'not', 'line'][Math.floor(Math.random() * 3)];
+                        let types = ['and', 'not', 'line'];
+                        let type = types[Math.floor(Math.random() * 3)];
                         let color = Math.random() > 0.5 ? 'rgba(34, 211, 238, 0.4)' : 'rgba(226, 232, 240, 0.4)';
-                        let vx = (Math.random() - 0.5) * 0.3; // Initial drift
-                        let vy = (Math.random() - 0.5) * 0.3;
+                        let vx = (Math.random() - 0.5) * 0.3; let vy = (Math.random() - 0.5) * 0.3;
                         particles.push(new Particle(x, y, size, type, color, vx, vy));
                     }
                 }
-
                 function animateParticles() {
                     ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-                    for (let i = 0; i < particles.length; i++) {
-                        particles[i].update();
-                        particles[i].draw();
-                    }
+                    particles.forEach(p => { p.update(); p.draw(); });
                     requestAnimationFrame(animateParticles);
                 }
-
-                initParticles();
-                animateParticles();
-
-                // Re-init on resize
-                let resizeTimer;
-                window.addEventListener('resize', () => {
-                    clearTimeout(resizeTimer);
-                    resizeTimer = setTimeout(() => {
-                        resizeCanvas();
-                        initParticles();
-                    }, 250);
-                });
+                initParticles(); animateParticles();
+                let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { resizeCanvas(); initParticles(); }, 250); });
             }
 
-
-            // --- Course Rendering Logic ---
+            // --- Render Courses ---
             const courseListContainer = document.getElementById('course-list');
             const footerYearEl = document.getElementById('footer-year');
-            if (footerYearEl) {
-                footerYearEl.textContent = new Date().getFullYear();
-            }
+            if (footerYearEl) footerYearEl.textContent = new Date().getFullYear();
 
             if (courseListContainer) {
                 courses.forEach((course, index) => {
                     const card = document.createElement('div');
                     card.className = `rounded-lg shadow-xl overflow-hidden flex flex-col transform hover:scale-[1.03] transition-transform duration-300 border ${course.theme.card}`;
                     card.setAttribute('data-aos', 'fade-up');
-                    card.setAttribute('data-aos-delay', index * 150);
-
-                    const topicPills = course.topics.map(topic => 
-                        `<span class="text-xs font-semibold px-3 py-1 rounded-full ${course.theme.topics}">${topic}</span>`
-                    ).join('');
-
-                    // Updated card.innerHTML to include the image
+                    card.setAttribute('data-aos-delay', index * 100);
+                    const topicPills = course.topics.map(topic => `<span class="text-xs font-semibold px-3 py-1 rounded-full ${course.theme.topics}">${topic}</span>`).join('');
                     card.innerHTML = `
                         <div class="relative h-48 w-full overflow-hidden group">
                             <img src="${course.imageUrl}" alt="${course.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/0f172a/64748b?text=Image+Error'; this.onerror=null;">
+                            <div class="absolute top-2 right-2 bg-black/70 px-2 py-1 rounded text-xs font-bold text-white border border-white/20">${course.instructor}</div>
                         </div>
                         <div class="p-6 flex-grow flex flex-col">
                             <h3 class="text-2xl font-bold text-white mb-3">${course.title}</h3>
-                            <p class="text-slate-400 mb-6 flex-grow">${course.description}</p>
-                            
-                            <h4 class="text-sm font-semibold text-slate-500 mb-3 uppercase tracking-wider">Key Topics</h4>
-                            <div class="flex flex-wrap gap-2 mb-6">
-                                ${topicPills}
-                            </div>
+                            <p class="text-slate-400 mb-6 flex-grow text-sm">${course.description}</p>
+                            <div class="flex flex-wrap gap-2 mb-6">${topicPills}</div>
                         </div>
-                        <div class="bg-slate-700/50 p-6 border-t border-slate-700 flex justify-between items-center">
+                        <div class="bg-slate-950/50 p-6 border-t border-white/5 flex justify-between items-center">
                             <div class="flex items-baseline gap-3">
                                 <span class="text-3xl font-bold ${course.theme.price}">${course.price}</span>
                                 <span class="text-lg line-through text-slate-500">${course.originalPrice}</span>
                             </div>
-                            <button class="enroll-btn font-semibold px-5 py-2 rounded-md transition-all shadow-md transform hover:-translate-y-0.5 ${course.theme.button}" data-course-name="${course.title}">
-                                Enroll Now
-                            </button>
-                        </div>
-                    `;
+                            <button class="view-details-btn font-semibold px-5 py-2 rounded-md transition-all shadow-md transform hover:-translate-y-0.5 ${course.theme.button}" data-course-id="${course.id}">View Details & Enroll</button>
+                        </div>`;
                     courseListContainer.appendChild(card);
                 });
             }
 
-            // --- Modal Logic (unchanged) ---
+            // --- View Logic ---
             const enrollModal = document.getElementById('enroll-modal');
             const contactModal = document.getElementById('contact-modal');
-            const enrollCourseNameInput = document.getElementById('enroll-course-name');
-            const enrollCourseNameDisplay = document.getElementById('enroll-course-name-display');
+            const openModal = (modal) => { if(modal) modal.classList.remove('hidden'); };
+            const closeModal = (modal) => { if(modal) modal.classList.add('hidden'); };
 
-            const openModal = (modal) => { if (modal) modal.classList.remove('hidden'); };
-            const closeModal = (modal) => { if (modal) modal.classList.add('hidden'); };
-
-            document.querySelectorAll('.enroll-btn').forEach(btn => {
+            // Course Details Click Handler
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const courseName = e.currentTarget.dataset.courseName;
-                    if (enrollCourseNameInput) enrollCourseNameInput.value = courseName;
-                    if (enrollCourseNameDisplay) enrollCourseNameDisplay.value = courseName;
-                    openModal( enrollModal);
+                    const courseId = e.currentTarget.dataset.courseId;
+                    const course = courses.find(c => c.id === courseId);
+                    if (course) {
+                        document.getElementById('detail-title').textContent = course.title;
+                        document.getElementById('detail-instructor').textContent = `Instructor: ${course.instructor}`;
+                        document.getElementById('detail-desc').textContent = course.description;
+                        document.getElementById('detail-price').textContent = course.price;
+                        document.getElementById('detail-original-price').textContent = course.originalPrice;
+                        document.getElementById('detail-syllabus').innerHTML = course.syllabus.map((item) => `
+                            <li class="group">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex items-start text-slate-300"><span class="mr-2 text-cyan-400 text-lg">•</span>${item}</div>
+                                </div>
+                            </li>`).join('');
+                        
+                        // Setup AI Outcome
+                        const aiBtn = document.getElementById('ai-outcome-btn');
+                        const aiResult = document.getElementById('ai-outcome-result');
+                        if (aiResult) { aiResult.classList.add('hidden'); aiResult.innerHTML = ''; aiBtn.classList.remove('hidden'); }
+                        aiBtn.onclick = async () => {
+                            aiBtn.innerHTML = '<span class="ai-loading-pulse mr-2"></span> Analyzing...';
+                            const res = await askGemini(`For the VLSI course "${course.title}", list 3 career outcomes.`);
+                            aiBtn.classList.add('hidden'); aiResult.innerHTML = res.replace(/\n/g, '<br>'); aiResult.classList.remove('hidden');
+                        };
+
+                        // Setup Enroll
+                        const detailEnrollBtn = document.getElementById('detail-enroll-btn');
+                        detailEnrollBtn.onclick = () => {
+                            document.getElementById('enroll-course-name').value = course.title;
+                            document.getElementById('enroll-course-name-display').value = course.title;
+                            openModal(enrollModal);
+                        };
+                        
+                        switchView('details');
+                    }
                 });
             });
 
-            const contactNavLink = document.getElementById('contact-nav-link');
-            if (contactNavLink) {
-                contactNavLink.addEventListener('click', () => { openModal(contactModal); });
-            }
-            const contactNavLinkMobile = document.getElementById('contact-nav-link-mobile');
-            if (contactNavLinkMobile) {
-                contactNavLinkMobile.addEventListener('click', () => { openModal(contactModal); });
-            }
-
-
-            document.querySelectorAll('.modal-close-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => { closeModal(e.currentTarget.closest('.modal')); });
-            });
-            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-                backdrop.addEventListener('click', (e) => { closeModal(e.currentTarget.closest('.modal')); });
+            // General Modal Listeners
+            document.getElementById('contact-nav-link').addEventListener('click', () => openModal(contactModal));
+            document.querySelectorAll('.modal-close-btn, .modal-backdrop').forEach(el => {
+                el.addEventListener('click', (e) => { const m = e.target.closest('.modal'); if (m) closeModal(m); });
             });
 
-            // --- Initialize AOS (unchanged) ---
-            AOS.init({
-                duration: 700,
-                once: true,
-                disable: 'mobile'
-            });
+            // Initialize AOS
+            AOS.init({ duration: 700, once: true, disable: 'mobile' });
 
-            // =============================================
-            // START: THREE.JS ANIMATION SCRIPT (with bug fix)
-            // =============================================
+            // --- Three.js ---
             const canvas = document.getElementById('three-canvas');
             if (canvas) {
                 let scene, camera, renderer, core;
                 let mouseX = 0, mouseY = 0;
                 let isInitialized = false;
-
                 function initThree() {
-                    if (isInitialized) return; // Prevent double-init
-                    
+                    if (isInitialized) return;
                     const container = canvas.parentElement;
                     if (!container) return; 
-
                     const width = container.offsetWidth;
                     const height = container.offsetHeight;
-                    
-                    if (width === 0 || height === 0) {
-                        console.warn("Canvas container has no size on init. Retrying...");
-                        requestAnimationFrame(initThree); // Try again next frame
-                        return;
-                    }
-
-                    console.log("Initializing three.js with size:", width, height);
+                    if (width === 0 || height === 0) { requestAnimationFrame(initThree); return; }
                     isInitialized = true;
-
                     scene = new THREE.Scene();
-                    
                     camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-                    // Camera position updated for bigger object
                     camera.position.z = 4.5; 
-
                     renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
                     renderer.setSize(width, height);
                     renderer.setPixelRatio(window.devicePixelRatio);
-
-                    // Create the "Tech Core"
-                    // Made the 3D object bigger
-                    const geometry = new THREE.IcosahedronGeometry(2.2, 1); // Was 1.5
-                    const material = new THREE.MeshStandardMaterial({
-                        color: 0x22d3ee, // cyan-400
-                        wireframe: true,
-                        metalness: 0.5,
-                        roughness: 0.3
-                    });
+                    const geometry = new THREE.IcosahedronGeometry(2.2, 1);
+                    const material = new THREE.MeshStandardMaterial({ color: 0x22d3ee, wireframe: true, metalness: 0.5, roughness: 0.3 });
                     core = new THREE.Mesh(geometry, material);
                     scene.add(core);
-
-                    // Add Lighting
                     const pointLight = new THREE.PointLight(0xffffff, 1.5);
                     pointLight.position.set(5, 5, 5);
                     scene.add(pointLight);
-
-                    const ambientLight = new THREE.AmbientLight(0x404040, 2); // Softer ambient
-                    scene.add(ambientLight);
-
-                    // Handle Mouse Move
-                    document.addEventListener('mousemove', onDocumentMouseMove);
-                    // Handle Resize
-                    window.addEventListener('resize', onWindowResize);
-                    
-                    // Start animation loop
+                    scene.add(new THREE.AmbientLight(0x404040, 2));
+                    document.addEventListener('mousemove', (e) => { mouseX = (e.clientX / window.innerWidth) * 2 - 1; mouseY = -(e.clientY / window.innerHeight) * 2 + 1; });
+                    window.addEventListener('resize', () => { if (container) { camera.aspect = container.offsetWidth / container.offsetHeight; camera.updateProjectionMatrix(); renderer.setSize(container.offsetWidth, container.offsetHeight); } });
                     animate();
                 }
-
-                function onWindowResize() {
-                    if (!isInitialized) return;
-                    const container = canvas.parentElement;
-                    if (container) {
-                        const width = container.offsetWidth;
-                        const height = container.offsetHeight;
-                        
-                        if(width > 0 && height > 0) {
-                            camera.aspect = width / height;
-                            camera.updateProjectionMatrix();
-                            renderer.setSize(width, height);
-                        }
-                    }
-                }
-
-                function onDocumentMouseMove(event) {
-                    if (!isInitialized) return;
-                    // This listener now ONLY controls the 3D object
-                    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-                }
-
                 function animate() {
                     requestAnimationFrame(animate);
-
-                    if (!isInitialized) return; // Don't run if not ready
-
-                    // Auto-rotation
-                    if (core) {
-                        core.rotation.x += 0.001;
-                        core.rotation.y += 0.002;
-                    }
-
-                    // Mouse interaction (lerp for smoothness)
+                    if (core) { core.rotation.x += 0.001; core.rotation.y += 0.002; }
                     camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.05;
                     camera.position.y += (mouseY * 1.5 - camera.position.y) * 0.05;
                     camera.lookAt(scene.position);
-
                     renderer.render(scene, camera);
                 }
-
-                // Start the initialization
                 initThree();
             }
-            // =============================================
-            // END: THREE.JS ANIMATION SCRIPT
-            // =============================================
 
-
-            // =============================================
-            // START: CHATBOT SCRIPT (Unchanged)
-            // =============================================
-            
+            // Chatbot
             const chatFloatBtn = document.getElementById('chat-float-btn');
             const chatModal = document.getElementById('chat-modal');
             const chatLog = document.getElementById('chat-log');
             const chatInput = document.getElementById('chat-input');
             const chatSendBtn = document.getElementById('chat-send-btn');
             const chatLoading = document.getElementById('chat-loading');
-
             let chatHistory = []; 
 
-            if (chatFloatBtn) {
-                chatFloatBtn.addEventListener('click', () => {
-                    openModal(chatModal);
-                    chatFloatBtn.classList.add('hidden');
-                });
-            }
-
+            if (chatFloatBtn) chatFloatBtn.addEventListener('click', () => { openModal(chatModal); chatFloatBtn.classList.add('hidden'); });
+            
             if (chatModal) {
-                chatModal.querySelector('.modal-close-btn').addEventListener('click', () => {
-                    closeModal(chatModal);
-                    chatFloatBtn.classList.remove('hidden');
-                });
-                chatModal.querySelector('.modal-backdrop').addEventListener('click', () => {
-                    closeModal(chatModal);
-                    chatFloatBtn.classList.remove('hidden');
-                });
-            }
-
-            if (chatSendBtn) {
-                chatSendBtn.addEventListener('click', handleChatSend);
-            }
-
-            if (chatInput) {
-                chatInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleChatSend();
-                    }
-                });
-            }
-
-            function handleChatSend() {
-                const userMessage = chatInput.value.trim();
-                if (!userMessage) return;
-
-                appendMessage(userMessage, 'user');
-                chatInput.value = '';
-                chatLoading.classList.remove('hidden');
-                
-                chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
-                getChatbotResponse();
-            }
-
-            function appendMessage(message, sender) {
-                const bubble = document.createElement('div');
-                bubble.className = `chat-bubble p-3 rounded-lg ${sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot'}`;
-                bubble.innerText = message;
-                chatLog.appendChild(bubble);
-                chatLog.scrollTop = chatLog.scrollHeight;
-            }
-
-            async function getChatbotResponse() {
-                const apiKey = ""; // Leave empty
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-                const courseContext = courses.map(c => `Course: "${c.title}", Topics: "${c.topics.join(', ')}"`).join('\n');
-                const systemPrompt = `You are a friendly, helpful AI chatbot for "VLSIeasy", an online VLSI course website. Your goal is to answer student questions about VLSI, our courses, or enrollment. Keep your answers concise and conversational.
-                Here are the courses we offer:
-                ${courseContext}
-                Do not make up courses or pricing. If you don't know an answer, politely say so.`;
-                
-                const payload = {
-                    contents: chatHistory,
-                    systemInstruction: {
-                        parts: [{ text: systemPrompt }]
-                    },
-                    generationConfig: {
-                        temperature: 0.7,
-                        maxOutputTokens: 250
-                    }
-                };
-
-                try {
-                    let response;
-                    let retries = 3;
-                    let delay = 1000;
-                    for (let i = 0; i < retries; i++) {
-                        response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (response.ok) break;
-                        if (response.status === 429 || response.status >= 500) {
-                            await new Promise(resolve => setTimeout(resolve, delay));
-                            delay *= 2;
-                        } else {
-                            throw new Error(`API request failed with status ${response.status}`);
-                        }
-                    }
-
-                    if (!response || !response.ok) {
-                        throw new Error('API request failed after retries.');
-                    }
-
-                    const result = await response.json();
-                    const botMessage = result.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                    if (botMessage) {
-                        appendMessage(botMessage, 'bot');
-                        chatHistory.push({ role: "model", parts: [{ text: botMessage }] });
-                    } else {
-                        throw new Error('No content in AI response.');
-                    }
-
-                } catch (error) {
-                    console.error('Error fetching AI response:', error);
-                    appendMessage("Sorry, I'm having trouble connecting to my brain right now. Please try again in a moment.", 'bot');
-                } finally {
-                    chatLoading.classList.add('hidden');
-                    chatLog.scrollTop = chatLog.scrollHeight;
+                const chatCloseBtn = chatModal.querySelector('.modal-close-btn');
+                if (chatCloseBtn) {
+                    const newClose = chatCloseBtn.cloneNode(true);
+                    chatCloseBtn.parentNode.replaceChild(newClose, chatCloseBtn);
+                    newClose.addEventListener('click', () => { closeModal(chatModal); chatFloatBtn.classList.remove('hidden'); });
                 }
             }
-            // =============================================
-            // END: CHATBOT SCRIPT
-            // =============================================
 
+            if (chatSendBtn) chatSendBtn.addEventListener('click', handleChatSend);
+            if (chatInput) chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleChatSend(); });
+
+            function handleChatSend() {
+                const txt = chatInput.value.trim();
+                if (!txt) return;
+                appendMessage(txt, 'user');
+                chatInput.value = '';
+                chatLoading.classList.remove('hidden');
+                chatHistory.push({ role: "user", parts: [{ text: txt }] });
+                askGemini(`You are a VLSI course assistant. Use this syllabus info: ${JSON.stringify(courses)}. User: ${txt}`).then(reply => {
+                    appendMessage(reply, 'bot');
+                    chatLoading.classList.add('hidden');
+                });
+            }
+            function appendMessage(msg, sender) {
+                const div = document.createElement('div');
+                div.className = `chat-bubble p-3 rounded-lg ${sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot'}`;
+                div.innerHTML = msg.replace(/\n/g, '<br>');
+                chatLog.appendChild(div);
+                chatLog.scrollTop = chatLog.scrollHeight;
+            }
+            
+            // --- GOOGLE SHEETS FORM SUBMISSION LOGIC ---
+            const form = document.getElementById('google-sheet-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const submitSpinner = document.getElementById('submit-spinner');
+            const submitMessage = document.getElementById('submit-message');
+
+            // !!! IMPORTANT !!!
+            // Replace this URL with your actual Google Apps Script Web App URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyJaff-NHDJQog01HWY0B0mXIXJP2ZxFsoFgQmsveZhxrojBD8odr2wczF15ehD7JzouQ/exec'; 
+
+            if (form) {
+                form.addEventListener('submit', e => {
+                    e.preventDefault();
+                    
+                    // Show Loading State
+                    submitBtn.disabled = true;
+                    submitSpinner.classList.remove('hidden');
+                    submitBtn.querySelector('span').textContent = 'Submitting...';
+
+                    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                    .then(response => {
+                        // Success!
+                        submitMessage.textContent = "Enrollment Submitted Successfully! We will contact you soon.";
+                        submitMessage.className = "text-center text-sm mt-2 text-green-400";
+                        submitMessage.classList.remove('hidden');
+                        
+                        // Reset form
+                        form.reset();
+                        
+                        // Close modal after 2 seconds
+                        setTimeout(() => {
+                            submitBtn.disabled = false;
+                            submitSpinner.classList.add('hidden');
+                            submitBtn.querySelector('span').textContent = 'Submit Enrollment';
+                            submitMessage.classList.add('hidden');
+                            if(enrollModal) enrollModal.classList.add('hidden');
+                        }, 2000);
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        submitMessage.textContent = "Error submitting form. Please try again.";
+                        submitMessage.className = "text-center text-sm mt-2 text-red-400";
+                        submitMessage.classList.remove('hidden');
+                        
+                        // Reset button state
+                        submitBtn.disabled = false;
+                        submitSpinner.classList.add('hidden');
+                        submitBtn.querySelector('span').textContent = 'Submit Enrollment';
+                    });
+                });
+            }
         });
     </script>
 </body>
 </html>
-
-
