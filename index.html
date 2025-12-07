@@ -610,23 +610,15 @@
                                 </div>
                             </li>`).join('');
                         
-                        // Setup AI Outcome
-                        const aiBtn = document.getElementById('ai-outcome-btn');
-                        const aiResult = document.getElementById('ai-outcome-result');
-                        if (aiResult) { aiResult.classList.add('hidden'); aiResult.innerHTML = ''; aiBtn.classList.remove('hidden'); }
-                        aiBtn.onclick = async () => {
-                            aiBtn.innerHTML = '<span class="ai-loading-pulse mr-2"></span> Analyzing...';
-                            const res = await askGemini(`For the VLSI course "${course.title}", list 3 career outcomes.`);
-                            aiBtn.classList.add('hidden'); aiResult.innerHTML = res.replace(/\n/g, '<br>'); aiResult.classList.remove('hidden');
-                        };
-
                         // Setup Enroll
                         const detailEnrollBtn = document.getElementById('detail-enroll-btn');
-                        detailEnrollBtn.onclick = () => {
-                            document.getElementById('enroll-course-name').value = course.title;
-                            document.getElementById('enroll-course-name-display').value = course.title;
-                            openModal(enrollModal);
-                        };
+                        if (detailEnrollBtn) {
+                            detailEnrollBtn.onclick = () => {
+                                document.getElementById('enroll-course-name').value = course.title;
+                                document.getElementById('enroll-course-name-display').value = course.title;
+                                openModal(enrollModal);
+                            };
+                        }
                         
                         switchView('details');
                     }
@@ -634,7 +626,9 @@
             });
 
             // General Modal Listeners
-            document.getElementById('contact-nav-link').addEventListener('click', () => openModal(contactModal));
+            const contactNavLink = document.getElementById('contact-nav-link');
+            if (contactNavLink) contactNavLink.addEventListener('click', () => openModal(contactModal));
+            
             document.querySelectorAll('.modal-close-btn, .modal-backdrop').forEach(el => {
                 el.addEventListener('click', (e) => { const m = e.target.closest('.modal'); if (m) closeModal(m); });
             });
@@ -734,8 +728,6 @@
             const submitSpinner = document.getElementById('submit-spinner');
             const submitMessage = document.getElementById('submit-message');
 
-            // !!! IMPORTANT !!!
-            // Replace this URL with your actual Google Apps Script Web App URL
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwyKlERO-O339hyIFKqtoew3dIxfJrriKAO-uXRudF1Ro6aOQdZu3TKZgXIx-Y4-njJSg/exec'; 
 
             if (form) {
@@ -749,15 +741,10 @@
 
                     fetch(scriptURL, { method: 'POST', body: new FormData(form)})
                     .then(response => {
-                        // Success!
                         submitMessage.textContent = "Enrollment Submitted Successfully! We will contact you soon.";
                         submitMessage.className = "text-center text-sm mt-2 text-green-400";
                         submitMessage.classList.remove('hidden');
-                        
-                        // Reset form
                         form.reset();
-                        
-                        // Close modal after 2 seconds
                         setTimeout(() => {
                             submitBtn.disabled = false;
                             submitSpinner.classList.add('hidden');
@@ -771,8 +758,6 @@
                         submitMessage.textContent = "Error submitting form. Please try again.";
                         submitMessage.className = "text-center text-sm mt-2 text-red-400";
                         submitMessage.classList.remove('hidden');
-                        
-                        // Reset button state
                         submitBtn.disabled = false;
                         submitSpinner.classList.add('hidden');
                         submitBtn.querySelector('span').textContent = 'Submit Enrollment';
