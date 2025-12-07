@@ -29,7 +29,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--dark-bg-start);
+            background-color: var(--dark-bg-start); /* Fallback */
             background-image: linear-gradient(
                 -45deg, 
                 var(--dark-bg-start), 
@@ -88,7 +88,7 @@
         
         header, footer, .modal, #view-home, #view-details {
             position: relative;
-            z-index: 5;
+            z-index: 5; /* Increased z-index to be above background */
         }
 
         @keyframes pulse-glow {
@@ -222,9 +222,9 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <button onclick="switchView('home')" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">Home</button>
-                        <a href="#courses" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">Courses</a>
-                        <a href="#about" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white">About</a>
+                        <button onclick="switchView('home')" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">Home</button>
+                        <a href="#courses" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">Courses</a>
+                        <a href="#about" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">About</a>
                         <button id="contact-nav-link" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400 px-4 py-2 rounded-md text-sm font-bold shadow-lg transition-all transform hover:-translate-y-0.5">
                             Contact Us
                         </button>
@@ -240,6 +240,7 @@
             <section id="hero" class="pt-24 pb-32">
                 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                        <!-- Headline -->
                         <div>
                             <h1 class="text-3d-steel text-4xl md:text-6xl font-extrabold leading-tight mb-6 tracking-tight">
                                 Stop Searching.<br>Start Learning.
@@ -251,6 +252,7 @@
                                 Explore All Courses
                             </a>
                         </div>
+                        <!-- 3D Animation Container -->
                         <div class="h-[300px] md:h-[450px] relative mt-10 md:mt-0">
                             <canvas id="three-canvas" class="rounded-lg absolute inset-0 w-full h-full"></canvas>
                         </div>
@@ -310,12 +312,8 @@
                             <div class="h-1 w-20 bg-cyan-500 rounded mb-6"></div>
                             <p id="detail-desc" class="text-slate-300 text-lg mb-8"></p>
                             
-                            <div class="mb-8 p-4 bg-slate-950/50 rounded-lg border border-slate-700/50">
-                                <h4 class="text-white font-semibold mb-2 flex items-center"><span class="mr-2">✨</span> AI Insight</h4>
-                                <div id="ai-outcome-result" class="text-sm text-slate-400 hidden"></div>
-                                <button id="ai-outcome-btn" class="text-xs bg-cyan-500/10 text-cyan-400 px-3 py-2 rounded border border-cyan-500/20 hover:bg-cyan-500/20 transition-all flex items-center">What will I achieve in this course?</button>
-                            </div>
-
+                            <!-- AI Insight removed per request to clean up UI -->
+                            
                             <div class="mt-auto">
                                 <div class="flex items-end gap-2 mb-6">
                                     <span id="detail-price" class="text-4xl font-bold text-white"></span>
@@ -501,6 +499,7 @@
                     }
                     draw() {
                         ctx.fillStyle = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 1;
+                        // Draw Logic Gates
                         if (this.type === 'line') {
                             ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.size * 2, this.y); ctx.stroke();
                         } else if (this.type === 'and') {
