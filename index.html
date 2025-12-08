@@ -9,7 +9,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;550;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Three.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -29,7 +29,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--dark-bg-start); /* Fallback */
+            background-color: var(--dark-bg-start);
             background-image: linear-gradient(
                 -45deg, 
                 var(--dark-bg-start), 
@@ -88,9 +88,10 @@
         
         header, footer, .modal, #view-home, #view-details {
             position: relative;
-            z-index: 5; /* Increased z-index to be above background */
+            z-index: 5;
         }
 
+        /* Button Glow Animation */
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
@@ -136,52 +137,54 @@
         }
         .text-3d-steel:hover { transform: scale(1.02); }
 
-        .nav-link-shine {
+        /* --- MODERN NAVIGATION STYLES --- */
+        .nav-btn {
             position: relative;
-            overflow: hidden;
-            transition: color 0.3s ease;
+            color: #cbd5e1;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            background: transparent;
+            border-radius: 8px;
         }
-        .nav-link-shine:hover { color: #ffffff; }
-
-        .nav-link-shine::before {
+        .nav-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+        /* Underline animation */
+        .nav-btn::after {
             content: '';
             position: absolute;
-            left: -100%;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-            transition: left 0.5s ease;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: linear-gradient(90deg, transparent, #22d3ee, transparent);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
-        .nav-link-shine:hover::before {
-            left: 100%;
+        .nav-btn:hover::after {
+            width: 80%;
         }
 
-        /* Chatbot Styles */
-        #chat-float-btn {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            z-index: 90;
-            transition: all 0.3s ease;
+        /* Special Contact Button */
+        .nav-btn-contact {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(34, 211, 238, 0.2));
+            border: 1px solid rgba(34, 211, 238, 0.4);
+            color: #22d3ee;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.1);
         }
-        #chat-modal { z-index: 100; }
-        #chat-log { height: 300px; }
-        .chat-bubble { max-width: 80%; }
-        .chat-bubble-user { background-color: #06b6d4; color: #0f172a; align-self: flex-end; }
-        .chat-bubble-bot { background-color: #334155; color: #e2e8f0; align-self: flex-start; }
-        
-        .chat-loader {
-            width: 8px; height: 8px; border-radius: 50%; display: block; margin: 2px; position: relative;
-            background: #cbd5e1;
-            box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1;
-            animation: chat-spin 1.5s ease-in-out infinite;
+        .nav-btn-contact:hover {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.4), rgba(34, 211, 238, 0.4));
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+            color: white;
+            transform: translateY(-2px);
         }
-        @keyframes chat-spin {
-            33% { background: #cbd5e1; box-shadow: -12px 0 #64748b, 12px 0 #cbd5e1; }
-            66% { background: #64748b; box-shadow: -12px 0 #cbd5e1, 12px 0 #cbd5e1; }
-            100% { background: #cbd5e1; box-shadow: -12px 0 #cbd5e1, 12px 0 #64748b; }
-        }
+
+        /* Chatbot Styles - Hidden for now */
+        .chatbot-hidden { display: none !important; }
 
         #three-canvas { width: 100%; height: 100%; cursor: grab; }
         .hidden-view { display: none !important; }
@@ -211,24 +214,29 @@
         };
     </script>
 
-    <header class="bg-slate-900/80 border-b border-slate-700/50 sticky top-0 z-50 backdrop-blur-md">
-        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+    <header class="bg-slate-950/80 border-b border-slate-800/50 sticky top-0 z-50 backdrop-blur-lg">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0">
-                    <a href="#" class="flex items-center space-x-2 group" onclick="location.reload()">
-                        <img src="logo.png" alt="VLSIeasy Logo" class="h-10 w-auto group-hover:scale-110 transition-transform" onerror="this.src='https://placehold.co/100x100/0f172a/22d3ee?text=LOGO'; this.onerror=null;">
-                        <span class="text-2xl font-extrabold text-white group-hover:text-cyan-400 transition-colors">VLSIeasy</span>
+                    <a href="#" class="flex items-center space-x-3 group" onclick="location.reload()">
+                        <img src="logo.png" alt="VLSIeasy Logo" class="h-10 w-auto group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100/0f172a/22d3ee?text=LOGO'; this.onerror=null;">
+                        <span class="text-2xl font-bold text-white tracking-tight group-hover:text-cyan-400 transition-colors">VLSIeasy</span>
                     </a>
                 </div>
                 <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <button onclick="switchView('home')" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">Home</button>
-                        <a href="#courses" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">Courses</a>
-                        <a href="#about" class="nav-link-shine text-slate-300 px-3 py-2 rounded-md text-sm font-medium hover:text-white transition-colors">About</a>
-                        <button id="contact-nav-link" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400 px-4 py-2 rounded-md text-sm font-bold shadow-lg transition-all transform hover:-translate-y-0.5">
+                    <div class="ml-10 flex items-center space-x-6">
+                        <button onclick="switchView('home')" class="nav-btn">Home</button>
+                        <a href="#courses" class="nav-btn">Courses</a>
+                        <!-- New Team Link -->
+                        <a href="#about" class="nav-btn">Team & Mission</a>
+                        <button id="contact-nav-link" class="nav-btn nav-btn-contact font-semibold rounded-full px-6">
                             Contact Us
                         </button>
                     </div>
+                </div>
+                <!-- Mobile Menu (simplified) -->
+                <div class="md:hidden">
+                    <button id="contact-nav-link-mobile" class="text-cyan-400 font-bold border border-cyan-500/50 px-4 py-2 rounded-lg bg-slate-800/50 backdrop-blur-sm">Contact</button>
                 </div>
             </div>
         </nav>
@@ -272,25 +280,65 @@
                 </div>
             </section>
 
-            <section id="about" class="py-20">
-                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
-                    <div class="text-center mb-16">
-                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Meet Your Instructors</h2>
-                        <p class="text-lg text-slate-400">Our courses are led by industry experts with a passion for teaching.</p>
+            <section id="about" class="py-24 relative overflow-hidden">
+                <!-- Background decorative element -->
+                <div class="absolute top-0 left-1/2 w-full h-full bg-gradient-to-b from-cyan-900/10 to-transparent -translate-x-1/2 pointer-events-none"></div>
+                
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up">
+                    <div class="text-center mb-20">
+                        <!-- Vision label -->
+                        <span class="text-cyan-400 font-bold tracking-widest uppercase text-3xl md:text-4xl mb-6 block drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">Our Vision</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-8">Empowering Silicon Architects</h2>
+                        <div class="max-w-3xl mx-auto bg-slate-900/50 border border-slate-700/50 p-8 rounded-2xl backdrop-blur-sm">
+                            <p class="text-lg text-slate-300 leading-relaxed italic">
+                                "At VLSIeasy, our mission is to democratize VLSI education by bridging the gap between academic theory and industry reality. We believe in affordable, high-quality technical education that creates a tangible societal impact, preparing students not just for jobs, but to drive the future of semiconductor innovation."
+                            </p>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-                        <div class="text-center p-6 bg-slate-900/50 rounded-xl border border-cyan-500/20 hover:border-cyan-500/50 transition-all">
-                            <img src="instructor1.jpg" alt="Yasmeen" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-cyan-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/22d3ee?text=Yasmeen'; this.onerror=null;">
-                            <h3 class="text-2xl font-bold text-white mb-2">Yasmeen</h3>
-                            <p class="text-cyan-400 mb-4">VLSI & Digital Logic Expert</p>
-                            <p class="text-slate-400 text-sm">Specializes in Digital Electronics, Low Power VLSI Design, and Verilog.</p>
+                    
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-10 text-center">Meet The Team</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Instructor: Yasmeen (First) -->
+                        <div class="text-center p-8 bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl border border-cyan-500/30 hover:border-cyan-500/60 transition-all transform hover:-translate-y-2 group shadow-2xl shadow-cyan-900/10">
+                            <div class="relative w-40 h-40 mx-auto mb-6">
+                                <div class="absolute inset-0 bg-cyan-500/20 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
+                                <img src="yasmeen.jpg" alt="Yasmeen" class="relative w-full h-full rounded-full object-cover border-2 border-cyan-500/50" onerror="this.src='https://placehold.co/150x150/0f172a/22d3ee?text=Yasmeen'; this.onerror=null;">
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-1">Zoya Khan</h3>
+                            <p class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">VLSI & Digital Expert</p>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                Specializes in Digital Electronics, Low Power VLSI Design, and Verilog. Passionate about building strong foundations for future engineers.
+                            </p>
                         </div>
-                        <div class="text-center p-6 bg-slate-900/50 rounded-xl border border-purple-500/20 hover:border-purple-500/50 transition-all">
-                            <img src="instructor2.jpg" alt="Rachana" class="w-40 h-40 rounded-full mx-auto mb-6 shadow-lg border-4 border-purple-500/50 object-cover" onerror="this.src='https://placehold.co/150x150/0f172a/c084fc?text=Rachana'; this.onerror=null;">
-                            <h3 class="text-2xl font-bold text-white mb-2">Rachana</h3>
-                            <p class="text-purple-400 mb-4">Physical Design & DFT Specialist</p>
-                            <p class="text-slate-400 text-sm">Expert in Digital VLSI Design (STA), Testing & Verification (DFT), and Physical Design.</p>
+
+                        <!-- Instructor: Rachana (Second) -->
+                        <div class="text-center p-8 bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl border border-purple-500/30 hover:border-purple-500/60 transition-all transform hover:-translate-y-2 group shadow-2xl shadow-purple-900/10">
+                            <div class="relative w-40 h-40 mx-auto mb-6">
+                                <div class="absolute inset-0 bg-purple-500/20 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
+                                <img src="rachana.jpg" alt="Rachana" class="relative w-full h-full rounded-full object-cover border-2 border-purple-500/50" onerror="this.src='https://placehold.co/150x150/0f172a/c084fc?text=Rachana'; this.onerror=null;">
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-1">Ruhi Jain</h3>
+                            <p class="text-purple-400 font-semibold mb-4 text-sm uppercase tracking-wide">Physical Design & DFT</p>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                Expert in Digital VLSI Design (STA), Testing & Verification (DFT), and Physical Design flows. Bringing industry workflows to the classroom.
+                            </p>
                         </div>
+
+                        <!-- Founder: Chetan V (Third) -->
+                        <div class="text-center p-8 bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl border border-orange-500/30 hover:border-orange-500/60 transition-all transform hover:-translate-y-2 group shadow-2xl shadow-orange-900/10">
+                            <div class="relative w-40 h-40 mx-auto mb-6">
+                                <div class="absolute inset-0 bg-orange-500/20 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
+                                <img src="chetan.jpg" alt="Chetan V" class="relative w-full h-full rounded-full object-cover border-2 border-orange-500/50" onerror="this.src='https://placehold.co/150x150/0f172a/fb923c?text=Chetan'; this.onerror=null;">
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-1">Chetan V</h3>
+                            <p class="text-orange-400 font-semibold mb-4 text-sm uppercase tracking-wide">Founder & Leader</p>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                Visionary leader with deep expertise spanning VLSI, Embedded Systems, IoT, and multidisciplinary technologies. Dedicated to universal innovation and guiding the next generation.
+                            </p>
+                        </div>
+
                     </div>
                 </div>
             </section>
@@ -299,8 +347,8 @@
         <!-- ==================== VIEW: COURSE DETAILS ==================== -->
         <div id="view-details" class="hidden-view pt-24 pb-20 min-h-screen">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <button onclick="switchView('home')" class="mb-8 flex items-center text-cyan-400 hover:text-white transition-colors font-semibold">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                <button onclick="switchView('home')" class="mb-8 flex items-center text-cyan-400 hover:text-white transition-colors font-semibold group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Back to Courses
                 </button>
 
@@ -312,8 +360,8 @@
                             <div class="h-1 w-20 bg-cyan-500 rounded mb-6"></div>
                             <p id="detail-desc" class="text-slate-300 text-lg mb-8"></p>
                             
-                            <!-- AI Insight removed per request to clean up UI -->
-                            
+                            <!-- AI Insight Removed -->
+
                             <div class="mt-auto">
                                 <div class="flex items-end gap-2 mb-6">
                                     <span id="detail-price" class="text-4xl font-bold text-white"></span>
@@ -337,57 +385,85 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"><p>&copy; <span id="footer-year"></span> VLSIeasy. All rights reserved.</p></div>
     </footer>
 
-    <!-- Enrollment Form Modal (Full Details) -->
+    <!-- Enrollment Form Modal -->
     <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
         <div class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
         <div class="bg-slate-800 rounded-lg shadow-2xl w-full max-w-2xl border border-slate-700 relative z-[201] max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <div class="flex justify-between items-center p-5 border-b border-slate-700 sticky top-0 bg-slate-800 z-10">
-                <h3 class="text-xl font-semibold text-white">Enrollment Form</h3>
-                <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
-            </div>
             
-            <form id="google-sheet-form">
-                <div class="p-6 space-y-4">
-                    <p class="text-slate-300 text-sm">Please fill all details to complete your enrollment.</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="md:col-span-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Personal Details</h4></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Full Name</label><input type="text" name="name" required placeholder="John Doe" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Email Address</label><input type="email" name="email" required placeholder="john@example.com" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Phone Number</label><input type="tel" name="phone" required placeholder="+91 9876543210" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">WhatsApp Number</label><input type="tel" name="whatsapp" required placeholder="For updates" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Date of Birth</label><input type="date" name="dob" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Gender</label><select name="gender" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"><option value="" disabled selected>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
-
-                        <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Academic / Professional</h4></div>
-                        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">College / Company Name</label><input type="text" name="college_company" required placeholder="e.g. IIT Bombay / Intel" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Branch / Stream</label><input type="text" name="branch" required placeholder="e.g. ECE / EEE" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Year of Passing</label><input type="text" name="year_passing" required placeholder="e.g. 2024" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-
-                        <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Address Details</h4></div>
-                        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Residence Address</label><input type="text" name="address" required placeholder="Street Address, Area" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">City</label><input type="text" name="city" required placeholder="e.g. Bangalore" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">State</label><input type="text" name="state" required placeholder="e.g. Karnataka" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-                        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Country</label><input type="text" name="country" required placeholder="e.g. India" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
-
-                        <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Your Objective</h4></div>
-                        <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Goal to achieve in this course</label><textarea name="goal" rows="2" placeholder="e.g. To get a job in Physical Design..." class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></textarea></div>
-                    </div>
-                    
-                    <div class="mt-4 pt-4 border-t border-slate-700">
-                        <label class="block text-xs text-slate-400 mb-1">Selected Course</label>
-                        <input type="text" id="enroll-course-name-display" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed font-semibold">
-                    </div>
-                    <input type="hidden" name="courseName" id="enroll-course-name">
+            <!-- Default View: Form -->
+            <div id="enroll-form-view">
+                <div class="flex justify-between items-center p-5 border-b border-slate-700 sticky top-0 bg-slate-800 z-10">
+                    <h3 class="text-xl font-semibold text-white">Enrollment Form</h3>
+                    <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
                 </div>
-                <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg sticky bottom-0 z-10 bg-slate-800">
-                    <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg flex justify-center items-center">
-                        <span>Submit Enrollment</span>
-                        <svg id="submit-spinner" class="animate-spin ml-3 h-5 w-5 text-slate-900 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </button>
-                    <p id="submit-message" class="text-center text-sm mt-2 hidden"></p>
+                
+                <form id="google-sheet-form">
+                    <div class="p-6 space-y-4">
+                        <p class="text-slate-300 text-sm">Please fill all details to complete your enrollment.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Personal Details</h4></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Full Name</label><input type="text" name="name" required placeholder="John Doe" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Email Address</label><input type="email" name="email" required placeholder="john@example.com" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Phone Number</label><input type="tel" name="phone" required placeholder="+91 9876543210" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">WhatsApp Number</label><input type="tel" name="whatsapp" required placeholder="For updates" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Date of Birth</label><input type="date" name="dob" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Gender</label><select name="gender" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"><option value="" disabled selected>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+
+                            <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Academic / Professional</h4></div>
+                            <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">College / Company Name</label><input type="text" name="college_company" required placeholder="e.g. IIT Bombay / Intel" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Branch / Stream</label><input type="text" name="branch" required placeholder="e.g. ECE / EEE" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Year of Passing</label><input type="text" name="year_passing" required placeholder="e.g. 2024" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+
+                            <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Address Details</h4></div>
+                            <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Residence Address</label><input type="text" name="address" required placeholder="Street Address, Area" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">City</label><input type="text" name="city" required placeholder="e.g. Bangalore" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">State</label><input type="text" name="state" required placeholder="e.g. Karnataka" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+                            <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Country</label><input type="text" name="country" required placeholder="e.g. India" class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></div>
+
+                            <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Your Objective</h4></div>
+                            <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Goal to achieve in this course</label><textarea name="goal" rows="2" placeholder="e.g. To get a job in Physical Design..." class="w-full bg-slate-700 border border-slate-600 rounded-md p-3 text-white focus:border-cyan-500 focus:outline-none"></textarea></div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-slate-700">
+                            <label class="block text-xs text-slate-400 mb-1">Selected Course</label>
+                            <input type="text" id="enroll-course-name-display" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed font-semibold">
+                        </div>
+                        <input type="hidden" name="courseName" id="enroll-course-name">
+                    </div>
+                    <div class="p-5 border-t border-slate-700 bg-slate-800/50 rounded-b-lg sticky bottom-0 z-10 bg-slate-800">
+                        <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 font-bold px-5 py-3 rounded-md hover:from-cyan-400 hover:to-sky-400 transition-all shadow-lg flex justify-center items-center">
+                            <span>Submit Enrollment</span>
+                            <svg id="submit-spinner" class="animate-spin ml-3 h-5 w-5 text-slate-900 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        </button>
+                        <p id="submit-message" class="text-center text-sm mt-2 hidden"></p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Hidden View: Success Message -->
+            <div id="enroll-success-view" class="hidden flex-col items-center justify-center p-10 text-center h-full min-h-[400px]">
+                <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
                 </div>
-            </form>
+                <h3 class="text-3xl font-bold text-white mb-4">Successfully Registered!</h3>
+                <div class="space-y-4 max-w-sm mx-auto">
+                    <p class="text-slate-300 text-lg">
+                        Thank you for choosing VLSIeasy. You've taken the first step toward mastering VLSI!
+                    </p>
+                    <div class="p-4 bg-slate-900/50 rounded-lg border border-cyan-500/30">
+                        <p class="text-cyan-400 font-medium">What happens next?</p>
+                        <p class="text-slate-400 text-sm mt-2">
+                            Our team will review your details and reach out to you shortly via WhatsApp/Email with the 
+                            <span class="text-white font-semibold">payment link</span> and further onboarding instructions.
+                        </p>
+                    </div>
+                </div>
+                <button class="modal-close-btn mt-8 text-sm text-slate-500 hover:text-white underline">Close</button>
+            </div>
+
         </div>
     </div>
     
@@ -414,58 +490,24 @@
         </div>
     </div>
 
-    <!-- Chatbot -->
-    <button id="chat-float-btn" class="bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 p-4 rounded-full shadow-xl transform hover:scale-110 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-    </button>
-    <div id="chat-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
-        <div class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
-        <div class="bg-slate-800 rounded-lg shadow-2xl w-full max-w-md border border-slate-700 max-h-[80vh] flex flex-col relative z-[201]">
-            <div class="flex justify-between items-center p-5 border-b border-slate-700">
-                <h3 class="text-xl font-semibold text-white">✨ AI Assistant</h3>
-                <button class="modal-close-btn text-slate-400 hover:text-white">&times;</button>
-            </div>
-            <div id="chat-log" class="p-4 flex-grow space-y-3 overflow-y-auto flex flex-col">
-                <div class="chat-bubble chat-bubble-bot p-3 rounded-lg">Hi! I'm the VLSIeasy AI assistant. How can I help you?</div>
-            </div>
-            <div id="chat-loading" class="hidden p-4"><span class="chat-loader"></span></div>
-            <div class="p-4 border-t border-slate-700 bg-slate-800/50 rounded-b-lg">
-                <div class="flex space-x-2">
-                    <input type="text" id="chat-input" placeholder="Ask question..." class="flex-grow bg-slate-700 border border-slate-600 rounded-md p-3 text-white">
-                    <button id="chat-send-btn" class="p-3 bg-cyan-500 text-slate-900 rounded-md font-bold hover:bg-cyan-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></button>
-                </div>
-            </div>
-        </div>
+    <!-- Hidden Chatbot Button (Reserved for later) -->
+    <div class="chatbot-hidden">
+        <button id="chat-float-btn"></button>
     </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <script>
         const courses = [
-            { id: 'vlsi-fundamentals', title: 'VLSI Fundamentals', instructor: 'Yasmeen', description: 'Intro to VLSI, CMOS tech and MOS theory.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/22d3ee?text=VLSI+Fundamentals', theme: { card: 'bg-slate-900 border-cyan-500/30', topics: 'bg-cyan-900/50 text-cyan-300', price: 'text-cyan-400', button: 'bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400' }, topics: ['CMOS', 'MOS Transistor', 'Alternate Tech'], syllabus: ['Basics of CMOS technology', 'MOS Transistor Theory', 'Alternate CMOS Technologies', 'Switching Characteristics', 'Trends in VLSI'] },
-            { id: 'digital-electronics', title: 'Digital Electronics', instructor: 'Yasmeen', description: 'Building blocks of digital systems.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/34d399?text=Digital+Electronics', theme: { card: 'bg-slate-900 border-emerald-500/30', topics: 'bg-emerald-900/50 text-emerald-300', price: 'text-emerald-400', button: 'bg-gradient-to-r from-emerald-500 to-green-500 text-slate-900 hover:from-emerald-400 hover:to-green-400' }, topics: ['Number Systems', 'Logic Gates', 'Circuits'], syllabus: ['Basics', 'Number System', 'Logic Gates', 'Solving problems', 'Combinational Designs', 'Sequential Circuits'] },
-            { id: 'low-power-vlsi', title: 'Low Power VLSI Design', instructor: 'Yasmeen', description: 'Techniques to reduce power consumption.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/c084fc?text=Low+Power', theme: { card: 'bg-slate-900 border-purple-500/30', topics: 'bg-purple-900/50 text-purple-300', price: 'text-purple-400', button: 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white hover:from-purple-400 hover:to-fuchsia-400' }, topics: ['Power Types', 'Reduction Techniques'], syllabus: ['Types of Power', 'Techniques to reduce power', 'Dynamic Switching Power', 'Power Gating & Clock Gating'] },
-            { id: 'verilog', title: 'Verilog Mastery', instructor: 'Yasmeen', description: 'Verilog HDL for design and verification.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/fb923c?text=Verilog', theme: { card: 'bg-slate-900 border-orange-500/30', topics: 'bg-orange-900/50 text-orange-300', price: 'text-orange-400', button: 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400' }, topics: ['Basics', 'Advanced', 'RTL'], syllabus: ['Basics to Advanced', 'Blocking vs Non-Blocking Assignments', 'Procedural Blocks', 'Testbench Design'] },
-            { id: 'digital-vlsi-sta', title: 'Digital VLSI Design – STA', instructor: 'Rachana', description: 'Static Timing Analysis & timing closure.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/f472b6?text=STA+&+Timing', theme: { card: 'bg-slate-900 border-pink-500/30', topics: 'bg-pink-900/50 text-pink-300', price: 'text-pink-400', button: 'bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-400 hover:to-rose-400' }, topics: ['STA Fundamentals', 'Timing Closure', 'Primetime'], syllabus: ['STA fundamentals: setup, hold, skew, jitter', 'Clock domain crossings & synchronizers', 'Path analysis and derating', 'Fixing timing violations', 'ECO-based timing closure', 'Hands-on workflows'] },
-            { id: 'vlsi-testing', title: 'VLSI Testing & Verification', instructor: 'Rachana', description: 'DFT, Scan, and BIST mastery.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/60a5fa?text=DFT+&+Testing', theme: { card: 'bg-slate-900 border-blue-500/30', topics: 'bg-blue-900/50 text-blue-300', price: 'text-blue-400', button: 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-400 hover:to-indigo-400' }, topics: ['Fault Modeling', 'ATPG', 'Scan/BIST'], syllabus: ['Fault modeling: stuck-at, transition, bridging', 'ATPG basics', 'Scan chain insertion', 'LBIST and MBIST', 'MISR/LFSR architecture'] },
-            { id: 'physical-design', title: 'Physical Design (PnR)', instructor: 'Rachana', description: 'Innovus-style design flow.', originalPrice: '₹999', price: '₹500', imageUrl: 'https://placehold.co/600x400/000000/a78bfa?text=Physical+Design', theme: { card: 'bg-slate-900 border-violet-500/30', topics: 'bg-violet-900/50 text-violet-300', price: 'text-violet-400', button: 'bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:from-violet-400 hover:to-purple-400' }, topics: ['Floorplanning', 'CTS/Routing', 'Signoff'], syllabus: ['Floorplanning, placement, power', 'CTS and routing', 'IR drop, EM, DRC/LVS', 'PPA optimization', 'Full Innovus-style flow'] }
+            { id: 'vlsi-fundamentals', title: 'VLSI Fundamentals', instructor: 'Yasmeen', description: 'Intro to VLSI, CMOS tech and MOS theory.', originalPrice: '₹1500', price: '₹1000', imageUrl: 'https://placehold.co/600x400/000000/22d3ee?text=VLSI+Fundamentals', theme: { card: 'bg-slate-900 border-cyan-500/30', topics: 'bg-cyan-900/50 text-cyan-300', price: 'text-cyan-400', button: 'bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400' }, topics: ['CMOS', 'MOS Transistor', 'Alternate Tech'], syllabus: ['Basics of CMOS technology', 'MOS Transistor Theory', 'Alternate CMOS Technologies', 'Switching Characteristics', 'Trends in VLSI'] },
+            { id: 'digital-electronics', title: 'Digital Electronics', instructor: 'Yasmeen', description: 'Building blocks of digital systems.', originalPrice: '₹1500', price: '₹1000', imageUrl: 'https://placehold.co/600x400/000000/34d399?text=Digital+Electronics', theme: { card: 'bg-slate-900 border-emerald-500/30', topics: 'bg-emerald-900/50 text-emerald-300', price: 'text-emerald-400', button: 'bg-gradient-to-r from-emerald-500 to-green-500 text-slate-900 hover:from-emerald-400 hover:to-green-400' }, topics: ['Number Systems', 'Logic Gates', 'Circuits'], syllabus: ['Basics', 'Number System', 'Logic Gates', 'Solving problems', 'Combinational Designs', 'Sequential Circuits'] },
+            { id: 'low-power-vlsi', title: 'Low Power VLSI Design', instructor: 'Yasmeen', description: 'Techniques to reduce power consumption.', originalPrice: '₹1500', price: '₹1000', imageUrl: 'https://placehold.co/600x400/000000/c084fc?text=Low+Power', theme: { card: 'bg-slate-900 border-purple-500/30', topics: 'bg-purple-900/50 text-purple-300', price: 'text-purple-400', button: 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white hover:from-purple-400 hover:to-fuchsia-400' }, topics: ['Power Types', 'Reduction Techniques'], syllabus: ['Types of Power', 'Techniques to reduce power', 'Dynamic Switching Power', 'Power Gating & Clock Gating'] },
+            { id: 'verilog', title: 'Verilog Mastery', instructor: 'Yasmeen', description: 'Verilog HDL for design and verification.', originalPrice: '₹1500', price: '₹1000', imageUrl: 'https://placehold.co/600x400/000000/fb923c?text=Verilog', theme: { card: 'bg-slate-900 border-orange-500/30', topics: 'bg-orange-900/50 text-orange-300', price: 'text-orange-400', button: 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400' }, topics: ['Basics', 'Advanced', 'RTL'], syllabus: ['Basics to Advanced', 'Blocking vs Non-Blocking Assignments', 'Procedural Blocks', 'Testbench Design'] },
+            { id: 'digital-vlsi-sta', title: 'Digital VLSI Design – STA', instructor: 'Rachana', description: 'Static Timing Analysis & timing closure.', originalPrice: '₹1500', price: '₹1000', imageUrl: 'https://placehold.co/600x400/000000/f472b6?text=STA+&+Timing', theme: { card: 'bg-slate-900 border-pink-500/30', topics: 'bg-pink-900/50 text-pink-300', price: 'text-pink-400', button: 'bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-400 hover:to-rose-400' }, topics: ['STA Fundamentals', 'Timing Closure', 'Primetime'], syllabus: ['STA fundamentals: setup, hold, skew, jitter', 'Clock domain crossings & synchronizers', 'Path analysis and derating', 'Fixing timing violations', 'ECO-based timing closure', 'Hands-on workflows'] },
+            { id: 'vlsi-testing', title: 'VLSI Testing & Verification', instructor: 'Rachana', description: 'DFT, Scan, and BIST mastery.', originalPrice: '₹1500', price: '₹1000', imageUrl: 'https://placehold.co/600x400/000000/60a5fa?text=DFT+&+Testing', theme: { card: 'bg-slate-900 border-blue-500/30', topics: 'bg-blue-900/50 text-blue-300', price: 'text-blue-400', button: 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-400 hover:to-indigo-400' }, topics: ['Fault Modeling', 'ATPG', 'Scan/BIST'], syllabus: ['Fault modeling: stuck-at, transition, bridging', 'ATPG basics', 'Scan chain insertion', 'LBIST and MBIST', 'MISR/LFSR architecture'] },
+            { id: 'physical-design', title: 'Physical Design (PnR)', instructor: 'Rachana', description: 'Innovus-style design flow.', originalPrice: '₹1500', price: '₹1000', imageUrl: 'https://placehold.co/600x400/000000/a78bfa?text=Physical+Design', theme: { card: 'bg-slate-900 border-violet-500/30', topics: 'bg-violet-900/50 text-violet-300', price: 'text-violet-400', button: 'bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:from-violet-400 hover:to-purple-400' }, topics: ['Floorplanning', 'CTS/Routing', 'Signoff'], syllabus: ['Floorplanning, placement, power', 'CTS and routing', 'IR drop, EM, DRC/LVS', 'PPA optimization', 'Full Innovus-style flow'] }
         ];
 
-        async function askGemini(prompt) {
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
-                if (!response.ok) throw new Error('API Error');
-                const result = await response.json();
-                return result.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
-            } catch (e) { return "AI connection error."; }
-        }
-
-        // Global View Switcher
         window.switchView = function(viewName) {
             const homeView = document.getElementById('view-home');
             const detailsView = document.getElementById('view-details');
@@ -495,11 +537,11 @@
                         this.x = x; this.y = y; this.size = size; this.type = type; this.color = color;
                         this.vx = vx; this.vy = vy; this.friction = 0.95;
                         this.density = (Math.random() * 30) + 1; // mass for attraction
-                        this.attractionStrength = 0.05; // Strength
+                        // FASTER ATTRACTION: Increased strength
+                        this.attractionStrength = 0.25; 
                     }
                     draw() {
                         ctx.fillStyle = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 1;
-                        // Draw Logic Gates
                         if (this.type === 'line') {
                             ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.size * 2, this.y); ctx.stroke();
                         } else if (this.type === 'and') {
@@ -510,20 +552,17 @@
                         }
                     }
                     update() {
-                        // Attraction Physics
                         if (mouse.x !== undefined) {
                             let dx = mouse.x - this.x; let dy = mouse.y - this.y;
                             let distance = Math.sqrt(dx*dx + dy*dy);
                             if (distance < mouse.radius + this.size) {
                                 let forceX = dx/distance; let forceY = dy/distance;
-                                // Stronger attraction logic
-                                this.vx += forceX * this.attractionStrength * this.density * 0.05; 
-                                this.vy += forceY * this.attractionStrength * this.density * 0.05;
+                                // Increased attraction
+                                this.vx += forceX * this.attractionStrength * this.density * 0.1; 
+                                this.vy += forceY * this.attractionStrength * this.density * 0.1;
                             }
                         }
-                        this.vx *= this.friction; this.vy *= this.friction;
-                        this.x += this.vx; this.y += this.vy;
-                        // Wrap
+                        this.vx *= this.friction; this.vy *= this.friction; this.x += this.vx; this.y += this.vy;
                         if (this.x > bgCanvas.width + 50) this.x = -50; if (this.x < -50) this.x = bgCanvas.width + 50;
                         if (this.y > bgCanvas.height + 50) this.y = -50; if (this.y < -50) this.y = bgCanvas.height + 50;
                     }
@@ -531,13 +570,12 @@
 
                 function initParticles() {
                     particles = [];
-                    // Increased count for "powder" effect
                     let count = (bgCanvas.width * bgCanvas.height) / 5000; 
                     for (let i = 0; i < count; i++) {
                         let size = Math.random() * 4 + 2;
                         let x = Math.random() * bgCanvas.width;
                         let y = Math.random() * bgCanvas.height;
-                        let types = ['and', 'not', 'line', 'line', 'line']; // More lines for connections
+                        let types = ['and', 'not', 'line', 'line', 'line']; 
                         let type = types[Math.floor(Math.random() * types.length)];
                         let color = Math.random() > 0.5 ? 'rgba(34, 211, 238, 0.6)' : 'rgba(226, 232, 240, 0.4)';
                         let vx = (Math.random() - 0.5) * 0.5; let vy = (Math.random() - 0.5) * 0.5;
@@ -575,12 +613,12 @@
                             <p class="text-slate-400 mb-6 flex-grow text-sm">${course.description}</p>
                             <div class="flex flex-wrap gap-2 mb-6">${topicPills}</div>
                         </div>
-                        <div class="bg-slate-950/50 p-6 border-t border-white/5 flex justify-between items-center">
+                        <div class="bg-slate-950/50 p-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
                             <div class="flex items-baseline gap-3">
                                 <span class="text-3xl font-bold ${course.theme.price}">${course.price}</span>
                                 <span class="text-lg line-through text-slate-500">${course.originalPrice}</span>
                             </div>
-                            <button class="view-details-btn font-semibold px-5 py-2 rounded-md transition-all shadow-md transform hover:-translate-y-0.5 ${course.theme.button}" data-course-id="${course.id}">View Details & Enroll</button>
+                            <button class="view-details-btn font-semibold px-4 py-2 text-sm rounded-md transition-all shadow-md transform hover:-translate-y-0.5 ${course.theme.button}" data-course-id="${course.id}">View Details & Enroll</button>
                         </div>`;
                     courseListContainer.appendChild(card);
                 });
@@ -616,6 +654,11 @@
                             detailEnrollBtn.onclick = () => {
                                 document.getElementById('enroll-course-name').value = course.title;
                                 document.getElementById('enroll-course-name-display').value = course.title;
+                                
+                                // Reset to form view
+                                document.getElementById('enroll-form-view').classList.remove('hidden');
+                                document.getElementById('enroll-success-view').classList.add('hidden');
+                                
                                 openModal(enrollModal);
                             };
                         }
@@ -626,9 +669,7 @@
             });
 
             // General Modal Listeners
-            const contactNavLink = document.getElementById('contact-nav-link');
-            if (contactNavLink) contactNavLink.addEventListener('click', () => openModal(contactModal));
-            
+            document.getElementById('contact-nav-link').addEventListener('click', () => openModal(contactModal));
             document.querySelectorAll('.modal-close-btn, .modal-backdrop').forEach(el => {
                 el.addEventListener('click', (e) => { const m = e.target.closest('.modal'); if (m) closeModal(m); });
             });
@@ -652,11 +693,12 @@
                     isInitialized = true;
                     scene = new THREE.Scene();
                     camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-                    camera.position.z = 4.5; 
+                    camera.position.z = 5.0; // Adjusted camera to fit smaller ball
                     renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
                     renderer.setSize(width, height);
                     renderer.setPixelRatio(window.devicePixelRatio);
-                    const geometry = new THREE.IcosahedronGeometry(2.2, 1);
+                    // Reduced radius from 3.8 to 2.5
+                    const geometry = new THREE.IcosahedronGeometry(2.5, 1);
                     const material = new THREE.MeshStandardMaterial({ color: 0x22d3ee, wireframe: true, metalness: 0.5, roughness: 0.3 });
                     core = new THREE.Mesh(geometry, material);
                     scene.add(core);
@@ -678,55 +720,16 @@
                 }
                 initThree();
             }
-
-            // Chatbot
-            const chatFloatBtn = document.getElementById('chat-float-btn');
-            const chatModal = document.getElementById('chat-modal');
-            const chatLog = document.getElementById('chat-log');
-            const chatInput = document.getElementById('chat-input');
-            const chatSendBtn = document.getElementById('chat-send-btn');
-            const chatLoading = document.getElementById('chat-loading');
-            let chatHistory = []; 
-
-            if (chatFloatBtn) chatFloatBtn.addEventListener('click', () => { openModal(chatModal); chatFloatBtn.classList.add('hidden'); });
-            
-            if (chatModal) {
-                const chatCloseBtn = chatModal.querySelector('.modal-close-btn');
-                if (chatCloseBtn) {
-                    const newClose = chatCloseBtn.cloneNode(true);
-                    chatCloseBtn.parentNode.replaceChild(newClose, chatCloseBtn);
-                    newClose.addEventListener('click', () => { closeModal(chatModal); chatFloatBtn.classList.remove('hidden'); });
-                }
-            }
-
-            if (chatSendBtn) chatSendBtn.addEventListener('click', handleChatSend);
-            if (chatInput) chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleChatSend(); });
-
-            function handleChatSend() {
-                const txt = chatInput.value.trim();
-                if (!txt) return;
-                appendMessage(txt, 'user');
-                chatInput.value = '';
-                chatLoading.classList.remove('hidden');
-                chatHistory.push({ role: "user", parts: [{ text: txt }] });
-                askGemini(`You are a VLSI course assistant. Use this syllabus info: ${JSON.stringify(courses)}. User: ${txt}`).then(reply => {
-                    appendMessage(reply, 'bot');
-                    chatLoading.classList.add('hidden');
-                });
-            }
-            function appendMessage(msg, sender) {
-                const div = document.createElement('div');
-                div.className = `chat-bubble p-3 rounded-lg ${sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot'}`;
-                div.innerHTML = msg.replace(/\n/g, '<br>');
-                chatLog.appendChild(div);
-                chatLog.scrollTop = chatLog.scrollHeight;
-            }
             
             // --- GOOGLE SHEETS FORM SUBMISSION LOGIC ---
             const form = document.getElementById('google-sheet-form');
             const submitBtn = document.getElementById('submit-btn');
             const submitSpinner = document.getElementById('submit-spinner');
             const submitMessage = document.getElementById('submit-message');
+            
+            // Views inside Modal
+            const formView = document.getElementById('enroll-form-view');
+            const successView = document.getElementById('enroll-success-view');
 
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwyKlERO-O339hyIFKqtoew3dIxfJrriKAO-uXRudF1Ro6aOQdZu3TKZgXIx-Y4-njJSg/exec'; 
 
@@ -741,23 +744,24 @@
 
                     fetch(scriptURL, { method: 'POST', body: new FormData(form)})
                     .then(response => {
-                        submitMessage.textContent = "Enrollment Submitted Successfully! We will contact you soon.";
-                        submitMessage.className = "text-center text-sm mt-2 text-green-400";
-                        submitMessage.classList.remove('hidden');
+                        // Hide Form, Show Success
+                        formView.classList.add('hidden');
+                        successView.classList.remove('hidden');
+                        successView.classList.add('flex'); // Enable flexbox for centering
+                        
+                        // Reset form data for next time
                         form.reset();
-                        setTimeout(() => {
-                            submitBtn.disabled = false;
-                            submitSpinner.classList.add('hidden');
-                            submitBtn.querySelector('span').textContent = 'Submit Enrollment';
-                            submitMessage.classList.add('hidden');
-                            if(enrollModal) enrollModal.classList.add('hidden');
-                        }, 2000);
+                        submitBtn.disabled = false;
+                        submitSpinner.classList.add('hidden');
+                        submitBtn.querySelector('span').textContent = 'Submit Enrollment';
                     })
                     .catch(error => {
                         console.error('Error!', error.message);
                         submitMessage.textContent = "Error submitting form. Please try again.";
                         submitMessage.className = "text-center text-sm mt-2 text-red-400";
                         submitMessage.classList.remove('hidden');
+                        
+                        // Reset button state
                         submitBtn.disabled = false;
                         submitSpinner.classList.add('hidden');
                         submitBtn.querySelector('span').textContent = 'Submit Enrollment';
