@@ -194,6 +194,27 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+         /* Mobile Dropdown Slide Animation */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+
+        .animate-slide-down {
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.3s ease forwards;
+        }
+
+
     </style>
 </head>
 <body class="overflow-x-hidden bg-black text-slate-200">
@@ -235,12 +256,23 @@
                         </button>
                     </div>
                 </div>
-                <!-- Mobile Menu (simplified) -->
-                <div class="md:hidden">
-                    <button id="contact-nav-link-mobile" class="text-cyan-400 font-bold border border-cyan-500/50 px-4 py-2 rounded-lg bg-slate-800/50 backdrop-blur-sm">Contact</button>
+                <div class="md:hidden flex items-center gap-3">
+                    <!-- Hamburger -->
+                    <button id="mobile-menu-toggle" class="text-cyan-400 border border-cyan-500/50 px-3 py-2 rounded-lg bg-slate-800/50">
+                        ☰
+                    </button>
+                    <!-- Contact -->
+                    <button id="contact-nav-link-mobile" class="text-cyan-400 font-bold border border-cyan-500/50 px-4 py-2 rounded-lg bg-slate-800/50">Contact</button>
                 </div>
             </div>
         </nav>
+        <!-- MOBILE DROPDOWN MENU -->
+        <div id="mobile-dropdown" class="md:hidden hidden bg-slate-900 border-t border-slate-700 w-full px-6 py-4 space-y-4">
+            <button onclick="switchView('home')" class="block w-full text-left nav-btn">Home</button>
+            <a href="#courses" class="block w-full text-left nav-btn">Courses</a>
+            <a href="#about" class="block w-full text-left nav-btn">Team & Mission</a>
+            <button id="contact-nav-link-mobile2" class="block w-full text-left nav-btn nav-btn-contact rounded-md">Contact Us</button>
+        </div>
     </header>
 
     <main>
@@ -772,7 +804,55 @@
             }
         });
     </script>
+    <!-- MOBILE MENU SCRIPT (UPDATED WITH AUTO-CLOSE + ANIMATION) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileToggle = document.getElementById('mobile-menu-toggle');
+            const mobileDropdown = document.getElementById('mobile-dropdown');
+            const contactModal = document.getElementById('contact-modal');
+
+            /* --- Dropdown Animation Class --- */
+            function animateDropdown(show) {
+                if (show) {
+                    mobileDropdown.classList.remove('hidden');
+                    mobileDropdown.classList.add('animate-slide-down');
+                    setTimeout(() => mobileDropdown.classList.remove('animate-slide-down'), 300);
+                } else {
+                    mobileDropdown.classList.add('animate-slide-up');
+                    setTimeout(() => {
+                        mobileDropdown.classList.add('hidden');
+                        mobileDropdown.classList.remove('animate-slide-up');
+                    }, 300);
+                }
+            }
+
+            /* --- Toggle Dropdown --- */
+            mobileToggle.addEventListener('click', () => {
+                const isHidden = mobileDropdown.classList.contains('hidden');
+                animateDropdown(isHidden);
+            });
+
+            /* --- Contact Modal Open Function --- */
+            function openContactModal() {
+                if (contactModal) contactModal.classList.remove('hidden');
+                animateDropdown(false); // Auto close menu
+            }
+
+            /* --- Mobile Nav Buttons Auto-close Menu --- */
+            const autoCloseButtons = [
+                document.getElementById('contact-nav-link-mobile'),
+                document.getElementById('contact-nav-link-mobile2'),
+            ];
+
+            autoCloseButtons.forEach(btn => {
+                if (btn) btn.addEventListener('click', openContactModal);
+            });
+
+            document.querySelectorAll('#mobile-dropdown button, #mobile-dropdown a').forEach(el => {
+                el.addEventListener('click', () => animateDropdown(false));
+            });
+        });
+    </script>
+
 </body>
 </html>
-
-
