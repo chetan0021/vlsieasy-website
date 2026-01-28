@@ -1,0 +1,3875 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rycene VLSI - Master In-Demand Skills</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Spline Runtime (for 3D models) -->
+    <script type="module" src="https://unpkg.com/@splinetool/runtime@1.0.47/build/runtime.js"></script>
+
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Modern Professional Dark Theme */
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --bg-tertiary: #1a1a24;
+            
+            /* Accent Colors */
+            --accent-cyan: #f1f5f9;
+            --accent-purple: #a78bfa;
+            --accent-orange: #fb923c;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: rgba(0, 0, 0, 0.3);
+            
+            /* Text */
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            
+            /* Typography Scale */
+            --text-6xl: 3.75rem;
+            --text-5xl: 3rem;
+            --text-4xl: 2.25rem;
+            --text-3xl: 1.875rem;
+            --text-2xl: 1.5rem;
+            --text-xl: 1.25rem;
+            --text-base: 1rem;
+            --text-sm: 0.875rem;
+            --text-xs: 0.75rem;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #000000;
+            background-image: linear-gradient(
+                -45deg, 
+                #000000, 
+                #0a0a0a, 
+                #1a1a1a, 
+                #0a0a0a,
+                #000000
+            );
+            background-size: 400% 400%;
+            animation: gradientBG 25s ease infinite;
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+            /* Mobile performance optimizations */
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-perspective: 1000px;
+            perspective: 1000px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* AI Features Styles */
+        .ai-explanation-box {
+            background: rgba(15, 23, 42, 0.9);
+            border-left: 3px solid #f1f5f9;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .ai-loading-pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #f1f5f9;
+            animation: pulse-glow 1s infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #logic-gate-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        header, footer, .modal, #view-home, #view-details {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Ensure hero section allows background to show through */
+        #hero {
+            position: relative;
+            z-index: 5;
+            background: transparent !important;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+        }
+
+        .btn-premium-glow {
+            animation: pulse-glow 2s infinite;
+        }
+
+        /* Modal Styles */
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+        .modal.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+            z-index: 99;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .modal.hidden .modal-backdrop {
+            opacity: 0;
+        }
+
+        /* Enhanced Modal Container */
+        .modal-container {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Form Input Styles */
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+            outline: none;
+        }
+
+        h1, h2, h3 {
+            text-shadow: 0px 0px 10px rgba(34, 211, 238, 0.3);
+        }
+        
+        /* Minimal Glow 3D Steel Text */
+        .text-3d-steel {
+            color: #e2e8f0;
+            text-shadow: 
+                1px 1px 0px #94a3b8,
+                2px 2px 0px #64748b,
+                3px 3px 0px #475569,
+                0px 0px 4px rgba(226, 232, 240, 0.15);
+            transition: all 0.3s ease-in-out;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .text-3d-steel:hover { 
+            transform: scale(1.01); 
+            text-shadow: 
+                1px 1px 0px #94a3b8,
+                2px 2px 0px #64748b,
+                3px 3px 0px #475569,
+                4px 4px 0px #334155,
+                0px 0px 6px rgba(226, 232, 240, 0.2);
+        }
+
+        /* --- MODERN NAVIGATION STYLES --- */
+        .nav-btn {
+            position: relative;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9375rem;
+            padding: 0.625rem 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            border-radius: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+        .nav-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-1px);
+        }
+        /* Underline animation */
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0.25rem;
+            left: 50%;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        .nav-btn:hover::after {
+            width: 70%;
+        }
+
+        /* Glassmorphic Contact Button */
+        .nav-btn-contact {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(6, 182, 212, 0.15));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            color: var(--accent-cyan);
+            box-shadow: 0 4px 20px rgba(34, 211, 238, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .nav-btn-contact:hover {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(6, 182, 212, 0.25));
+            border-color: rgba(34, 211, 238, 0.5);
+            box-shadow: 0 8px 30px rgba(34, 211, 238, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateY(-2px) scale(1.02);
+        }
+        .nav-btn-contact::after {
+            display: none;
+        }
+
+        /* Scroll Shadow Effect */
+        .header-scrolled {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border-bottom-color: rgba(148, 163, 184, 0.2) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- GLASSMORPHIC BUTTON SYSTEM --- */
+        .btn-glass {
+            position: relative;
+            padding: 14px 32px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            overflow: hidden;
+            border: none;
+            letter-spacing: -0.01em;
+        }
+
+        /* Primary Glassmorphic Button (Cyan) */
+        .btn-glass-primary {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(6, 182, 212, 0.15));
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            box-shadow: 0 4px 20px rgba(34, 211, 238, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .btn-glass-primary:hover {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(6, 182, 212, 0.25));
+            border-color: rgba(34, 211, 238, 0.5);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(34, 211, 238, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        /* Secondary Outlined Button */
+        .btn-glass-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+        .btn-glass-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Purple Variant */
+        .btn-glass-purple {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(139, 92, 246, 0.15));
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            box-shadow: 0 4px 20px rgba(167, 139, 250, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .btn-glass-purple:hover {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(139, 92, 246, 0.25));
+            border-color: rgba(167, 139, 250, 0.5);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(167, 139, 250, 0.35);
+        }
+
+        /* Orange Variant */
+        .btn-glass-orange {
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(249, 115, 22, 0.15));
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            box-shadow: 0 4px 20px rgba(251, 146, 60, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .btn-glass-orange:hover {
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.3), rgba(249, 115, 22, 0.25));
+            border-color: rgba(251, 146, 60, 0.5);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(251, 146, 60, 0.35);
+        }
+
+        /* Ripple Effect */
+        .btn-glass::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn-glass:active::before {
+            width: 300px;
+            height: 300px;
+            transition: width 0s, height 0s;
+        }
+
+        /* --- HERO BUTTONS WITH RAINBOW HOLOGRAPHIC EFFECT --- */
+        .btn-hero-primary {
+            position: relative;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+        }
+
+        .btn-hero-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: left 0.5s ease;
+        }
+
+        .btn-hero-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-hero-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                45deg,
+                #ff0080,
+                #ff8c00,
+                #40e0d0,
+                #7b68ee,
+                #ff1493,
+                #00ced1
+            );
+            background-size: 300% 300%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: rainbow-shift 3s ease infinite;
+            border-radius: 12px;
+            z-index: -1;
+        }
+
+        .btn-hero-primary:hover::after {
+            opacity: 0.7;
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+        }
+
+        @keyframes rainbow-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .btn-hero-secondary {
+            position: relative;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-hero-secondary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                45deg,
+                #00f5ff,
+                #00d4ff,
+                #0099ff,
+                #7b68ee,
+                #00f5ff
+            );
+            background-size: 300% 300%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: rainbow-shift 3s ease infinite;
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        .btn-hero-secondary:hover::after {
+            opacity: 0.3;
+        }
+
+        .btn-hero-secondary:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(34, 211, 238, 0.2);
+        }
+
+        /* Chatbot Styles - Hidden for now */
+        .chatbot-hidden { display: none !important; }
+
+        #three-canvas { width: 100%; height: 100%; cursor: grab; }
+        .hidden-view { display: none !important; }
+        
+        /* Modern Glassmorphism Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(135deg, 
+                rgba(34, 211, 238, 0.4) 0%, 
+                rgba(34, 211, 238, 0.2) 50%, 
+                rgba(34, 211, 238, 0.1) 100%);
+        }
+
+        /* Custom Scrollbar for specific elements */
+        .custom-scrollbar::-webkit-scrollbar { 
+            width: 8px; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-track { 
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Interactive Text Block with Rainbow Background */
+        .interactive-text-block {
+            padding: 1.5rem;
+            border-left: 3px solid rgba(241, 245, 249, 0.3);
+            background: linear-gradient(90deg, transparent 0%, rgba(241, 245, 249, 0.05) 100%);
+            transition: all 0.4s ease;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(241, 245, 249, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-text-block::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 0, 150, 0.05),
+                rgba(0, 204, 255, 0.05),
+                rgba(128, 0, 255, 0.05),
+                rgba(255, 100, 0, 0.05)
+            );
+            background-size: 300% 300%;
+            animation: subtleRainbow 12s ease infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .interactive-text-block:hover::before {
+            opacity: 1;
+        }
+
+        @media (min-width: 768px) { 
+            .interactive-text-block { 
+                padding: 2rem; 
+            } 
+        }
+        .interactive-text-block:hover {
+            border-left-color: #f1f5f9;
+            background: linear-gradient(90deg, rgba(241, 245, 249, 0.1) 0%, rgba(241, 245, 249, 0.15) 100%);
+            padding-left: 2rem;
+            box-shadow: 0 0 30px rgba(241, 245, 249, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: rgba(241, 245, 249, 0.3);
+        }
+
+        /* Glass Card Effects with Rainbow Background */
+        .glass-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(241, 245, 249, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 0, 150, 0.06),
+                rgba(0, 204, 255, 0.06),
+                rgba(128, 0, 255, 0.06),
+                rgba(255, 100, 0, 0.06),
+                rgba(0, 255, 128, 0.06)
+            );
+            background-size: 300% 300%;
+            animation: subtleRainbow 12s ease infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        .glass-card:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(241, 245, 249, 0.3);
+            box-shadow: 0 20px 60px rgba(241, 245, 249, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transform: translateY(-8px);
+        }
+
+        /* Course Card Specific Styles */
+        .course-card {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(241, 245, 249, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .course-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(241, 245, 249, 0.1);
+            border-color: rgba(241, 245, 249, 0.2);
+        }
+
+        .course-card:hover .course-image {
+            transform: scale(1.1);
+        }
+
+        .course-image {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .course-card:hover .course-enroll-btn {
+            transform: translateY(-2px);
+        }
+
+        /* Team Card Styles */
+        .team-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-12px);
+        }
+
+        .team-card-image-wrapper {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .team-card-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+
+        .team-card:hover .team-card-glow {
+            filter: blur(32px);
+        }
+
+        /* Mobile performance optimizations for animations */
+        @media (max-width: 768px) {
+            /* Reduce animation complexity on mobile */
+            .glass-card::before,
+            .glass-panel::before,
+            .interactive-text-block::before {
+                animation-duration: 20s; /* Slower animations */
+            }
+            
+            /* Disable heavy animations on mobile */
+            .vision-float-1,
+            .vision-float-2,
+            .vision-float-3,
+            .vision-float-4 {
+                animation: none;
+            }
+            
+            /* Reduce particle effects on mobile */
+            #logic-gate-background {
+                opacity: 0.3;
+            }
+            
+            /* Optimize Three.js performance */
+            #three-canvas {
+                will-change: auto;
+            }
+        }
+
+        /* Very small screens - minimal animations */
+        @media (max-width: 480px) {
+            /* Disable most animations on very small screens */
+            .btn-hero-primary::after,
+            .btn-hero-secondary::after {
+                animation: none;
+            }
+            
+            .vision-title,
+            .vision-subtitle,
+            .vision-card,
+            .vision-text {
+                animation: none;
+            }
+            
+            /* Reduce background complexity */
+            body {
+                background-image: linear-gradient(
+                    -45deg, 
+                    #000000, 
+                    #0a0a0a, 
+                    #000000
+                );
+                animation-duration: 40s; /* Much slower */
+            }
+        }
+
+        /* Performance optimizations for all elements */
+        * {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        /* Optimize heavy animated elements */
+        .glass-card,
+        .glass-panel,
+        .interactive-text-block,
+        .course-card,
+        .team-card {
+            will-change: transform;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        /* Optimize button animations */
+        .btn-glass,
+        .btn-hero-primary,
+        .btn-hero-secondary {
+            will-change: transform;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        @media (max-width: 768px) {
+            :root {
+                --text-6xl: 2.5rem;
+                --text-5xl: 2rem;
+                --text-4xl: 1.75rem;
+            }
+            
+            .btn-hero-primary,
+            .btn-hero-secondary {
+                padding: 14px 32px;
+                font-size: 14px;
+            }
+            
+            .course-card:hover {
+                transform: translateY(-6px);
+            }
+            
+            .team-card:hover {
+                transform: translateY(-6px);
+            }
+
+            /* Mobile Navigation Fixes */
+            .nav-btn {
+                font-size: 0.875rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            /* Ensure mobile buttons don't overflow */
+            #mobile-menu-toggle,
+            #contact-nav-link-mobile {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Mobile dropdown improvements */
+            #mobile-dropdown {
+                max-height: 70vh;
+                overflow-y: auto;
+            }
+
+            /* Logo text responsive */
+            .logo-container + span {
+                font-size: 1.125rem !important;
+                line-height: 1.2;
+            }
+        }
+
+        /* Mobile Navigation Improvements */
+        @media (max-width: 640px) {
+            /* Ensure proper spacing for mobile nav */
+            .md\:hidden {
+                gap: 0.5rem;
+            }
+
+            /* Make sure buttons don't get too small */
+            #mobile-menu-toggle,
+            #contact-nav-link-mobile {
+                min-width: 44px;
+                min-height: 44px;
+                font-size: 0.875rem;
+            }
+
+            /* Improve mobile dropdown */
+            #mobile-dropdown {
+                padding: 1rem;
+                margin-top: 0;
+            }
+
+            #mobile-dropdown button,
+            #mobile-dropdown a {
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                margin-bottom: 0.25rem;
+            }
+
+            /* Hero section mobile adjustments */
+            #hero {
+                padding-top: 4rem;
+                padding-bottom: 3rem;
+            }
+
+            /* Course cards mobile spacing */
+            .course-card {
+                margin-bottom: 1.5rem;
+            }
+
+            /* Text scaling for mobile */
+            .hero-headline {
+                font-size: 2rem !important;
+                line-height: 1.1;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+        }
+
+        /* Very small screens (iPhone SE, etc.) */
+        @media (max-width: 375px) {
+            nav {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+
+            .logo-container + span {
+                font-size: 0.9rem !important;
+                font-weight: 600;
+            }
+
+            #contact-nav-link-mobile {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            #mobile-menu-toggle {
+                padding: 0.4rem;
+                min-width: 40px;
+                min-height: 40px;
+            }
+
+            .hero-headline {
+                font-size: 1.75rem !important;
+            }
+        }
+
+        /* --- SUBTLE RAINBOW GRADIENT BACKGROUND FOR GLASS PANELS --- */
+        .glass-panel-bg {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-panel-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 0, 150, 0.1),
+                rgba(0, 204, 255, 0.1),
+                rgba(128, 0, 255, 0.1),
+                rgba(255, 100, 0, 0.1),
+                rgba(0, 255, 128, 0.1),
+                rgba(255, 0, 150, 0.1)
+            );
+            background-size: 400% 400%;
+            animation: rainbowMove 15s ease infinite;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        @keyframes rainbowMove {
+            0% { 
+                background-position: 0% 50%;
+                transform: rotate(0deg);
+            }
+            25% { 
+                background-position: 100% 50%;
+                transform: rotate(90deg);
+            }
+            50% { 
+                background-position: 100% 100%;
+                transform: rotate(180deg);
+            }
+            75% { 
+                background-position: 0% 100%;
+                transform: rotate(270deg);
+            }
+            100% { 
+                background-position: 0% 50%;
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Enhanced glass panels with rainbow background */
+        .glass-panel {
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 0, 150, 0.08),
+                rgba(0, 204, 255, 0.08),
+                rgba(128, 0, 255, 0.08),
+                rgba(255, 100, 0, 0.08),
+                rgba(0, 255, 128, 0.08)
+            );
+            background-size: 300% 300%;
+            animation: subtleRainbow 12s ease infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .glass-panel:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes subtleRainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* Compact Info Badges (Not Buttons) - More Colorful */
+        .info-badge-cyan {
+            background: linear-gradient(135deg, 
+                rgba(6, 182, 212, 0.4) 0%, 
+                rgba(34, 211, 238, 0.6) 100%);
+            border: 1px solid rgba(34, 211, 238, 0.7);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.2);
+        }
+
+        .info-badge-purple {
+            background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.4) 0%, 
+                rgba(168, 85, 247, 0.6) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.7);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+        }
+
+        .info-badge-cyan:hover {
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .info-badge-purple:hover {
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Performance: Reduce animations on low-end devices */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Loading optimization */
+        img {
+            content-visibility: auto;
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, #f1f5f9 0%, #a78bfa 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+         /* Mobile Dropdown Slide Animation */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+
+        .animate-slide-down {
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.3s ease forwards;
+        }
+
+        /* --- ENHANCED SECTION SPLASH EFFECTS --- */
+        .section-splash {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-splash::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(34, 211, 238, 0.1),
+                transparent
+            );
+            transition: left 0.8s ease;
+        }
+
+        .section-splash:hover::before {
+            left: 100%;
+        }
+
+        /* Enhanced Border Glow Effect */
+        .border-glow {
+            position: relative;
+            border: 2px solid transparent;
+            background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
+                        linear-gradient(135deg, #f1f5f9, #a78bfa, #fb923c) border-box;
+            transition: all 0.4s ease;
+        }
+
+        .border-glow:hover {
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.4),
+                        0 0 60px rgba(167, 139, 250, 0.2);
+        }
+
+        /* Animated Border */
+        @keyframes borderRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-border {
+            position: relative;
+            background: linear-gradient(135deg, #f1f5f9, #a78bfa, #fb923c, #f1f5f9);
+            background-size: 300% 300%;
+            animation: borderRotate 4s ease infinite;
+            padding: 2px;
+            border-radius: 16px;
+        }
+
+        .animated-border-inner {
+            background: var(--bg-primary);
+            border-radius: 14px;
+        }
+
+        /* Section Divider with Glow */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(34, 211, 238, 0.5),
+                rgba(167, 139, 250, 0.5),
+                rgba(251, 146, 60, 0.5),
+                transparent
+            );
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* --- ELECTRON ORBIT ANIMATION AROUND LOGO --- */
+        .logo-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .electron-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            width: 140px;
+            height: 140px;
+            z-index: 1;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            border: 2px solid rgba(34, 211, 238, 0.4);
+            border-radius: 50%;
+            animation: orbitRotate 20s linear infinite;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+        }
+
+        .orbit-ring-1 {
+            width: 80px;
+            height: 80px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(60deg);
+            border-color: rgba(34, 211, 238, 0.6);
+            animation: orbitRotate 12s linear infinite;
+        }
+
+        .orbit-ring-2 {
+            width: 100px;
+            height: 100px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(60deg) rotateZ(60deg);
+            animation: orbitRotate 18s linear infinite reverse;
+            border-color: rgba(167, 139, 250, 0.5);
+        }
+
+        .orbit-ring-3 {
+            width: 120px;
+            height: 120px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(60deg) rotateZ(120deg);
+            animation: orbitRotate 24s linear infinite;
+            border-color: rgba(251, 146, 60, 0.4);
+        }
+
+        .electron {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #f1f5f9, #22d3ee);
+            border-radius: 50%;
+            box-shadow: 0 0 15px #22d3ee, 0 0 30px #22d3ee, 0 0 45px #22d3ee;
+            animation: electronMove 3s linear infinite;
+        }
+
+        .electron-1 {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, #22d3ee, #06b6d4);
+            animation: electronMove 4s linear infinite;
+        }
+
+        .electron-2 {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: electronMove2 6s linear infinite;
+            animation-delay: -2s;
+            background: radial-gradient(circle, #a78bfa, #8b5cf6);
+        }
+
+        .electron-3 {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: electronMove3 8s linear infinite;
+            animation-delay: -4s;
+            background: radial-gradient(circle, #fb923c, #f97316);
+        }
+
+        @keyframes orbitRotate {
+            0% { transform: translate(-50%, -50%) rotateX(60deg) rotateZ(0deg); }
+            100% { transform: translate(-50%, -50%) rotateX(60deg) rotateZ(360deg); }
+        }
+
+        @keyframes electronMove {
+            0% { 
+                transform: translateX(-50%) rotateZ(0deg) translateX(40px) rotateZ(0deg);
+            }
+            100% { 
+                transform: translateX(-50%) rotateZ(360deg) translateX(40px) rotateZ(-360deg);
+            }
+        }
+
+        @keyframes electronMove2 {
+            0% { 
+                transform: translateX(-50%) rotateZ(0deg) translateX(50px) rotateZ(0deg);
+            }
+            100% { 
+                transform: translateX(-50%) rotateZ(360deg) translateX(50px) rotateZ(-360deg);
+            }
+        }
+
+        @keyframes electronMove3 {
+            0% { 
+                transform: translateX(-50%) rotateZ(0deg) translateX(60px) rotateZ(0deg);
+            }
+            100% { 
+                transform: translateX(-50%) rotateZ(360deg) translateX(60px) rotateZ(-360deg);
+            }
+        }
+
+        /* Iridescent Oil-on-Water Admissions Badge */
+        .admissions-badge {
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background-clip: padding-box;
+            overflow: hidden;
+            animation: badgePulse 3s ease-in-out infinite;
+            backdrop-filter: blur(10px);
+        }
+
+        .admissions-badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 100, 200, 0.4) 35%,
+                rgba(100, 255, 255, 0.5) 40%,
+                rgba(255, 255, 100, 0.4) 45%,
+                rgba(255, 100, 255, 0.5) 50%,
+                rgba(100, 255, 150, 0.4) 55%,
+                rgba(255, 150, 100, 0.5) 60%,
+                rgba(150, 100, 255, 0.4) 65%,
+                transparent 70%
+            );
+            animation: iridescent 4s linear infinite;
+            z-index: -1;
+        }
+
+        .admissions-badge::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                -45deg,
+                transparent 20%,
+                rgba(100, 255, 255, 0.3) 25%,
+                rgba(255, 100, 255, 0.4) 30%,
+                rgba(255, 255, 100, 0.3) 35%,
+                rgba(100, 255, 200, 0.4) 40%,
+                rgba(255, 150, 255, 0.3) 45%,
+                rgba(150, 255, 100, 0.4) 50%,
+                rgba(255, 100, 150, 0.3) 55%,
+                transparent 60%
+            );
+            animation: iridescent 6s linear infinite reverse;
+            z-index: -1;
+        }
+
+        @keyframes iridescent {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(0deg);
+                opacity: 0.5;
+            }
+            25% {
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateX(0%) translateY(0%) rotate(180deg);
+                opacity: 0.7;
+            }
+            75% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(360deg);
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 5px rgba(100, 255, 255, 0.1),
+                    0 0 10px rgba(255, 100, 255, 0.08),
+                    0 0 15px rgba(255, 255, 100, 0.05);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 
+                    0 0 8px rgba(100, 255, 255, 0.15),
+                    0 0 16px rgba(255, 100, 255, 0.12),
+                    0 0 24px rgba(255, 255, 100, 0.08);
+                transform: scale(1.01);
+            }
+        }
+
+        /* Vision Section Cool Animations */
+        .vision-section {
+            position: relative;
+        }
+
+        .vision-title {
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 0 8px rgba(34, 211, 238, 0.2);
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 12px rgba(34, 211, 238, 0.3);
+                transform: scale(1.01);
+            }
+        }
+
+        .vision-subtitle {
+            animation: subtitleFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes subtitleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .vision-card {
+            animation: cardPulse 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .vision-card:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.05), 0 0 15px rgba(34, 211, 238, 0.1);
+        }
+
+        @keyframes cardPulse {
+            0%, 100% {
+                box-shadow: 0 8px 16px rgba(255, 255, 255, 0.03);
+            }
+            50% {
+                box-shadow: 0 10px 20px rgba(255, 255, 255, 0.05), 0 0 10px rgba(34, 211, 238, 0.05);
+            }
+        }
+
+        /* Floating Elements Animations */
+        .vision-float-1 {
+            animation: float1 8s ease-in-out infinite;
+        }
+
+        .vision-float-2 {
+            animation: float2 6s ease-in-out infinite;
+        }
+
+        .vision-float-3 {
+            animation: float3 10s ease-in-out infinite;
+        }
+
+        .vision-float-4 {
+            animation: float4 7s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { 
+                transform: translate(10px, -10px) scale(1);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translate(15px, -15px) scale(1.2);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translate(5px, -5px) scale(1.1);
+                opacity: 0.4;
+            }
+            75% { 
+                transform: translate(20px, -20px) scale(0.9);
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes float2 {
+            0%, 100% { 
+                transform: translate(-8px, 8px) scale(1);
+                opacity: 0.4;
+            }
+            33% { 
+                transform: translate(-12px, 12px) scale(1.3);
+                opacity: 0.7;
+            }
+            66% { 
+                transform: translate(-4px, 4px) scale(0.8);
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes float3 {
+            0%, 100% { 
+                transform: translate(-6px, -6px) scale(1);
+                opacity: 0.2;
+            }
+            40% { 
+                transform: translate(-10px, -10px) scale(1.4);
+                opacity: 0.6;
+            }
+            80% { 
+                transform: translate(-2px, -2px) scale(0.7);
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes float4 {
+            0%, 100% { 
+                transform: translate(0px, 0px) scale(1);
+                opacity: 0.3;
+            }
+            30% { 
+                transform: translate(5px, -5px) scale(1.5);
+                opacity: 0.8;
+            }
+            60% { 
+                transform: translate(-3px, 3px) scale(0.6);
+                opacity: 0.2;
+            }
+        }
+
+        /* Animated Border Glow */
+        .vision-border-glow {
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(34, 211, 238, 0.03),
+                transparent,
+                rgba(167, 139, 250, 0.03),
+                transparent,
+                rgba(251, 146, 60, 0.03),
+                transparent
+            );
+            background-size: 300% 300%;
+            animation: borderFlow 8s ease infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .vision-card:hover .vision-border-glow {
+            opacity: 1;
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Text Animation */
+        .vision-text {
+            animation: textShimmer 12s ease-in-out infinite;
+        }
+
+        @keyframes textShimmer {
+            0%, 100% { 
+                color: rgb(203, 213, 225);
+            }
+            25% { 
+                color: rgb(226, 232, 240);
+            }
+            50% { 
+                color: rgb(241, 245, 249);
+            }
+            75% { 
+                color: rgb(203, 213, 225);
+            }
+        }
+
+        /* Enhanced Logo Text Styling */
+        .logo-text {
+            background: linear-gradient(135deg, #f1f5f9 0%, #22d3ee 25%, #a78bfa 50%, #fb923c 75%, #f1f5f9 100%);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logoGradientShift 4s ease-in-out infinite;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo-text::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #22d3ee, #a78bfa, #fb923c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            z-index: -1;
+            filter: blur(2px);
+            opacity: 0.7;
+        }
+
+        @keyframes logoGradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .logo-container {
+            position: relative;
+            min-width: 60px;
+            margin-right: 20px;
+        }
+
+        .logo-container img {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Logo hover effects */
+        .logo-container:hover .orbit-ring {
+            border-width: 3px;
+            animation-duration: 5s;
+        }
+
+        .logo-container:hover .electron {
+            width: 10px;
+            height: 10px;
+            box-shadow: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor;
+        }
+
+        /* Spline Container Styles */
+        .spline-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        spline-viewer {
+            width: 100%;
+            height: 100%;
+        }
+        /* --- ULTRA-PROFESSIONAL COMPACT SPACING --- */
+        .section-compact {
+            padding: 4rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .section-compact {
+                padding: 5rem 0;
+            }
+        }
+
+        /* Tighter card spacing */
+        .card-compact {
+            padding: 1.25rem;
+        }
+
+        /* Premium borders everywhere */
+        .premium-border {
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            position: relative;
+        }
+
+        .premium-border::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, #f1f5f9, #a78bfa, #fb923c);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .premium-border:hover::before {
+            opacity: 1;
+        }
+
+        /* Icon badges */
+        .icon-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            transition: all 0.3s;
+        }
+
+        .icon-badge:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+        }
+
+        /* Compact stat cards */
+        .stat-card {
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tight grid layouts */
+        .grid-tight {
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-tight {
+                gap: 1.5rem;
+            }
+        }
+
+        /* Premium hover glow */
+        .hover-glow {
+            transition: all 0.3s;
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.3),
+                        0 0 60px rgba(167, 139, 250, 0.2),
+                        inset 0 0 20px rgba(34, 211, 238, 0.1);
+        }
+
+        /* --- FOOD WEBSITE STYLE IMAGE ANIMATIONS --- */
+        .image-hover-zoom {
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .image-hover-zoom img {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+
+        .image-hover-zoom:hover img {
+            transform: scale(1.15);
+        }
+
+        /* Parallax image effect */
+        .image-parallax {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        .image-parallax::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(34, 211, 238, 0.1), rgba(167, 139, 250, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 2;
+        }
+
+        .image-parallax:hover::before {
+            opacity: 1;
+        }
+
+        /* Floating image animation */
+        .image-float {
+            animation: imageFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes imageFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(1deg); }
+            50% { transform: translateY(-5px) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(-1deg); }
+        }
+
+        /* Image reveal animation */
+        .image-reveal {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-reveal::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .image-reveal:hover::after {
+            left: 100%;
+        }
+
+        /* Course card image enhancements */
+        .course-image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .course-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(34, 211, 238, 0.8) 0%,
+                rgba(167, 139, 250, 0.6) 50%,
+                rgba(251, 146, 60, 0.8) 100%
+            );
+            opacity: 0;
+            transition: opacity 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .course-card:hover .course-image-overlay {
+            opacity: 1;
+        }
+
+
+
+
+    </style>
+</head>
+<body class="overflow-x-hidden text-slate-200">
+
+    <canvas id="logic-gate-background"></canvas>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'], },
+                    colors: {
+                        cyan: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' },
+                        slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' }
+                    }
+                },
+            },
+        };
+    </script>
+
+    <header class="bg-black/80 border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl transition-all duration-300" id="main-header">
+        <nav class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20"> <!-- Responsive height -->
+                <div class="flex-shrink-0 min-w-0">
+                    <a href="#" class="flex items-center space-x-3 sm:space-x-4 group" onclick="location.reload()">
+                        <div class="logo-container relative flex-shrink-0">
+                            <img src="Logo.png" alt="Rycene Logo" class="h-10 sm:h-14 w-auto group-hover:scale-105 transition-transform duration-300 relative z-10" onerror="this.src='https://placehold.co/100x100/0f172a/22d3ee?text=LOGO'; this.onerror=null;">
+                            <!-- Electron Orbits -->
+                            <div class="electron-orbit">
+                                <div class="orbit-ring orbit-ring-1">
+                                    <div class="electron electron-1"></div>
+                                </div>
+                                <div class="orbit-ring orbit-ring-2">
+                                    <div class="electron electron-2"></div>
+                                </div>
+                                <div class="orbit-ring orbit-ring-3">
+                                    <div class="electron electron-3"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="logo-text text-lg sm:text-2xl font-bold tracking-tight group-hover:text-cyan-400 transition-colors duration-300 truncate ml-4 sm:ml-6" data-text="Rycene VLSI">Rycene VLSI</span>
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-2">
+                        <button onclick="switchView('home')" class="nav-btn">Home</button>
+                        <a href="#courses" class="nav-btn">Courses</a>
+                        <a href="#about" class="nav-btn">Team & Mission</a>
+                        <button id="contact-nav-link" class="nav-btn-contact font-semibold rounded-full px-6 py-2.5">
+                            Contact Us
+                        </button>
+                    </div>
+                </div>
+                <div class="md:hidden flex items-center gap-2">
+                    <button id="contact-nav-link-mobile" class="text-cyan-400 font-semibold text-sm border border-cyan-500/50 px-3 py-2 rounded-lg bg-slate-800/50 backdrop-blur-md hover:bg-slate-800/70 transition-all whitespace-nowrap">
+                        Contact
+                    </button>
+                    <button id="mobile-menu-toggle" class="text-cyan-400 border border-cyan-500/50 px-3 py-2 rounded-lg bg-slate-800/50 backdrop-blur-md hover:bg-slate-800/70 transition-all flex items-center justify-center min-w-[44px]">
+                        <span class="text-lg">☰</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- MOBILE DROPDOWN MENU -->
+        <div id="mobile-dropdown" class="md:hidden hidden bg-black/95 border-t border-white/20 w-full px-4 py-4 space-y-3 backdrop-blur-xl">
+            <button onclick="switchView('home')" class="block w-full text-left nav-btn py-3 px-4 rounded-lg hover:bg-white/5 transition-all">Home</button>
+            <a href="#courses" class="block w-full text-left nav-btn py-3 px-4 rounded-lg hover:bg-white/5 transition-all">Courses</a>
+            <a href="#about" class="block w-full text-left nav-btn py-3 px-4 rounded-lg hover:bg-white/5 transition-all">Team & Mission</a>
+            <button id="contact-nav-link-mobile2" class="block w-full text-left nav-btn nav-btn-contact rounded-lg py-3 px-4 mt-2 bg-gradient-to-r from-cyan-500/20 to-sky-500/20 border border-cyan-500/30">Contact Us</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- ==================== VIEW: HOME ==================== -->
+        <div id="view-home">
+            <section id="hero" class="pt-16 sm:pt-20 pb-20 sm:pb-24 section-compact relative">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
+                        <!-- Headline -->
+                        <div>
+                            <!-- Compact badge with enhanced visibility -->
+                            <div class="admissions-badge inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 backdrop-blur-md">
+                                <i class="fas fa-calendar-check text-white"></i>
+                                <span class="text-white text-sm font-semibold">Admissions open for 2026 batches</span>
+                            </div>
+                            
+                            <h1 class="hero-headline text-3d-steel text-4xl md:text-6xl font-black leading-tight mb-6 tracking-tight">
+                                Stop Searching.<br>Start Learning.
+                            </h1>
+                            <p class="hero-description max-w-xl text-lg md:text-xl text-slate-200 mb-8 leading-relaxed font-normal">
+                                Master VLSI. Our expert-led courses make complex topics simple, from Digital Electronics to advanced Low Power techniques.
+                            </p>
+                            
+                            <!-- Compact info badges (not buttons) - More Colorful -->
+                            <div class="flex flex-wrap gap-4 mb-8 justify-center lg:justify-start">
+                                <div class="info-badge-cyan flex items-center gap-3 px-4 py-3 rounded-full backdrop-blur-md">
+                                    <div class="w-8 h-8 rounded-full bg-cyan-400/30 flex items-center justify-center">
+                                        <i class="fas fa-graduation-cap text-cyan-200 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-lg font-bold text-cyan-100">5+</div>
+                                        <div class="text-xs text-cyan-200 -mt-1">Courses</div>
+                                    </div>
+                                </div>
+                                <div class="info-badge-purple flex items-center gap-3 px-4 py-3 rounded-full backdrop-blur-md">
+                                    <div class="w-8 h-8 rounded-full bg-purple-400/30 flex items-center justify-center">
+                                        <i class="fas fa-video text-purple-200 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-lg font-bold text-purple-100">100%</div>
+                                        <div class="text-xs text-purple-200 -mt-1">Live Sessions</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="hero-buttons flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                                <a href="#courses" class="btn-hero-primary text-center flex items-center justify-center gap-2">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    View Courses
+                                </a>
+                                <button id="hero-contact-btn" class="btn-hero-secondary flex items-center justify-center gap-2">
+                                    <i class="fas fa-comments"></i>
+                                    Talk to Mentor
+                                </button>
+                            </div>
+                        </div>
+                        <!-- 3D Animation Container -->
+                        <div class="h-[300px] md:h-[450px] relative mt-10 md:mt-0">
+                            <!-- 
+                            ═══════════════════════════════════════════════════════════
+                            🎨 SPLINE 3D MODEL PLACEHOLDER - MICROPROCESSOR CHIP
+                            ═══════════════════════════════════════════════════════════
+                            
+                            TO ADD SPLINE MODEL:
+                            1. Create a microprocessor chip in Spline.design
+                            2. Export and get the embed URL
+                            3. Replace the canvas below with:
+                            
+                            <spline-viewer 
+                                url="YOUR_SPLINE_URL_HERE"
+                                class="w-full h-full rounded-lg"
+                            ></spline-viewer>
+                            
+                            DESIGN SPECS:
+                            - Size: 400x400px
+                            - Style: Photorealistic metallic
+                            - Animation: Slow rotation + mouse parallax
+                            - Colors: Silver/gray with cyan accents
+                            
+                            See: SPLINE_INTEGRATION_GUIDE.md for full instructions
+                            ═══════════════════════════════════════════════════════════
+                            -->
+                            <canvas id="three-canvas" class="rounded-lg absolute inset-0 w-full h-full"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MARKETING / REALITY CHECK SECTION -->
+            <section class="py-16 section-compact relative border-y border-white/5 bg-black backdrop-blur-md section-splash overflow-hidden">
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 left-0 w-full h-1 section-divider"></div>
+                <div class="absolute bottom-0 left-0 w-full h-1 section-divider"></div>
+                
+                <!-- Animated Background Particles -->
+                <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-cyan-400/30 rounded-full animate-pulse"></div>
+                    <div class="absolute top-3/4 right-1/3 w-1 h-1 bg-orange-400/40 rounded-full animate-ping" style="animation-delay: 1s;"></div>
+                    <div class="absolute bottom-1/4 left-1/2 w-1.5 h-1.5 bg-purple-400/30 rounded-full animate-pulse" style="animation-delay: 2s;"></div>
+                </div>
+                
+                <div class="max-w-6xl mx-auto px-4">
+                    <div class="text-center mb-12" data-aos="zoom-in">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/30 mb-4">
+                            <i class="fas fa-bolt text-orange-400"></i>
+                            <span class="text-orange-400 font-bold text-sm tracking-widest uppercase">THE REALITY CHECK</span>
+                        </div>
+                        <h2 class="text-3xl lg:text-5xl font-black text-white mb-4 leading-tight">Democratizing Silicon Education</h2>
+                        <p class="text-base text-slate-400 max-w-2xl mx-auto">We are on a mission to bridge the skills gap by making premium VLSI education accessible to every aspiring engineer.</p>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4">
+                            <!-- Enhanced Mission Cards with Stats -->
+                            <div class="premium-border interactive-text-block group cursor-default rounded-xl p-6 hover-glow relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-400/5 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+                                <div class="flex items-start gap-4 relative z-10">
+                                    <div class="icon-badge flex-shrink-0 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-dollar-sign text-cyan-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Closing the Affordability Gap</h3>
+                                            <span class="text-cyan-400 font-bold text-lg">70% Less</span>
+                                        </div>
+                                        <p class="text-slate-400 leading-relaxed text-sm mb-3">High-quality technical education shouldn't be a luxury. We offer industry-standard training at a fraction of corporate institute costs.</p>
+                                        <div class="flex items-center gap-2 text-xs text-cyan-300">
+                                            <i class="fas fa-chart-line"></i>
+                                            <span>Compared to traditional institutes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="premium-border interactive-text-block group cursor-default rounded-xl p-6 hover-glow relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-20 h-20 bg-purple-400/5 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+                                <div class="flex items-start gap-4 relative z-10">
+                                    <div class="icon-badge flex-shrink-0 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-equals text-purple-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h3 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">Equality in Opportunity</h3>
+                                            <span class="text-purple-400 font-bold text-lg">100% Access</span>
+                                        </div>
+                                        <p class="text-slate-400 leading-relaxed text-sm mb-3">By providing the exact same tools, workflows, and mentorship used in top-tier companies, we level the playing field.</p>
+                                        <div class="flex items-center gap-2 text-xs text-purple-300">
+                                            <i class="fas fa-tools"></i>
+                                            <span>Industry-standard tools & workflows</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="premium-border interactive-text-block group cursor-default rounded-xl p-6 hover-glow relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-20 h-20 bg-orange-400/5 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+                                <div class="flex items-start gap-4 relative z-10">
+                                    <div class="icon-badge flex-shrink-0 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-users text-orange-400"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h3 class="text-xl font-bold text-white group-hover:text-orange-400 transition-colors">Community-Led Growth</h3>
+                                            <span class="text-orange-400 font-bold text-lg">24/7</span>
+                                        </div>
+                                        <p class="text-slate-400 leading-relaxed text-sm mb-3">Learning isn't solitary. Our Discord-based ecosystem ensures peer-to-peer learning, 24/7 doubt resolution.</p>
+                                        <div class="flex items-center gap-2 text-xs text-orange-300">
+                                            <i class="fab fa-discord"></i>
+                                            <span>Active community support</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Enhanced Impact Card -->
+                        <div class="relative h-full min-h-[400px] flex items-center justify-center">
+                            <!-- 
+                            ═══════════════════════════════════════════════════════════
+                            🎨 SPLINE 3D MODEL PLACEHOLDER - SILICON ATOM
+                            ═══════════════════════════════════════════════════════════
+                            
+                            TO ADD SPLINE MODEL:
+                            Add this BEFORE the glass-card div:
+                            
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] opacity-30 pointer-events-none">
+                                <spline-viewer 
+                                    url="YOUR_SILICON_ATOM_SPLINE_URL"
+                                    class="w-full h-full"
+                                ></spline-viewer>
+                            </div>
+                            
+                            DESIGN SPECS:
+                            - Size: 300x300px (background element)
+                            - Style: Abstract atom with 3 orbital rings
+                            - Animation: Rotating orbits with glowing electrons
+                            - Colors: Cyan electrons, purple/orange orbits
+                            - Opacity: 30% (subtle background effect)
+                            
+                            See: SPLINE_INTEGRATION_GUIDE.md for full instructions
+                            ═══════════════════════════════════════════════════════════
+                            -->
+                            <div class="glass-card p-8 rounded-2xl border border-white/10 w-full max-w-md relative z-10 bg-black/60 group relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                
+                                <!-- Header with animated icon -->
+                                <div class="flex items-center gap-4 mb-6 relative z-10">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-rocket text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-bold text-lg">Launch Your Career</h4>
+                                        <p class="text-slate-400 text-xs uppercase tracking-wider">Join the Revolution</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-6 relative z-10">
+                                    <!-- Success Metrics -->
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="text-center p-3 bg-white/5 rounded-lg border border-white/10">
+                                            <div class="text-2xl font-bold text-cyan-400">95%</div>
+                                            <div class="text-xs text-slate-400">Success Rate</div>
+                                        </div>
+                                        <div class="text-center p-3 bg-white/5 rounded-lg border border-white/10">
+                                            <div class="text-2xl font-bold text-purple-400">500+</div>
+                                            <div class="text-xs text-slate-400">Students</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Student Feedback -->
+                                    <div class="flex flex-col items-center justify-center border-b border-white/5 pb-4">
+                                        <span class="text-slate-300 text-sm mb-2">Student Feedback</span>
+                                        <div class="flex gap-1 text-yellow-400 text-xl">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <span class="text-slate-500 text-xs mt-1">4.9/5 Average Rating</span>
+                                    </div>
+                                    
+                                    <!-- CTA Section -->
+                                    <div class="bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-orange-500/10 border border-cyan-500/30 rounded-lg p-4 text-center">
+                                        <p class="text-white font-bold text-lg mb-1">JOIN THE FIRST COHORT</p>
+                                        <p class="text-cyan-300 text-xs mb-3">Be a pioneer in the VLSI revolution</p>
+                                        <div class="flex items-center justify-center gap-2 text-xs text-slate-400">
+                                            <i class="fas fa-clock"></i>
+                                            <span>Limited seats available</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Verification badges -->
+                                    <div class="flex justify-between items-center text-sm text-slate-400 pt-2">
+                                        <span><i class="fas fa-check-circle text-green-500 mr-2"></i>Verified Content</span>
+                                        <span><i class="fas fa-check-circle text-green-500 mr-2"></i>Expert Mentors</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Industry Standards Section -->
+            <section class="py-16 section-compact relative bg-black backdrop-blur-md section-splash">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div data-aos="fade-right">
+                            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6">
+                                <i class="fas fa-certificate text-cyan-400"></i>
+                                <span class="text-cyan-400 text-sm font-semibold">Industry Standard</span>
+                            </div>
+                            <h2 class="text-3xl lg:text-4xl font-black text-white mb-6 leading-tight">Industry Standard <span class="text-gradient">Curriculum</span></h2>
+                            <p class="text-slate-400 mb-6 leading-relaxed text-base">With the <strong>India Semiconductor Mission</strong> driving massive growth, the demand for skilled Silicon Architects is at an all-time high.</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-center text-slate-300 text-sm group hover:translate-x-2 transition-transform premium-border rounded-lg p-3 hover-glow">
+                                    <div class="icon-badge mr-3 flex-shrink-0">
+                                        <i class="fas fa-microchip text-cyan-400"></i>
+                                    </div>
+                                    <span>5nm & 3nm Technology Nodes concepts</span>
+                                </li>
+                                <li class="flex items-center text-slate-300 text-sm group hover:translate-x-2 transition-transform premium-border rounded-lg p-3 hover-glow">
+                                    <div class="icon-badge mr-3 flex-shrink-0">
+                                        <i class="fas fa-layer-group text-purple-400"></i>
+                                    </div>
+                                    <span>Advanced FinFET & GAAFET Architectures</span>
+                                </li>
+                                <li class="flex items-center text-slate-300 text-sm group hover:translate-x-2 transition-transform premium-border rounded-lg p-3 hover-glow">
+                                    <div class="icon-badge mr-3 flex-shrink-0">
+                                        <i class="fas fa-project-diagram text-green-400"></i>
+                                    </div>
+                                    <span>Real-time Paper & Project Guidance</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3" data-aos="fade-left">
+                            <div class="glass-card card-compact rounded-xl border-l-4 border-cyan-500 premium-border hover-glow">
+                                <div class="icon-badge mb-3">
+                                    <i class="fab fa-discord text-[#5865F2] text-xl"></i>
+                                </div>
+                                <h3 class="text-white font-bold text-base mb-1">Discord Server</h3>
+                                <p class="text-xs text-slate-400 font-mono">Class notes, doubts & peer networking.</p>
+                            </div>
+                            <div class="glass-card card-compact rounded-xl border-l-4 border-purple-500 premium-border hover-glow">
+                                <div class="icon-badge mb-3">
+                                    <i class="fas fa-video text-purple-400 text-xl"></i>
+                                </div>
+                                <h3 class="text-white font-bold text-base mb-1">Live Sessions</h3>
+                                <p class="text-xs text-slate-400 font-mono">Real-time Q&A. No pre-recorded boredom.</p>
+                            </div>
+                            <div class="glass-card card-compact rounded-xl border-l-4 border-orange-500 premium-border hover-glow">
+                                <div class="icon-badge mb-3">
+                                    <i class="fas fa-award text-orange-400 text-xl"></i>
+                                </div>
+                                <h3 class="text-white font-bold text-base mb-1">Certification</h3>
+                                <p class="text-xs text-slate-400 font-mono">Valid course completion certificates.</p>
+                            </div>
+                            <div class="glass-card card-compact rounded-xl border-l-4 border-green-500 premium-border hover-glow">
+                                <div class="icon-badge mb-3">
+                                    <i class="fas fa-hourglass-half text-green-400 text-xl"></i>
+                                </div>
+                                <h3 class="text-white font-bold text-base mb-1">1+ Month</h3>
+                                <p class="text-xs text-slate-400 font-mono">Detailed deep-dives, not crash courses.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="courses" class="py-16 section-compact bg-black border-t border-b border-white/10 section-splash relative overflow-hidden">
+                <!-- Decorative Background -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/2 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="text-center mb-12" data-aos="fade-up">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-4">
+                            <i class="fas fa-book-open text-cyan-400"></i>
+                            <span class="text-cyan-400 font-bold tracking-widest uppercase text-sm">Our Courses</span>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Master VLSI Design</h2>
+                        <p class="text-base text-slate-400">Dive deep into the subjects that matter most in the VLSI industry.</p>
+                    </div>
+                    <div id="course-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-tight">
+                        <!-- Course cards injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="py-24 relative overflow-hidden">
+                <!-- Enhanced Background decorative elements -->
+                <div class="absolute top-0 left-1/2 w-full h-full bg-gradient-to-b from-cyan-900/10 to-transparent -translate-x-1/2 pointer-events-none"></div>
+                <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div class="absolute top-1/3 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
+                    <div class="absolute bottom-1/3 right-1/4 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+                    <div class="absolute top-2/3 left-2/3 w-32 h-32 bg-orange-500/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 4s;"></div>
+                </div>
+                
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up">
+                    <!-- Enhanced Vision Section with Cool Animations -->
+                    <div class="vision-section text-center mb-20 relative">
+                        <span class="vision-title text-cyan-400 font-bold tracking-widest uppercase text-3xl md:text-4xl mb-6 block drop-shadow-[0_0_8px_rgba(34,211,238,0.2)]">Our Vision</span>
+                        <h2 class="vision-subtitle text-2xl md:text-3xl font-bold text-white mb-8">Empowering Silicon Architects</h2>
+                        <div class="vision-card max-w-3xl mx-auto bg-black/90 border border-white/20 p-8 rounded-2xl backdrop-blur-sm shadow-lg shadow-white/10 relative overflow-hidden">
+                            <!-- Animated floating elements -->
+                            <div class="vision-float-1 absolute top-0 right-0 w-20 h-20 bg-cyan-400/5 rounded-full -translate-y-10 translate-x-10"></div>
+                            <div class="vision-float-2 absolute bottom-0 left-0 w-16 h-16 bg-purple-400/5 rounded-full translate-y-8 -translate-x-8"></div>
+                            <div class="vision-float-3 absolute top-1/2 left-0 w-12 h-12 bg-orange-400/5 rounded-full -translate-y-6 -translate-x-6"></div>
+                            <div class="vision-float-4 absolute top-1/4 right-1/4 w-8 h-8 bg-green-400/5 rounded-full"></div>
+                            
+                            <!-- Animated border glow -->
+                            <div class="vision-border-glow absolute inset-0 rounded-2xl"></div>
+                            
+                            <p class="vision-text text-lg text-slate-300 leading-relaxed italic relative z-10">
+                                "At Rycene VLSI Technologies, our mission is to democratize VLSI education by bridging the gap between academic theory and industry reality. We believe in affordable, high-quality technical education that creates a tangible societal impact, preparing students not just for jobs, but to drive the future of semiconductor innovation."
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-10 text-center">Meet The Team</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Enhanced Instructor: Zoya Khan (First) -->
+                        <div class="team-card border border-cyan-500/30 hover:border-cyan-500/60 shadow-2xl shadow-cyan-900/10 relative overflow-hidden group" data-aos="fade-up" data-aos-delay="0">
+                            <!-- Animated background elements -->
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-400/5 rounded-full -translate-y-12 translate-x-12 group-hover:scale-150 transition-transform duration-700"></div>
+                            <div class="absolute bottom-0 left-0 w-16 h-16 bg-cyan-400/10 rounded-full translate-y-8 -translate-x-8 group-hover:scale-125 transition-transform duration-500"></div>
+                            
+                            <div class="team-card-image-wrapper group-hover:scale-105 transition-transform duration-300">
+                                <div class="team-card-glow bg-cyan-500/20 group-hover:bg-cyan-500/30 transition-colors"></div>
+                                <img src="yasmeen.jpg" alt="Zoya Khan" class="relative w-full h-full rounded-full object-cover border-2 border-cyan-500/50 group-hover:border-cyan-400 transition-colors" onerror="this.src='https://placehold.co/150x150/0f172a/22d3ee?text=Zoya'; this.onerror=null;">
+                                <!-- Expertise badges -->
+                                <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                                    <i class="fas fa-microchip"></i>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors">Zoya Khan</h3>
+                            <p class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">VLSI & Digital Expert</p>
+                            
+                            <!-- Enhanced description with skills -->
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Specializes in Digital Electronics, Low Power VLSI Design, and Verilog. Passionate about building strong foundations for future engineers.
+                            </p>
+                            
+                            <!-- Skills tags -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-cyan-500/20 text-cyan-300 text-xs rounded-full border border-cyan-500/30">Verilog</span>
+                                <span class="px-2 py-1 bg-cyan-500/20 text-cyan-300 text-xs rounded-full border border-cyan-500/30">Low Power</span>
+                                <span class="px-2 py-1 bg-cyan-500/20 text-cyan-300 text-xs rounded-full border border-cyan-500/30">Digital Design</span>
+                            </div>
+                            
+                            <!-- Experience indicator -->
+                            <div class="flex items-center gap-2 text-xs text-cyan-300 pt-2 border-t border-cyan-500/20">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>5+ Years Teaching Experience</span>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Instructor: Ruhi Jain (Second) -->
+                        <div class="team-card border border-purple-500/30 hover:border-purple-500/60 shadow-2xl shadow-purple-900/10 relative overflow-hidden group" data-aos="fade-up" data-aos-delay="100">
+                            <!-- Animated background elements -->
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-purple-400/5 rounded-full -translate-y-12 translate-x-12 group-hover:scale-150 transition-transform duration-700"></div>
+                            <div class="absolute bottom-0 left-0 w-16 h-16 bg-purple-400/10 rounded-full translate-y-8 -translate-x-8 group-hover:scale-125 transition-transform duration-500"></div>
+                            
+                            <div class="team-card-image-wrapper group-hover:scale-105 transition-transform duration-300">
+                                <div class="team-card-glow bg-purple-500/20 group-hover:bg-purple-500/30 transition-colors"></div>
+                                <img src="rachana.png" alt="Ruhi Jain" class="relative w-full h-full rounded-full object-cover border-2 border-purple-500/50 group-hover:border-purple-400 transition-colors" onerror="this.src='https://placehold.co/150x150/0f172a/c084fc?text=Ruhi'; this.onerror=null;">
+                                <!-- Expertise badges -->
+                                <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-white mb-1 group-hover:text-purple-400 transition-colors">Ruhi Jain</h3>
+                            <p class="text-purple-400 font-semibold mb-4 text-sm uppercase tracking-wide">Physical Design & DFT</p>
+                            
+                            <!-- Enhanced description with skills -->
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Expert in Digital VLSI Design (STA), Testing & Verification (DFT), and Physical Design flows. Bringing industry workflows to the classroom.
+                            </p>
+                            
+                            <!-- Skills tags -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">STA</span>
+                                <span class="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">DFT</span>
+                                <span class="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">PnR</span>
+                            </div>
+                            
+                            <!-- Experience indicator -->
+                            <div class="flex items-center gap-2 text-xs text-purple-300 pt-2 border-t border-purple-500/20">
+                                <i class="fas fa-industry"></i>
+                                <span>Industry Expert & Mentor</span>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Founder: Chetan V (Third) -->
+                        <div class="team-card border border-orange-500/30 hover:border-orange-500/60 shadow-2xl shadow-orange-900/10 relative overflow-hidden group" data-aos="fade-up" data-aos-delay="200">
+                            <!-- Animated background elements -->
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-orange-400/5 rounded-full -translate-y-12 translate-x-12 group-hover:scale-150 transition-transform duration-700"></div>
+                            <div class="absolute bottom-0 left-0 w-16 h-16 bg-orange-400/10 rounded-full translate-y-8 -translate-x-8 group-hover:scale-125 transition-transform duration-500"></div>
+                            
+                            <div class="team-card-image-wrapper group-hover:scale-105 transition-transform duration-300">
+                                <div class="team-card-glow bg-orange-500/20 group-hover:bg-orange-500/30 transition-colors"></div>
+                                <img src="chetan.jpg" alt="Chetan V" class="relative w-full h-full rounded-full object-cover border-2 border-orange-500/50 group-hover:border-orange-400 transition-colors" onerror="this.src='https://placehold.co/150x150/0f172a/fb923c?text=Chetan'; this.onerror=null;">
+                                <!-- Leadership badge -->
+                                <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">Chetan V</h3>
+                            <p class="text-orange-400 font-semibold mb-4 text-sm uppercase tracking-wide">Visionary Leader</p>
+                            
+                            <!-- Enhanced description with skills -->
+                            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                Visionary leader with deep expertise spanning VLSI, Embedded Systems, IoT, and multidisciplinary technologies. Dedicated to universal innovation and guiding the next generation.
+                            </p>
+                            
+                            <!-- Skills tags -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">VLSI</span>
+                                <span class="px-2 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">IoT</span>
+                                <span class="px-2 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full border border-orange-500/30">Leadership</span>
+                            </div>
+                            
+                            <!-- Experience indicator -->
+                            <div class="flex items-center gap-2 text-xs text-orange-300 pt-2 border-t border-orange-500/20">
+                                <i class="fas fa-rocket"></i>
+                                <span>Innovation & Strategy Expert</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <!-- Team Stats Section -->
+                    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6" data-aos="fade-up" data-aos-delay="300">
+                        <div class="text-center p-6 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 group hover:border-cyan-400/30 transition-colors">
+                            <div class="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center text-cyan-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-users text-xl"></i>
+                            </div>
+                            <div class="text-2xl font-bold text-white mb-2">500+</div>
+                            <div class="text-slate-400 text-sm">Students Mentored</div>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 group hover:border-purple-400/30 transition-colors">
+                            <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-award text-xl"></i>
+                            </div>
+                            <div class="text-2xl font-bold text-white mb-2">8+</div>
+                            <div class="text-slate-400 text-sm">Years Combined Experience</div>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 group hover:border-orange-400/30 transition-colors">
+                            <div class="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center text-orange-400 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-star text-xl"></i>
+                            </div>
+                            <div class="text-2xl font-bold text-white mb-2">4.9/5</div>
+                            <div class="text-slate-400 text-sm">Average Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== VIEW: COURSE DETAILS ==================== -->
+        <div id="view-details" class="hidden-view pt-24 pb-20 min-h-screen">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <button onclick="switchView('home')" class="mb-8 btn-glass btn-glass-secondary flex items-center font-semibold group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Back to Courses
+                </button>
+
+                <div class="glass-card rounded-2xl shadow-2xl overflow-hidden border border-white/10" data-aos="fade-up">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <div class="p-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl flex flex-col">
+                            <span id="detail-instructor" class="inline-block self-start px-3 py-1 rounded-full text-xs font-semibold bg-cyan-900/50 text-cyan-300 mb-4 border border-cyan-500/30"></span>
+                            <h2 id="detail-title" class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"></h2>
+                            <div class="h-1 w-20 bg-gradient-to-r from-cyan-500 to-cyan-400 rounded mb-6 shadow-lg shadow-cyan-500/50"></div>
+                            <p id="detail-desc" class="text-slate-300 text-lg mb-8 leading-relaxed"></p>
+
+                            <div class="mt-auto">
+                                <div class="flex items-end gap-2 mb-6">
+                                    <span id="detail-price" class="text-4xl font-bold text-gradient"></span>
+                                    <span id="detail-original-price" class="text-xl text-slate-500 line-through mb-1"></span>
+                                </div>
+                                <button id="detail-enroll-btn" class="btn-glass btn-glass-primary w-full text-lg px-8 py-4 rounded-xl shadow-lg">Proceed to Enrollment</button>
+                            </div>
+                        </div>
+
+                        <div class="p-8 bg-slate-950/30 backdrop-blur-xl border-t md:border-t-0 md:border-l border-white/10">
+                            <h3 class="text-xl font-bold text-white mb-6 flex items-center border-b border-white/10 pb-3">
+                                <i class="fas fa-book-open text-cyan-400 mr-3"></i>
+                                Course Syllabus
+                            </h3>
+                            <ul id="detail-syllabus" class="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- COMPREHENSIVE PROFESSIONAL FOOTER -->
+    <footer class="relative bg-gradient-to-b from-slate-900 via-slate-950 to-black border-t border-cyan-500/20 text-slate-300 overflow-hidden">
+        <!-- Decorative Background -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500 rounded-full blur-3xl"></div>
+        </div>
+
+        <!-- Floating Tech Images -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-20 left-10 w-16 h-16 image-float opacity-10">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=64&h=64&fit=crop&crop=center" alt="" class="w-full h-full rounded-lg object-cover">
+            </div>
+            <div class="absolute top-40 right-20 w-12 h-12 image-float opacity-10" style="animation-delay: -1s;">
+                <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=48&h=48&fit=crop&crop=center" alt="" class="w-full h-full rounded-lg object-cover">
+            </div>
+            <div class="absolute bottom-40 left-20 w-14 h-14 image-float opacity-10" style="animation-delay: -2s;">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=56&h=56&fit=crop&crop=center" alt="" class="w-full h-full rounded-lg object-cover">
+            </div>
+            <div class="absolute bottom-20 right-10 w-10 h-10 image-float opacity-10" style="animation-delay: -3s;">
+                <img src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=40&h=40&fit=crop&crop=center" alt="" class="w-full h-full rounded-lg object-cover">
+            </div>
+        </div>
+
+        <!-- Main Footer Content -->
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                
+                <!-- Company Info -->
+                <div class="space-y-4" data-aos="fade-up" data-aos-delay="0">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="Logo.png" alt="Rycene Logo" class="h-10 w-auto" onerror="this.src='https://placehold.co/100x100/0f172a/22d3ee?text=LOGO'; this.onerror=null;">
+                        <span class="text-2xl font-bold text-white">Rycene VLSI Technologies</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Democratizing VLSI education through affordable, industry-standard training. Empowering the next generation of Silicon Architects.
+                    </p>
+                    <div class="flex space-x-4 pt-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800/50 border border-slate-700 flex items-center justify-center hover:bg-cyan-500/20 hover:border-cyan-500 transition-all group">
+                            <i class="fab fa-linkedin text-slate-400 group-hover:text-cyan-400 transition-colors"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800/50 border border-slate-700 flex items-center justify-center hover:bg-cyan-500/20 hover:border-cyan-500 transition-all group">
+                            <i class="fab fa-twitter text-slate-400 group-hover:text-cyan-400 transition-colors"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@RyceneVlsi" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800/50 border border-slate-700 flex items-center justify-center hover:bg-red-500/20 hover:border-red-500 transition-all group">
+                            <i class="fab fa-youtube text-slate-400 group-hover:text-red-400 transition-colors"></i>
+                        </a>
+                        <a href="https://discord.gg/3NSnAGMF" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800/50 border border-slate-700 flex items-center justify-center hover:bg-indigo-500/20 hover:border-indigo-500 transition-all group">
+                            <i class="fab fa-discord text-slate-400 group-hover:text-indigo-400 transition-colors"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="space-y-4" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-white font-bold text-lg mb-4 flex items-center">
+                        <span class="w-1 h-6 bg-cyan-500 mr-3 rounded"></span>
+                        Quick Links
+                    </h3>
+                    <ul class="space-y-3">
+                        <li><a href="#hero" class="text-slate-400 hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-chevron-right text-xs mr-2 text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>Home</a></li>
+                        <li><a href="#courses" class="text-slate-400 hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-chevron-right text-xs mr-2 text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>Courses</a></li>
+                        <li><a href="#about" class="text-slate-400 hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-chevron-right text-xs mr-2 text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>About Us</a></li>
+                        <li><button id="footer-contact-btn" class="text-slate-400 hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-chevron-right text-xs mr-2 text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>Contact</button></li>
+                    </ul>
+                </div>
+
+                <!-- Popular Courses -->
+                <div class="space-y-4" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-white font-bold text-lg mb-4 flex items-center">
+                        <span class="w-1 h-6 bg-purple-500 mr-3 rounded"></span>
+                        Popular Courses
+                    </h3>
+                    <ul class="space-y-3">
+                        <li><a href="#courses" class="text-slate-400 hover:text-purple-400 transition-colors flex items-center group"><i class="fas fa-microchip text-xs mr-2 text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>VLSI Fundamentals</a></li>
+                        <li><a href="#courses" class="text-slate-400 hover:text-purple-400 transition-colors flex items-center group"><i class="fas fa-code text-xs mr-2 text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>Verilog Mastery</a></li>
+                        <li><a href="#courses" class="text-slate-400 hover:text-purple-400 transition-colors flex items-center group"><i class="fas fa-clock text-xs mr-2 text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>Digital VLSI - STA</a></li>
+                        <li><a href="#courses" class="text-slate-400 hover:text-purple-400 transition-colors flex items-center group"><i class="fas fa-check-circle text-xs mr-2 text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>VLSI Testing & DFT</a></li>
+                        <li><a href="#courses" class="text-slate-400 hover:text-purple-400 transition-colors flex items-center group"><i class="fas fa-layer-group text-xs mr-2 text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>Physical Design</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="space-y-4" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-white font-bold text-lg mb-4 flex items-center">
+                        <span class="w-1 h-6 bg-orange-500 mr-3 rounded"></span>
+                        Get In Touch
+                    </h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-envelope text-orange-400 mt-1"></i>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider">Email</p>
+                                <a href="mailto:vlsieasyteam@gmail.com" class="text-slate-300 hover:text-orange-400 transition-colors">vlsieasyteam@gmail.com</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fab fa-discord text-orange-400 mt-1"></i>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider">Community</p>
+                                <a href="https://discord.gg/3NSnAGMF" target="_blank" rel="noopener noreferrer" class="text-slate-300 hover:text-orange-400 transition-colors">Join Discord Server</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-map-marker-alt text-orange-400 mt-1"></i>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider">Location</p>
+                                <p class="text-slate-300">India</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Newsletter Section -->
+            <div class="border-t border-slate-800 pt-12 pb-8" data-aos="fade-up">
+                <div class="max-w-2xl mx-auto text-center">
+                    <h3 class="text-2xl font-bold text-white mb-3">Stay Updated</h3>
+                    <p class="text-slate-400 mb-6">Get the latest course updates, industry insights, and exclusive offers.</p>
+                    <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                        <input type="email" name="email" placeholder="Enter your email" required class="flex-1 px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all">
+                        <input type="hidden" name="subject" value="Newsletter Subscription">
+                        <input type="hidden" name="message" value="New newsletter subscription request">
+                        <button type="submit" id="newsletter-submit-btn" class="btn-glass btn-glass-primary px-6 py-3 rounded-lg whitespace-nowrap">
+                            <span class="newsletter-btn-text">Subscribe</span>
+                            <div class="newsletter-spinner hidden inline-block ml-2">
+                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            </div>
+                            <i class="fas fa-paper-plane ml-2 newsletter-icon"></i>
+                        </button>
+                    </form>
+                    <div id="newsletter-message" class="hidden mt-4 text-sm"></div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-slate-800 pt-8 mt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-slate-500 text-sm">
+                        &copy; <span id="footer-year"></span> Rycene VLSI Technologies. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 text-sm">
+                        <button id="privacy-policy-btn" class="text-slate-500 hover:text-cyan-400 transition-colors">Privacy Policy</button>
+                        <button id="terms-of-service-btn" class="text-slate-500 hover:text-cyan-400 transition-colors">Terms of Service</button>
+                        <button id="refund-policy-btn" class="text-slate-500 hover:text-cyan-400 transition-colors">Refund Policy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll to Top Button -->
+        <button id="scroll-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-full shadow-lg shadow-cyan-500/50 flex items-center justify-center text-white opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 z-50">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </footer>
+
+    <!-- Enrollment Form Modal -->
+    <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
+        <div class="modal-backdrop fixed inset-0 bg-black/80"></div>
+        <div class="modal-container rounded-2xl shadow-2xl w-full max-w-2xl relative z-[201] max-h-[90vh] overflow-y-auto custom-scrollbar">
+            
+            <!-- Default View: Form -->
+            <div id="enroll-form-view">
+                <div class="flex justify-between items-center p-5 border-b border-white/10 sticky top-0 bg-slate-800/90 backdrop-blur-xl z-10">
+                    <h3 class="text-xl font-semibold text-white flex items-center">
+                        <i class="fas fa-user-graduate text-cyan-400 mr-3"></i>
+                        Enrollment Form
+                    </h3>
+                    <button class="modal-close-btn text-slate-400 hover:text-white text-3xl leading-none transition-colors">&times;</button>
+                </div>
+                
+                <form id="google-sheet-form">
+                    <div class="p-6 space-y-4">
+                        <p class="text-slate-300 text-sm">Please fill all details to complete your enrollment.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Personal Details</h4></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Full Name</label><input type="text" name="name" required placeholder="John Doe" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Email Address</label><input type="email" name="email" required placeholder="john@example.com" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Phone Number</label><input type="tel" name="phone" required placeholder="+91 9876543210" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Date of Birth</label><input type="date" name="dob" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Gender</label><select name="gender" class="form-input w-full rounded-md p-3 text-white"><option value="" disabled selected>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+
+                            <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Academic / Professional</h4></div>
+                            <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">College / Company Name</label><input type="text" name="college_company" required placeholder="e.g. IIT Bombay / Intel" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Branch / Stream</label><input type="text" name="branch" required placeholder="e.g. ECE / EEE" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">Year of Passing</label><input type="text" name="year_passing" required placeholder="e.g. 2024" class="form-input w-full rounded-md p-3 text-white"></div>
+
+                            <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Address Details</h4></div>
+                            <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Residence Address</label><input type="text" name="address" required placeholder="Street Address, Area" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">City</label><input type="text" name="city" required placeholder="e.g. Bangalore" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div><label class="block text-xs text-slate-400 mb-1">State</label><input type="text" name="state" required placeholder="e.g. Karnataka" class="form-input w-full rounded-md p-3 text-white"></div>
+                            <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Country</label><input type="text" name="country" required placeholder="e.g. India" class="form-input w-full rounded-md p-3 text-white"></div>
+
+                            <div class="md:col-span-2 mt-2"><h4 class="text-cyan-400 text-sm font-semibold mb-2 uppercase tracking-wider">Your Objective</h4></div>
+                            <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Goal to achieve in this course</label><textarea name="goal" rows="2" placeholder="e.g. To get a job in Physical Design..." class="form-input w-full rounded-md p-3 text-white"></textarea></div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-slate-700">
+                            <label class="block text-xs text-slate-400 mb-1">Selected Course</label>
+                            <input type="text" id="enroll-course-name-display" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed font-semibold">
+                        </div>
+                        <input type="hidden" name="courseName" id="enroll-course-name">
+                    </div>
+                    <div class="p-5 border-t border-white/10 bg-slate-800/50 backdrop-blur-xl rounded-b-lg sticky bottom-0 z-10">
+                        <button type="submit" id="submit-btn" class="btn-glass btn-glass-primary w-full px-5 py-3 rounded-md shadow-lg flex justify-center items-center">
+                            <span>Submit Enrollment</span>
+                            <svg id="submit-spinner" class="animate-spin ml-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        </button>
+                        <p id="submit-message" class="text-center text-sm mt-2 hidden"></p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Hidden View: Success Message -->
+            <div id="enroll-success-view" class="hidden flex-col items-center justify-center p-10 text-center h-full min-h-[400px]">
+                <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-bold text-white mb-4">Successfully Registered!</h3>
+                <div class="space-y-4 max-w-sm mx-auto">
+                    <p class="text-slate-300 text-lg">
+                        Thank you for choosing Rycene VLSI Technologies. You've taken the first step toward mastering VLSI!
+                    </p>
+                    <div class="p-4 bg-slate-900/50 rounded-lg border border-cyan-500/30">
+                        <p class="text-cyan-400 font-medium">What happens next?</p>
+                        <p class="text-slate-400 text-sm mt-2">
+                            Our team will review your details and reach out to you shortly via Email with the 
+                            <span class="text-white font-semibold">payment link</span> and further Discord account and onboarding instructions.
+                        </p>
+                    </div>
+                </div>
+                <button class="modal-close-btn mt-8 text-sm text-slate-500 hover:text-white underline">Close</button>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
+        <div class="modal-backdrop fixed inset-0 bg-black/80"></div>
+        <div class="modal-container rounded-2xl shadow-2xl w-full max-w-md relative z-[201]">
+            <div class="flex justify-between items-center p-5 border-b border-white/10 bg-slate-800/90 backdrop-blur-xl rounded-t-2xl">
+                <h3 class="text-xl font-semibold text-white flex items-center">
+                    <i class="fas fa-envelope text-cyan-400 mr-3"></i>
+                    Contact Us
+                </h3>
+                <button class="modal-close-btn text-slate-400 hover:text-white text-3xl leading-none transition-colors">&times;</button>
+            </div>
+            <form action="https://formspree.io/f/xjkjkpdr" method="POST">
+                <div class="p-6 space-y-4">
+                    <input type="text" name="name" required placeholder="Full Name" class="form-input w-full rounded-md p-3 text-white">
+                    <input type="email" name="email" required placeholder="Email" class="form-input w-full rounded-md p-3 text-white">
+                    <textarea name="message" rows="4" required placeholder="Your Query" class="form-input w-full rounded-md p-3 text-white"></textarea>
+                    <input type="hidden" name="_subject" value="New Rycene Contact">
+                    <input type="hidden" name="_cc" value="yasmeenms0512@gmail.com">
+                </div>
+                <div class="p-5 border-t border-white/10 bg-slate-800/50 backdrop-blur-xl rounded-b-2xl">
+                    <button type="submit" class="btn-glass btn-glass-primary w-full px-5 py-3 rounded-md shadow-lg">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Policy Modal -->
+    <div id="policy-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
+        <div class="modal-backdrop fixed inset-0 bg-black/80"></div>
+        <div class="modal-container rounded-2xl shadow-2xl w-full max-w-4xl relative z-[201] max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center p-5 border-b border-white/10 bg-slate-800/90 backdrop-blur-xl rounded-t-2xl sticky top-0 z-10">
+                <h3 id="policy-modal-title" class="text-xl font-semibold text-white flex items-center">
+                    <i class="fas fa-file-alt text-cyan-400 mr-3"></i>
+                    Policy Document
+                </h3>
+                <button class="modal-close-btn text-slate-400 hover:text-white text-3xl leading-none transition-colors">&times;</button>
+            </div>
+            <div class="p-6">
+                <div id="policy-content" class="text-slate-300 leading-relaxed whitespace-pre-line">
+                    Loading...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Chatbot Button (Reserved for later) -->
+    <div class="chatbot-hidden">
+        <button id="chat-float-btn"></button>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        const courses = [
+            { id: 'vlsi-fundamentals', title: 'VLSI Fundamentals', instructor: 'Zoya Khan', description: 'Intro to VLSI, CMOS tech and MOS theory.', originalPrice: '₹3500', price: '₹2000', imageUrl: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=600&h=400', theme: { card: 'bg-slate-900 border-cyan-500/30', topics: 'bg-cyan-900/50 text-cyan-300', price: 'text-cyan-400', button: 'bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-900 hover:from-cyan-400 hover:to-sky-400 border-2 border-cyan-400 hover:border-cyan-300' }, topics: ['CMOS', 'MOS Transistor', 'Alternate Tech'], syllabus: ['Basics of CMOS technology', 'MOS Transistor Theory', 'Alternate CMOS Technologies', 'Switching Characteristics', 'Trends in VLSI'] },
+            { id: 'verilog', title: 'Verilog Mastery', instructor: 'Zoya Khan', description: 'Verilog HDL for design and verification.', originalPrice: '₹3500', price: '₹2000', imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400', theme: { card: 'bg-slate-900 border-orange-500/30', topics: 'bg-orange-900/50 text-orange-300', price: 'text-orange-400', button: 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400 border-2 border-orange-400 hover:border-orange-300' }, topics: ['Basics', 'Advanced', 'RTL'], syllabus: ['Basics to Advanced', 'Blocking vs Non-Blocking Assignments', 'Procedural Blocks', 'Testbench Design'] },
+            { id: 'digital-vlsi-sta', title: 'Digital VLSI Design – STA', instructor: 'Ruhi Jain', description: 'Static Timing Analysis & timing closure.', originalPrice: '₹3500', price: '₹2000', imageUrl: 'https://placehold.co/600x400/1e293b/f1f5f9?text=Digital+VLSI+STA', theme: { card: 'bg-slate-900 border-slate-400/30', topics: 'bg-slate-700/50 text-slate-200', price: 'text-slate-300', button: 'bg-gradient-to-r from-slate-500 to-slate-400 text-white hover:from-slate-400 hover:to-slate-300 border-2 border-slate-400 hover:border-slate-300' }, topics: ['STA Fundamentals', 'Timing Closure', 'Primetime'], syllabus: ['STA fundamentals: setup, hold, skew, jitter', 'Clock domain crossings & synchronizers', 'Path analysis and derating', 'Fixing timing violations', 'ECO-based timing closure', 'Hands-on workflows'] },
+            { id: 'vlsi-testing', title: 'VLSI Testing & Verification', instructor: 'Ruhi Jain', description: 'DFT, Scan, and BIST mastery.', originalPrice: '₹3500', price: '₹2000', imageUrl: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&h=400', theme: { card: 'bg-slate-900 border-slate-300/30', topics: 'bg-slate-600/50 text-slate-100', price: 'text-slate-200', button: 'bg-gradient-to-r from-slate-400 to-slate-300 text-slate-900 hover:from-slate-300 hover:to-slate-200 border-2 border-slate-300 hover:border-slate-200' }, topics: ['Fault Modeling', 'ATPG', 'Scan/BIST'], syllabus: ['Fault modeling: stuck-at, transition, bridging', 'ATPG basics', 'Scan chain insertion', 'LBIST and MBIST', 'MISR/LFSR architecture'] },
+            { id: 'physical-design', title: 'Physical Design (PnR)', instructor: 'Ruhi Jain', description: 'Innovus-style design flow.', originalPrice: '₹3500', price: '₹2000', imageUrl: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=600&h=400', theme: { card: 'bg-slate-900 border-violet-500/30', topics: 'bg-violet-900/50 text-violet-300', price: 'text-violet-400', button: 'bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:from-violet-400 hover:to-purple-400 border-2 border-violet-400 hover:border-violet-300' }, topics: ['Floorplanning', 'CTS/Routing', 'Signoff'], syllabus: ['Floorplanning, placement, power', 'CTS and routing', 'IR drop, EM, DRC/LVS', 'PPA optimization', 'Full Innovus-style flow'] }
+        ];
+
+        window.switchView = function(viewName) {
+            const homeView = document.getElementById('view-home');
+            const detailsView = document.getElementById('view-details');
+            if (viewName === 'details') {
+                homeView.classList.add('hidden-view');
+                detailsView.classList.remove('hidden-view');
+            } else {
+                detailsView.classList.add('hidden-view');
+                homeView.classList.remove('hidden-view');
+            }
+            window.scrollTo(0, 0);
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Logic Gate Background with "Particle Physics" ---
+            const bgCanvas = document.getElementById('logic-gate-background');
+            if (bgCanvas) {
+                const ctx = bgCanvas.getContext('2d');
+                let particles = []; let mouse = { x: undefined, y: undefined, radius: 150 };
+                function resizeCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
+                resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+                window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+                window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
+
+                class Particle {
+                    constructor(x, y, size, type, color, vx, vy) {
+                        this.x = x; this.y = y; this.size = size; this.type = type; this.color = color;
+                        this.vx = vx; this.vy = vy; this.friction = 0.95;
+                        this.density = (Math.random() * 30) + 1; // mass for attraction
+                        this.attractionStrength = 0.25; 
+                    }
+                    draw() {
+                        ctx.fillStyle = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 1.5; // Normal line width
+                        if (this.type === 'line') {
+                            ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.size * 2, this.y); ctx.stroke(); // Normal line length
+                        } else if (this.type === 'and') {
+                            ctx.beginPath(); 
+                            ctx.moveTo(this.x, this.y - this.size/2); 
+                            ctx.lineTo(this.x, this.y + this.size/2); 
+                            ctx.arc(this.x, this.y, this.size/2, -Math.PI / 2, Math.PI / 2); 
+                            ctx.closePath(); 
+                            ctx.stroke();
+                        } else if (this.type === 'not') {
+                            ctx.beginPath(); 
+                            ctx.moveTo(this.x, this.y - this.size/2); 
+                            ctx.lineTo(this.x, this.y + this.size/2); 
+                            ctx.lineTo(this.x + this.size, this.y); 
+                            ctx.closePath(); 
+                            ctx.stroke();
+                            ctx.beginPath(); 
+                            ctx.arc(this.x + this.size + 2, this.y, 2, 0, Math.PI * 2); // Normal circle size
+                            ctx.fill();
+                        }
+                    }
+                    update() {
+                        if (mouse.x !== undefined) {
+                            let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                            let distance = Math.sqrt(dx*dx + dy*dy);
+                            if (distance < mouse.radius + this.size) {
+                                let forceX = dx/distance; let forceY = dy/distance;
+                                this.vx += forceX * this.attractionStrength * this.density * 0.1; 
+                                this.vy += forceY * this.attractionStrength * this.density * 0.1;
+                            }
+                        }
+                        this.vx *= this.friction; this.vy *= this.friction; this.x += this.vx; this.y += this.vy;
+                        if (this.x > bgCanvas.width + 50) this.x = -50; if (this.x < -50) this.x = bgCanvas.width + 50;
+                        if (this.y > bgCanvas.height + 50) this.y = -50; if (this.y < -50) this.y = bgCanvas.height + 50;
+                    }
+                }
+
+                function initParticles() {
+                    particles = [];
+                    // Drastically reduce particle count on mobile
+                    const isMobile = window.innerWidth <= 768;
+                    const baseCount = isMobile ? 15 : Math.max(25, (bgCanvas.width * bgCanvas.height) / 5000);
+                    let count = Math.min(baseCount, isMobile ? 20 : 100); // Cap particles on mobile
+                    
+                    for (let i = 0; i < count; i++) {
+                        let size = Math.random() * 3 + 2;
+                        let x = Math.random() * bgCanvas.width;
+                        let y = Math.random() * bgCanvas.height;
+                        let types = ['and', 'not', 'line', 'line', 'line']; 
+                        let type = types[Math.floor(Math.random() * types.length)];
+                        let color = Math.random() > 0.5 ? 'rgba(34, 211, 238, 0.7)' : 'rgba(226, 232, 240, 0.5)';
+                        // Slower movement on mobile
+                        let speed = isMobile ? 0.3 : 0.6;
+                        let vx = (Math.random() - 0.5) * speed;
+                        let vy = (Math.random() - 0.5) * speed;
+                        particles.push(new Particle(x, y, size, type, color, vx, vy));
+                    }
+                }
+                
+                let animationFrameId;
+                function animateParticles() {
+                    ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+                    particles.forEach(p => { p.update(); p.draw(); });
+                    animationFrameId = requestAnimationFrame(animateParticles);
+                }
+                
+                // Pause particles when page is not visible (mobile battery optimization)
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        if (animationFrameId) {
+                            cancelAnimationFrame(animationFrameId);
+                        }
+                    } else {
+                        animateParticles();
+                    }
+                });
+                
+                initParticles(); animateParticles();
+                let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { resizeCanvas(); initParticles(); }, 250); });
+            }
+
+            // --- Render Courses ---
+            const courseListContainer = document.getElementById('course-list');
+            const footerYearEl = document.getElementById('footer-year');
+            if (footerYearEl) footerYearEl.textContent = new Date().getFullYear();
+
+            if (courseListContainer) {
+                courses.forEach((course, index) => {
+                    const card = document.createElement('div');
+                    card.className = `course-card flex flex-col transform hover:scale-[1.02] transition-all duration-400 border ${course.theme.card}`;
+                    card.setAttribute('data-aos', 'fade-up');
+                    card.setAttribute('data-aos-delay', index * 100);
+                    const topicPills = course.topics.map(topic => `<span class="text-xs font-semibold px-3 py-1.5 rounded-full ${course.theme.topics}">${topic}</span>`).join('');
+                    card.innerHTML = `
+                        <div class="course-image-container relative h-48 w-full overflow-hidden group">
+                            <img src="${course.imageUrl}" alt="${course.title}" class="course-image w-full h-full object-cover transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/0f172a/64748b?text=Image+Error'; this.onerror=null;">
+                            <div class="course-image-overlay">
+                                <!-- Play button removed as requested -->
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-white border border-white/20">${course.instructor}</div>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h3 class="text-2xl font-bold text-white mb-3 leading-tight">${course.title}</h3>
+                            <p class="text-slate-400 mb-6 flex-grow text-sm leading-relaxed">${course.description}</p>
+                            <div class="flex flex-wrap gap-2 mb-6">${topicPills}</div>
+                        </div>
+                        <div class="bg-slate-950/50 backdrop-blur-sm p-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <div class="flex items-baseline gap-3">
+                                <span class="text-3xl font-bold ${course.theme.price}">${course.price}</span>
+                                <span class="text-lg line-through text-slate-500">${course.originalPrice}</span>
+                            </div>
+                            <button class="course-enroll-btn view-details-btn font-semibold px-5 py-2.5 text-sm rounded-xl transition-all shadow-md transform hover:-translate-y-0.5 ${course.theme.button}" data-course-id="${course.id}">View Details & Enroll</button>
+                        </div>`;
+                    courseListContainer.appendChild(card);
+                });
+            }
+
+            // --- View Logic ---
+            const enrollModal = document.getElementById('enroll-modal');
+            const contactModal = document.getElementById('contact-modal');
+            const openModal = (modal) => { if(modal) modal.classList.remove('hidden'); };
+            const closeModal = (modal) => { if(modal) modal.classList.add('hidden'); };
+
+            // Course Details Click Handler
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const courseId = e.currentTarget.dataset.courseId;
+                    const course = courses.find(c => c.id === courseId);
+                    if (course) {
+                        document.getElementById('detail-title').textContent = course.title;
+                        document.getElementById('detail-instructor').textContent = `Instructor: ${course.instructor}`;
+                        document.getElementById('detail-desc').textContent = course.description;
+                        document.getElementById('detail-price').textContent = course.price;
+                        document.getElementById('detail-original-price').textContent = course.originalPrice;
+                        document.getElementById('detail-syllabus').innerHTML = course.syllabus.map((item) => `
+                            <li class="group">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex items-start text-slate-300"><span class="mr-2 text-cyan-400 text-lg">•</span>${item}</div>
+                                </div>
+                            </li>`).join('');
+                        
+                        // Setup Enroll
+                        const detailEnrollBtn = document.getElementById('detail-enroll-btn');
+                        if (detailEnrollBtn) {
+                            detailEnrollBtn.onclick = () => {
+                                document.getElementById('enroll-course-name').value = course.title;
+                                document.getElementById('enroll-course-name-display').value = course.title;
+                                
+                                // Reset to form view
+                                document.getElementById('enroll-form-view').classList.remove('hidden');
+                                document.getElementById('enroll-success-view').classList.add('hidden');
+                                
+                                openModal(enrollModal);
+                            };
+                        }
+                        
+                        switchView('details');
+                    }
+                });
+            });
+
+            // General Modal Listeners
+            document.getElementById('contact-nav-link').addEventListener('click', () => openModal(contactModal));
+            document.getElementById('contact-nav-link-mobile').addEventListener('click', () => openModal(contactModal));
+            document.getElementById('contact-nav-link-mobile2').addEventListener('click', () => openModal(contactModal));
+            
+            // Hero contact button
+            const heroContactBtn = document.getElementById('hero-contact-btn');
+            if (heroContactBtn) {
+                heroContactBtn.addEventListener('click', () => openModal(contactModal));
+            }
+            
+            document.querySelectorAll('.modal-close-btn, .modal-backdrop').forEach(el => {
+                el.addEventListener('click', (e) => { const m = e.target.closest('.modal'); if (m) closeModal(m); });
+            });
+
+            // Initialize AOS with mobile optimizations
+            AOS.init({ 
+                duration: 700, 
+                once: true, 
+                disable: function() {
+                    // Disable AOS on mobile devices and slow connections
+                    return window.innerWidth < 768 || 
+                           (navigator.connection && navigator.connection.effectiveType && 
+                            navigator.connection.effectiveType.includes('2g'));
+                }
+            });
+
+            // --- Navigation Scroll Shadow Effect ---
+            const header = document.getElementById('main-header');
+            let lastScroll = 0;
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+                lastScroll = currentScroll;
+            });
+
+            // --- Hero Section GSAP Animations with Mobile Optimization ---
+            if (typeof gsap !== 'undefined') {
+                const isMobile = window.innerWidth <= 768;
+                const heroTimeline = gsap.timeline({ 
+                    defaults: { 
+                        ease: 'power3.out',
+                        duration: isMobile ? 0.4 : 0.8 // Faster animations on mobile
+                    } 
+                });
+                
+                // Set initial states
+                gsap.set('.hero-headline', { opacity: 0, y: isMobile ? 30 : 50, filter: isMobile ? 'none' : 'blur(10px)' });
+                gsap.set('.hero-description', { opacity: 0, y: isMobile ? 20 : 30 });
+                gsap.set('.hero-buttons > *', { opacity: 0, y: isMobile ? 15 : 20 });
+                gsap.set('#three-canvas', { opacity: 0, scale: isMobile ? 0.9 : 0.8 });
+                
+                heroTimeline
+                    .to('.hero-headline', {
+                        y: 0,
+                        opacity: 1,
+                        filter: isMobile ? 'none' : 'blur(0px)',
+                        duration: isMobile ? 0.4 : 0.8,
+                        delay: isMobile ? 0.1 : 0.2
+                    })
+                    .to('.hero-description', {
+                        y: 0,
+                        opacity: 1,
+                        duration: isMobile ? 0.3 : 0.6
+                    }, '-=0.2')
+                    .to('.hero-buttons > *', {
+                        y: 0,
+                        opacity: 1,
+                        duration: isMobile ? 0.3 : 0.5,
+                        stagger: isMobile ? 0.05 : 0.1
+                    }, '-=0.2')
+                    .to('#three-canvas', {
+                        opacity: 1,
+                        scale: 1,
+                        duration: isMobile ? 0.4 : 0.8
+                    }, '-=0.3');
+            }
+
+            // --- Three.js with Mobile Optimizations ---
+            const canvas = document.getElementById('three-canvas');
+            if (canvas) {
+                let scene, camera, renderer, core;
+                let mouseX = 0, mouseY = 0;
+                let isInitialized = false;
+                let isMobile = window.innerWidth <= 768;
+                let animationId;
+                
+                function initThree() {
+                    if (isInitialized) return;
+                    const container = canvas.parentElement;
+                    if (!container) return; 
+                    const width = container.offsetWidth;
+                    const height = container.offsetHeight;
+                    if (width === 0 || height === 0) { requestAnimationFrame(initThree); return; }
+                    isInitialized = true;
+                    scene = new THREE.Scene();
+                    camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+                    camera.position.z = isMobile ? 12.0 : 10.0; // Further back on mobile
+                    
+                    // Mobile-optimized renderer settings
+                    renderer = new THREE.WebGLRenderer({ 
+                        canvas: canvas, 
+                        alpha: true,
+                        antialias: !isMobile, // Disable antialiasing on mobile
+                        powerPreference: isMobile ? "low-power" : "high-performance"
+                    });
+                    renderer.setSize(width, height);
+                    renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio);
+                    
+                    // Simplified geometry for mobile
+                    const geometry = new THREE.IcosahedronGeometry(5.0, isMobile ? 1 : 2);
+                    
+                    // Simplified material for mobile
+                    const material = new THREE.MeshPhysicalMaterial({ 
+                        color: 0xffffff,
+                        wireframe: true, 
+                        metalness: isMobile ? 0.7 : 0.9, 
+                        roughness: isMobile ? 0.1 : 0.05,
+                        reflectivity: isMobile ? 0.8 : 1.0,
+                        clearcoat: isMobile ? 0.5 : 1.0,
+                        clearcoatRoughness: isMobile ? 0.1 : 0.0,
+                        emissive: 0x222222,
+                        emissiveIntensity: isMobile ? 0.1 : 0.3,
+                        transmission: isMobile ? 0.1 : 0.2,
+                        thickness: 0.8,
+                        iridescence: isMobile ? 0.5 : 1.0,
+                        iridescenceIOR: 1.3,
+                        iridescenceThicknessRange: [100, 800],
+                    });
+                    
+                    core = new THREE.Mesh(geometry, material);
+                    scene.add(core);
+                    
+                    // Simplified lighting for mobile
+                    const ambientLight = new THREE.AmbientLight(0x404040, isMobile ? 1.0 : 0.8);
+                    scene.add(ambientLight);
+                    
+                    if (!isMobile) {
+                        // Full lighting only on desktop
+                        const pointLight1 = new THREE.PointLight(0xff6b9d, 3.0);
+                        pointLight1.position.set(8, 8, 8);
+                        scene.add(pointLight1);
+                        
+                        const pointLight2 = new THREE.PointLight(0x6bcfff, 3.5);
+                        pointLight2.position.set(-8, -8, 8);
+                        scene.add(pointLight2);
+                        
+                        const pointLight3 = new THREE.PointLight(0xffeb3b, 3.0);
+                        pointLight3.position.set(0, 10, 5);
+                        scene.add(pointLight3);
+                        
+                        const rimLight = new THREE.DirectionalLight(0xffffff, 2.5);
+                        rimLight.position.set(10, 10, 10);
+                        scene.add(rimLight);
+                        
+                        const spotLight = new THREE.SpotLight(0xb19cd9, 3.0, 50, Math.PI / 6);
+                        spotLight.position.set(5, 5, 15);
+                        spotLight.target = core;
+                        scene.add(spotLight);
+                        
+                        window.dynamicLights = { pointLight1, pointLight2, pointLight3, rimLight, spotLight };
+                    } else {
+                        // Simple lighting for mobile
+                        const pointLight = new THREE.PointLight(0x6bcfff, 2.0);
+                        pointLight.position.set(5, 5, 10);
+                        scene.add(pointLight);
+                    }
+                    
+                    document.addEventListener('mousemove', (e) => { 
+                        if (!isMobile) {
+                            mouseX = (e.clientX / window.innerWidth) * 2 - 1; 
+                            mouseY = -(e.clientY / window.innerHeight) * 2 + 1; 
+                        }
+                    });
+                    
+                    window.addEventListener('resize', () => { 
+                        if (container) { 
+                            isMobile = window.innerWidth <= 768;
+                            camera.aspect = container.offsetWidth / container.offsetHeight; 
+                            camera.updateProjectionMatrix(); 
+                            renderer.setSize(container.offsetWidth, container.offsetHeight);
+                            renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio);
+                        } 
+                    });
+                    animate();
+                }
+                
+                function animate() {
+                    animationId = requestAnimationFrame(animate);
+                    
+                    if (core) { 
+                        // Slower rotation on mobile to save battery
+                        const rotationSpeed = isMobile ? 0.001 : 0.002;
+                        core.rotation.x += rotationSpeed;
+                        core.rotation.y += rotationSpeed * 1.5;
+                        
+                        // Animate lights only on desktop
+                        if (!isMobile && window.dynamicLights) {
+                            const time = Date.now() * 0.001;
+                            window.dynamicLights.pointLight1.position.x = Math.cos(time) * 10;
+                            window.dynamicLights.pointLight1.position.z = Math.sin(time) * 10;
+                            
+                            window.dynamicLights.pointLight2.position.x = Math.cos(time + Math.PI) * 8;
+                            window.dynamicLights.pointLight2.position.z = Math.sin(time + Math.PI) * 8;
+                            
+                            window.dynamicLights.rimLight.position.x = Math.cos(time * 0.5) * 15;
+                            window.dynamicLights.rimLight.position.y = Math.sin(time * 0.3) * 12 + 10;
+                            
+                            window.dynamicLights.spotLight.position.x = Math.cos(time * 0.7) * 8;
+                            window.dynamicLights.spotLight.position.y = Math.sin(time * 0.7) * 8 + 5;
+                        }
+                    }
+                    
+                    // Smooth camera movement only on desktop
+                    if (!isMobile) {
+                        camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
+                        camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.05;
+                    }
+                    camera.lookAt(scene.position);
+                    renderer.render(scene, camera);
+                }
+                
+                // Pause animation when page is not visible (mobile battery optimization)
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        if (animationId) {
+                            cancelAnimationFrame(animationId);
+                        }
+                    } else {
+                        animate();
+                    }
+                });
+                
+                initThree();
+            }
+            
+            // --- GOOGLE SHEETS FORM SUBMISSION LOGIC ---
+            const form = document.getElementById('google-sheet-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const submitSpinner = document.getElementById('submit-spinner');
+            const submitMessage = document.getElementById('submit-message');
+            
+            // Views inside Modal
+            const formView = document.getElementById('enroll-form-view');
+            const successView = document.getElementById('enroll-success-view');
+
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwyKlERO-O339hyIFKqtoew3dIxfJrriKAO-uXRudF1Ro6aOQdZu3TKZgXIx-Y4-njJSg/exec'; 
+
+            if (form) {
+                form.addEventListener('submit', e => {
+                    e.preventDefault();
+                    
+                    // Show Loading State
+                    submitBtn.disabled = true;
+                    submitSpinner.classList.remove('hidden');
+                    submitBtn.querySelector('span').textContent = 'Submitting...';
+
+                    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                    .then(response => {
+                        // Hide Form, Show Success
+                        formView.classList.add('hidden');
+                        successView.classList.remove('hidden');
+                        successView.classList.add('flex'); // Enable flexbox for centering
+                        
+                        // Reset form data for next time
+                        form.reset();
+                        submitBtn.disabled = false;
+                        submitSpinner.classList.add('hidden');
+                        submitBtn.querySelector('span').textContent = 'Submit Enrollment';
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        submitMessage.textContent = "Error submitting form. Please try again.";
+                        submitMessage.className = "text-center text-sm mt-2 text-red-400";
+                        submitMessage.classList.remove('hidden');
+                        
+                        // Reset button state
+                        submitBtn.disabled = false;
+                        submitSpinner.classList.add('hidden');
+                        submitBtn.querySelector('span').textContent = 'Submit Enrollment';
+                    });
+                });
+            }
+
+            // --- Footer Contact Button ---
+            const footerContactBtn = document.getElementById('footer-contact-btn');
+            if (footerContactBtn) {
+                footerContactBtn.addEventListener('click', () => openModal(contactModal));
+            }
+
+            // --- Scroll to Top Button ---
+            const scrollToTopBtn = document.getElementById('scroll-to-top');
+            if (scrollToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 300) {
+                        scrollToTopBtn.style.opacity = '1';
+                        scrollToTopBtn.style.pointerEvents = 'auto';
+                    } else {
+                        scrollToTopBtn.style.opacity = '0';
+                        scrollToTopBtn.style.pointerEvents = 'none';
+                    }
+                });
+
+                scrollToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // --- Newsletter Form Submission ---
+            const newsletterForm = document.getElementById('newsletter-form');
+            const newsletterSubmitBtn = document.getElementById('newsletter-submit-btn');
+            const newsletterSpinner = document.querySelector('.newsletter-spinner');
+            const newsletterMessage = document.getElementById('newsletter-message');
+            const newsletterBtnText = document.querySelector('.newsletter-btn-text');
+            const newsletterIcon = document.querySelector('.newsletter-icon');
+
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    // Show loading state
+                    newsletterSubmitBtn.disabled = true;
+                    newsletterSpinner.classList.remove('hidden');
+                    newsletterIcon.classList.add('hidden');
+                    newsletterBtnText.textContent = 'Subscribing...';
+
+                    try {
+                        const formData = new FormData(newsletterForm);
+                        const response = await fetch('https://formspree.io/f/xjkjkpdr', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        });
+
+                        if (response.ok) {
+                            newsletterMessage.textContent = "Successfully subscribed! Thank you for joining our newsletter.";
+                            newsletterMessage.className = "text-center text-sm mt-4 text-green-400";
+                            newsletterMessage.classList.remove('hidden');
+                            newsletterForm.reset();
+                        } else {
+                            throw new Error('Network response was not ok');
+                        }
+                    } catch (error) {
+                        newsletterMessage.textContent = "Error subscribing. Please try again.";
+                        newsletterMessage.className = "text-center text-sm mt-4 text-red-400";
+                        newsletterMessage.classList.remove('hidden');
+                    }
+
+                    // Reset button state
+                    newsletterSubmitBtn.disabled = false;
+                    newsletterSpinner.classList.add('hidden');
+                    newsletterIcon.classList.remove('hidden');
+                    newsletterBtnText.textContent = 'Subscribe';
+
+                    // Hide message after 5 seconds
+                    setTimeout(() => {
+                        newsletterMessage.classList.add('hidden');
+                    }, 5000);
+                });
+            }
+
+            // --- Policy Modal Functions ---
+            const policyModal = document.getElementById('policy-modal');
+            const policyModalTitle = document.getElementById('policy-modal-title');
+            const policyContent = document.getElementById('policy-content');
+
+            // Policy content embedded directly
+            const policyData = {
+                'privacy-policy': {
+                    title: 'Privacy Policy',
+                    content: `PRIVACY POLICY
+
+Last updated: January 2024
+
+1. INFORMATION WE COLLECT
+
+1.1 Personal Information
+We collect information you provide directly to us, such as:
+- Name and contact information when you register for courses
+- Email address for newsletters and communications
+- Payment information for course purchases
+- Profile information and preferences
+
+1.2 Automatically Collected Information
+We automatically collect certain information when you visit our website:
+- IP address and browser information
+- Pages visited and time spent on our site
+- Device information and operating system
+- Cookies and similar tracking technologies
+
+2. HOW WE USE YOUR INFORMATION
+
+We use the information we collect to:
+- Provide and improve our educational services
+- Process course enrollments and payments
+- Send course materials and updates
+- Respond to your inquiries and provide customer support
+- Send newsletters and promotional materials (with your consent)
+- Analyze website usage and improve user experience
+
+3. INFORMATION SHARING
+
+We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:
+- With service providers who assist in our operations
+- When required by law or to protect our rights
+- In connection with a business transfer or merger
+- With your explicit consent
+
+4. DATA SECURITY
+
+We implement appropriate security measures to protect your personal information:
+- Encryption of sensitive data
+- Secure payment processing
+- Regular security audits
+- Limited access to personal information
+- Secure data storage practices
+
+5. YOUR RIGHTS
+
+You have the right to:
+- Access your personal information
+- Correct inaccurate information
+- Delete your personal information
+- Opt-out of marketing communications
+- Data portability where applicable
+
+6. COOKIES
+
+We use cookies to enhance your experience on our website. You can control cookie settings through your browser preferences.
+
+7. THIRD-PARTY LINKS
+
+Our website may contain links to third-party websites. We are not responsible for the privacy practices of these external sites.
+
+8. CHILDREN'S PRIVACY
+
+Our services are not intended for children under 13. We do not knowingly collect personal information from children under 13.
+
+9. INTERNATIONAL TRANSFERS
+
+Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place.
+
+10. CHANGES TO THIS POLICY
+
+We may update this privacy policy from time to time. We will notify you of any material changes by posting the new policy on our website.
+
+11. CONTACT US
+
+If you have any questions about this privacy policy, please contact us at:
+Email: vlsieasyteam@gmail.com
+
+This privacy policy is designed to be transparent about our data practices while ensuring compliance with applicable privacy laws and regulations.`
+                },
+                'terms-of-service': {
+                    title: 'Terms of Service',
+                    content: `TERMS OF SERVICE
+
+Last updated: January 2024
+
+1. ACCEPTANCE OF TERMS
+
+By accessing and using Rycene VLSI's website and services, you accept and agree to be bound by the terms and provision of this agreement.
+
+2. DESCRIPTION OF SERVICE
+
+Rycene VLSI provides online VLSI education courses, training materials, and related educational services. Our services include:
+- Online video courses and tutorials
+- Course materials and resources
+- Student support and community access
+- Certificates of completion
+
+3. USER ACCOUNTS
+
+3.1 Account Creation
+- You must provide accurate and complete information when creating an account
+- You are responsible for maintaining the confidentiality of your account credentials
+- You must notify us immediately of any unauthorized use of your account
+
+3.2 Account Responsibilities
+- You are responsible for all activities that occur under your account
+- You must not share your account credentials with others
+- You must keep your account information up to date
+
+4. COURSE ENROLLMENT AND ACCESS
+
+4.1 Course Purchase
+- Course fees must be paid in full before access is granted
+- All prices are listed in Indian Rupees (INR) unless otherwise specified
+- We reserve the right to change course prices at any time
+
+4.2 Course Access
+- Course access is granted for the duration specified in the course description
+- You may access courses from multiple devices using your account
+- Course materials are for personal use only and may not be shared
+
+5. INTELLECTUAL PROPERTY
+
+5.1 Our Content
+- All course materials, videos, and content are owned by Rycene VLSI
+- You may not reproduce, distribute, or create derivative works from our content
+- You may not record, screenshot, or share course materials without permission
+
+5.2 User Content
+- You retain ownership of any content you submit to our platform
+- By submitting content, you grant us a license to use it for educational purposes
+- You are responsible for ensuring your content does not infringe on others' rights
+
+6. PROHIBITED USES
+
+You may not use our services to:
+- Violate any applicable laws or regulations
+- Infringe on intellectual property rights
+- Share course materials with unauthorized users
+- Attempt to hack or compromise our systems
+- Engage in any fraudulent activities
+
+7. PAYMENT TERMS
+
+7.1 Payment Processing
+- Payments are processed securely through third-party payment processors
+- You authorize us to charge your payment method for course fees
+- All sales are final unless otherwise specified in our refund policy
+
+7.2 Taxes
+- You are responsible for any applicable taxes on your purchases
+- Prices do not include applicable taxes unless specified
+
+8. DISCLAIMERS
+
+8.1 Service Availability
+- We strive to maintain service availability but cannot guarantee uninterrupted access
+- We may suspend services for maintenance or updates
+- We are not liable for any downtime or service interruptions
+
+8.2 Educational Content
+- Course content is for educational purposes only
+- We do not guarantee specific learning outcomes or career results
+- Industry practices and technologies may change over time
+
+9. LIMITATION OF LIABILITY
+
+To the maximum extent permitted by law:
+- We are not liable for any indirect, incidental, or consequential damages
+- Our total liability is limited to the amount you paid for our services
+- We are not responsible for any third-party content or services
+
+10. INDEMNIFICATION
+
+You agree to indemnify and hold us harmless from any claims, damages, or expenses arising from your use of our services or violation of these terms.
+
+11. TERMINATION
+
+11.1 Termination by You
+- You may terminate your account at any time
+- Termination does not entitle you to a refund unless specified in our refund policy
+
+11.2 Termination by Us
+- We may terminate your account for violation of these terms
+- We may suspend or terminate services at our discretion
+- We will provide reasonable notice when possible
+
+12. GOVERNING LAW
+
+These terms are governed by the laws of India. Any disputes will be resolved in the courts of India.
+
+13. CHANGES TO TERMS
+
+We reserve the right to modify these terms at any time. We will notify users of material changes through our website or email.
+
+14. CONTACT INFORMATION
+
+For questions about these terms, please contact us at:
+Email: vlsieasyteam@gmail.com
+
+15. SEVERABILITY
+
+If any provision of these terms is found to be unenforceable, the remaining provisions will continue to be valid and enforceable.
+
+By using our services, you acknowledge that you have read, understood, and agree to be bound by these terms of service.`
+                },
+                'refund-policy': {
+                    title: 'Refund Policy',
+                    content: `REFUND POLICY
+
+Last updated: January 2024
+
+1. OVERVIEW
+
+At Rycene VLSI, we are committed to providing high-quality educational content and ensuring student satisfaction. This refund policy outlines the conditions under which refunds may be requested and processed.
+
+2. REFUND ELIGIBILITY
+
+2.1 7-Day Money-Back Guarantee
+- Refunds may be requested within 7 days of course purchase
+- You must have completed less than 30% of the course content
+- The refund request must include a valid reason
+- This guarantee applies to individual course purchases only
+
+2.2 Conditions for Refund Eligibility
+- Course access was not significantly used (less than 30% completion)
+- No course materials were downloaded or printed
+- No certificates were issued
+- Request is made within the specified time frame
+
+3. NON-REFUNDABLE SITUATIONS
+
+Refunds will NOT be provided in the following cases:
+- Requests made after the 7-day period
+- Course completion exceeds 30% of total content
+- Course materials have been downloaded or shared
+- Certificate of completion has been issued
+- Violation of our terms of service
+- Technical issues on the student's end (internet connectivity, device compatibility)
+- Change of mind after significant course consumption
+
+4. REFUND PROCESS
+
+4.1 How to Request a Refund
+- Send an email to vlsieasyteam@gmail.com
+- Include your order number and course details
+- Provide a clear reason for the refund request
+- Allow 3-5 business days for initial review
+
+4.2 Refund Processing
+- Approved refunds will be processed within 7-10 business days
+- Refunds will be credited to the original payment method
+- Processing time may vary depending on your bank or payment provider
+- You will receive email confirmation once the refund is processed
+
+5. PARTIAL REFUNDS
+
+In exceptional circumstances, partial refunds may be considered:
+- Technical issues that significantly impact course delivery
+- Course content that materially differs from the description
+- Instructor unavailability for extended periods
+- Each case will be reviewed individually
+
+6. COURSE BUNDLE REFUNDS
+
+For course bundles or packages:
+- Refund eligibility applies to the entire bundle
+- Individual courses within a bundle cannot be refunded separately
+- The 30% completion rule applies to the overall bundle progress
+- All courses in the bundle must meet refund criteria
+
+7. PROMOTIONAL AND DISCOUNTED COURSES
+
+- Courses purchased with promotional codes or discounts are eligible for refunds
+- Refund amount will be based on the actual amount paid
+- Special promotional terms may apply to certain offers
+
+8. TECHNICAL ISSUES
+
+8.1 Platform-Related Issues
+- If technical problems on our end prevent course access, full refunds may be provided
+- We will first attempt to resolve technical issues before processing refunds
+- Temporary technical difficulties do not qualify for automatic refunds
+
+8.2 Student-Side Technical Issues
+- Issues related to student's internet connection, device compatibility, or software are not grounds for refunds
+- We provide technical support to help resolve such issues
+- System requirements are clearly stated for each course
+
+9. REFUND EXCEPTIONS
+
+9.1 Emergency Situations
+- Medical emergencies or family crises may be considered for refund exceptions
+- Documentation may be required to verify exceptional circumstances
+- Each case will be reviewed with compassion and flexibility
+
+9.2 Course Quality Issues
+- If course content has significant quality issues, refunds may be provided beyond the standard period
+- We encourage students to report quality concerns immediately
+- We continuously work to improve course content based on feedback
+
+10. DISPUTE RESOLUTION
+
+10.1 Internal Resolution
+- We encourage students to contact us directly for refund discussions
+- Our support team will work to find mutually acceptable solutions
+- Most refund requests are resolved within 5-7 business days
+
+10.2 External Dispute Resolution
+- If internal resolution is not satisfactory, students may contact their payment provider
+- Chargeback disputes will be handled according to payment processor guidelines
+- We maintain detailed records of all transactions and course access
+
+11. REFUND POLICY CHANGES
+
+- This refund policy may be updated from time to time
+- Changes will be posted on our website with the updated date
+- Existing enrollments will be governed by the policy in effect at the time of purchase
+
+12. CONTACT INFORMATION
+
+For refund requests or questions about this policy:
+- Email: vlsieasyteam@gmail.com
+- Subject Line: "Refund Request - [Course Name]"
+- Include: Order number, course details, and reason for refund
+
+13. IMPORTANT NOTES
+
+- Refunds are processed in the same currency as the original purchase
+- International transaction fees are not refundable
+- We reserve the right to refuse refunds for suspected fraudulent activity
+- This policy complies with applicable consumer protection laws
+
+14. SATISFACTION GUARANTEE
+
+While we offer this refund policy, our primary goal is student success and satisfaction. We encourage students to:
+- Review course previews and descriptions carefully before purchasing
+- Contact support if you have questions about course content
+- Utilize our student support resources for technical assistance
+- Provide feedback to help us improve our courses
+
+We believe in the quality of our education and are committed to helping every student succeed in their VLSI learning journey.`
+                }
+            };
+
+            function loadPolicyContent(policyType) {
+                const policy = policyData[policyType];
+                if (policy) {
+                    policyModalTitle.innerHTML = `<i class="fas fa-file-alt text-cyan-400 mr-3"></i>${policy.title}`;
+                    policyContent.textContent = policy.content;
+                    openModal(policyModal);
+                } else {
+                    policyContent.textContent = 'Policy content not found.';
+                }
+            }
+
+            // Policy button event listeners
+            document.getElementById('privacy-policy-btn').addEventListener('click', () => {
+                loadPolicyContent('privacy-policy');
+            });
+
+            document.getElementById('terms-of-service-btn').addEventListener('click', () => {
+                loadPolicyContent('terms-of-service');
+            });
+
+            document.getElementById('refund-policy-btn').addEventListener('click', () => {
+                loadPolicyContent('refund-policy');
+            });
+        });
+    </script>
+    <!-- MOBILE MENU SCRIPT (UPDATED WITH AUTO-CLOSE + ANIMATION) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileToggle = document.getElementById('mobile-menu-toggle');
+            const mobileDropdown = document.getElementById('mobile-dropdown');
+            const contactModal = document.getElementById('contact-modal');
+
+            /* --- Dropdown Animation Class --- */
+            function animateDropdown(show) {
+                if (show) {
+                    mobileDropdown.classList.remove('hidden');
+                    mobileDropdown.classList.add('animate-slide-down');
+                    setTimeout(() => mobileDropdown.classList.remove('animate-slide-down'), 300);
+                } else {
+                    mobileDropdown.classList.add('animate-slide-up');
+                    setTimeout(() => {
+                        mobileDropdown.classList.add('hidden');
+                        mobileDropdown.classList.remove('animate-slide-up');
+                    }, 300);
+                }
+            }
+
+            /* --- Toggle Dropdown --- */
+            mobileToggle.addEventListener('click', () => {
+                const isHidden = mobileDropdown.classList.contains('hidden');
+                animateDropdown(isHidden);
+            });
+
+            /* --- Contact Modal Open Function --- */
+            function openContactModal() {
+                if (contactModal) contactModal.classList.remove('hidden');
+                animateDropdown(false); // Auto close menu
+            }
+
+            /* --- Mobile Nav Buttons Auto-close Menu --- */
+            const autoCloseButtons = [
+                document.getElementById('contact-nav-link-mobile'),
+                document.getElementById('contact-nav-link-mobile2'),
+            ];
+
+            autoCloseButtons.forEach(btn => {
+                if (btn) btn.addEventListener('click', openContactModal);
+            });
+
+            document.querySelectorAll('#mobile-dropdown button, #mobile-dropdown a').forEach(el => {
+                el.addEventListener('click', () => animateDropdown(false));
+            });
+        });
+    </script>
+
+    <!-- Mobile Performance Optimizations -->
+    <script>
+        // Mobile performance optimizations
+        (function() {
+            const isMobile = window.innerWidth <= 768;
+            const isSlowConnection = navigator.connection && 
+                                   navigator.connection.effectiveType && 
+                                   navigator.connection.effectiveType.includes('2g');
+            
+            // Reduce animation frame rate on mobile
+            if (isMobile || isSlowConnection) {
+                // Override requestAnimationFrame to throttle to 30fps on mobile
+                const originalRAF = window.requestAnimationFrame;
+                let lastTime = 0;
+                window.requestAnimationFrame = function(callback) {
+                    const now = Date.now();
+                    const timeToCall = Math.max(0, 33 - (now - lastTime)); // 30fps = 33ms
+                    const id = setTimeout(() => {
+                        callback(now + timeToCall);
+                    }, timeToCall);
+                    lastTime = now + timeToCall;
+                    return id;
+                };
+            }
+            
+            // Preload critical resources
+            if (!isMobile) {
+                const preloadLinks = [
+                    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap'
+                ];
+                
+                preloadLinks.forEach(href => {
+                    const link = document.createElement('link');
+                    link.rel = 'preload';
+                    link.as = 'style';
+                    link.href = href;
+                    document.head.appendChild(link);
+                });
+            }
+            
+            // Lazy load images on mobile
+            if (isMobile && 'IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            if (img.dataset.src) {
+                                img.src = img.dataset.src;
+                                img.removeAttribute('data-src');
+                                observer.unobserve(img);
+                            }
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+            
+            // Memory cleanup on page unload
+            window.addEventListener('beforeunload', () => {
+                // Cancel all animations
+                if (window.animationId) cancelAnimationFrame(window.animationId);
+                if (window.animationFrameId) cancelAnimationFrame(window.animationFrameId);
+                
+                // Clear Three.js resources
+                if (window.renderer) {
+                    window.renderer.dispose();
+                    window.renderer.forceContextLoss();
+                }
+                
+                // Clear particles
+                if (window.particles) {
+                    window.particles = [];
+                }
+            });
+            
+            // Touch optimization for mobile
+            if (isMobile) {
+                // Prevent zoom on double tap
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', (event) => {
+                    const now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+                
+                // Optimize scroll performance
+                let ticking = false;
+                function updateScrollPosition() {
+                    // Batch scroll updates
+                    ticking = false;
+                }
+                
+                document.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        requestAnimationFrame(updateScrollPosition);
+                        ticking = true;
+                    }
+                }, { passive: true });
+            }
+        })();
+    </script>
+
+</body>
+</html>
