@@ -129,7 +129,7 @@
             pointer-events: none;
         }
         
-        header, footer, .modal, #view-home, #view-details {
+        header, footer, #view-home, #view-details, #view-enroll, #view-contact, main {
             position: relative;
             z-index: 10;
         }
@@ -151,33 +151,29 @@
             animation: pulse-glow 2s infinite;
         }
 
-        /* Modal Styles */
+        /* Modal Styles - Simple and Clean */
         .modal {
-            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 100;
+            transition: opacity 0.25s ease;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
         }
         .modal.hidden {
             opacity: 0;
-            transform: scale(0.95);
             pointer-events: none;
         }
         .modal-backdrop {
-            transition: opacity 0.3s ease;
-            z-index: 99;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            transition: opacity 0.25s ease;
         }
         .modal.hidden .modal-backdrop {
             opacity: 0;
         }
-
-        /* Enhanced Modal Container */
-        .modal-container {
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+        
+        /* Prevent body scroll when modal is open */
+        body.modal-open {
+            overflow: hidden;
         }
 
         /* Form Input Styles */
@@ -191,6 +187,26 @@
             border-color: var(--accent-cyan);
             box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
             outline: none;
+        }
+        
+        /* Select dropdown styling */
+        select.form-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        /* Placeholder option styling */
+        select.form-input option[disabled] {
+            color: #94a3b8;
+        }
+        
+        select.form-input option {
+            background: #1e293b;
+            color: white;
         }
 
         h1, h2, h3 {
@@ -369,125 +385,167 @@
             transition: width 0s, height 0s;
         }
 
-        /* --- HERO BUTTONS WITH RAINBOW HOLOGRAPHIC EFFECT --- */
+        /* --- HERO BUTTONS WITH GLASSMORPHISM --- */
         .btn-hero-primary {
             position: relative;
-            padding: 16px 40px;
-            font-size: 16px;
+            padding: 18px 48px;
+            font-size: 17px;
             font-weight: 700;
-            color: white;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.95);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(167, 139, 250, 0.4);
+            border-radius: 16px;
             cursor: pointer;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+            letter-spacing: 1px;
+            box-shadow: 
+                0 4px 20px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
+        /* Iridescent animated overlay */
         .btn-hero-primary::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
+            inset: -2px;
             background: linear-gradient(
                 90deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
+                rgba(255, 0, 128, 0.3),
+                rgba(0, 212, 255, 0.3),
+                rgba(128, 0, 255, 0.3),
+                rgba(255, 100, 0, 0.3),
+                rgba(0, 255, 128, 0.3),
+                rgba(255, 0, 128, 0.3)
             );
-            transition: left 0.5s ease;
+            background-size: 300% 100%;
+            border-radius: 16px;
+            z-index: -1;
+            animation: iridescent-flow 4s linear infinite;
+            opacity: 0.6;
         }
 
-        .btn-hero-primary:hover::before {
-            left: 100%;
+        @keyframes iridescent-flow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
         }
 
+        /* Subtle shimmer effect */
         .btn-hero-primary::after {
             content: '';
             position: absolute;
-            inset: 0;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
             background: linear-gradient(
                 45deg,
-                #ff0080,
-                #ff8c00,
-                #40e0d0,
-                #7b68ee,
-                #ff1493,
-                #00ced1
+                transparent 30%,
+                rgba(255, 255, 255, 0.15) 50%,
+                transparent 70%
             );
-            background-size: 300% 300%;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            animation: rainbow-shift 3s ease infinite;
-            border-radius: 12px;
-            z-index: -1;
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
         }
 
-        .btn-hero-primary:hover::after {
-            opacity: 0.7;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .btn-hero-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+            transform: translateY(-3px) scale(1.03);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.35) 0%, rgba(118, 75, 162, 0.35) 100%);
+            border-color: rgba(167, 139, 250, 0.6);
+            box-shadow: 
+                0 8px 30px rgba(102, 126, 234, 0.3),
+                0 0 50px rgba(167, 139, 250, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
-        @keyframes rainbow-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .btn-hero-primary:hover::before {
+            opacity: 0.8;
+            animation-duration: 2s;
+        }
+
+        .btn-hero-primary:active {
+            transform: translateY(-1px) scale(1.01);
         }
 
         .btn-hero-secondary {
             position: relative;
-            padding: 16px 40px;
-            font-size: 16px;
+            padding: 18px 48px;
+            font-size: 17px;
             font-weight: 700;
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            color: rgba(0, 0, 0, 0.9);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
             cursor: pointer;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            backdrop-filter: blur(10px);
+            letter-spacing: 1px;
+            box-shadow: 
+                0 4px 20px rgba(255, 255, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
         }
 
-        .btn-hero-secondary::after {
+        /* Subtle glow effect */
+        .btn-hero-secondary::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                45deg,
-                #00f5ff,
-                #00d4ff,
-                #0099ff,
-                #7b68ee,
-                #00f5ff
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.3) 0%,
+                transparent 70%
             );
-            background-size: 300% 300%;
             opacity: 0;
-            transition: opacity 0.5s ease;
-            animation: rainbow-shift 3s ease infinite;
-            border-radius: 10px;
-            z-index: -1;
+            transition: opacity 0.4s ease;
+            border-radius: 16px;
         }
 
-        .btn-hero-secondary:hover::after {
-            opacity: 0.3;
+        .btn-hero-secondary:hover::before {
+            opacity: 1;
+        }
+
+        /* Shimmer effect */
+        .btn-hero-secondary::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.4) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
         }
 
         .btn-hero-secondary:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 12px rgba(34, 211, 238, 0.2);
+            transform: translateY(-3px) scale(1.03);
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(255, 255, 255, 1);
+            color: rgba(0, 0, 0, 1);
+            box-shadow: 
+                0 8px 30px rgba(255, 255, 255, 0.3),
+                0 0 50px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        .btn-hero-secondary:active {
+            transform: translateY(-1px) scale(1.01);
         }
 
         /* Chatbot Styles - Hidden for now */
@@ -841,7 +899,7 @@
 
             /* Logo text responsive */
             .logo-container + span {
-                font-size: 1.125rem !important;
+                font-size: 1.25rem !important;
                 line-height: 1.2;
             }
         }
@@ -905,8 +963,8 @@
             }
 
             .logo-container + span {
-                font-size: 0.9rem !important;
-                font-weight: 600;
+                font-size: 1.125rem !important;
+                font-weight: 700;
             }
 
             #contact-nav-link-mobile {
@@ -1604,7 +1662,11 @@
         .logo-container {
             position: relative;
             min-width: 60px;
+            min-height: 60px;
             margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .logo-container img {
@@ -2428,7 +2490,7 @@
         </div>
 
         <!-- ==================== VIEW: COURSE DETAILS ==================== -->
-        <div id="view-details" class="hidden-view pt-24 pb-20 min-h-screen">
+        <div id="view-details" class="hidden-view pt-24 pb-12">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <button onclick="switchView('home')" class="mb-8 btn-glass btn-glass-secondary flex items-center font-semibold group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
@@ -2463,6 +2525,146 @@
                 </div>
             </div>
         </div>
+
+        <!-- ==================== VIEW: ENROLLMENT FORM ==================== -->
+        <div id="view-enroll" class="hidden-view pt-24 pb-12 min-h-screen">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <button onclick="switchView('details')" class="mb-8 btn-glass btn-glass-secondary flex items-center font-semibold group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Back to Course Details
+                </button>
+
+                <div class="glass-card rounded-2xl shadow-2xl overflow-hidden border border-white/10" data-aos="fade-up">
+                    <!-- Form Header -->
+                    <div id="enroll-form-container-page" class="p-6 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl border-b border-white/10">
+                        <h2 class="text-3xl font-bold text-white flex items-center">
+                            <i class="fas fa-user-graduate text-cyan-400 mr-3"></i>
+                            Enrollment Form
+                        </h2>
+                        <p class="text-slate-300 mt-2">Please fill all details to complete your enrollment.</p>
+                    </div>
+
+                    <!-- Form Content -->
+                    <form id="google-sheet-form-page" class="p-8">
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-cyan-400 text-sm font-semibold mb-4 uppercase tracking-wider">Personal Details</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="block text-xs text-slate-400 mb-1">Full Name</label><input type="text" name="name" required placeholder="John Doe" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div><label class="block text-xs text-slate-400 mb-1">Email Address</label><input type="email" name="email" required placeholder="john@example.com" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div><label class="block text-xs text-slate-400 mb-1">Phone Number</label><input type="tel" name="phone" required placeholder="+91 9876543210" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div><label class="block text-xs text-slate-400 mb-1">Date of Birth</label><input type="date" name="dob" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div><label class="block text-xs text-slate-400 mb-1">Gender</label><select name="gender" class="form-input w-full rounded-md p-3 text-white"><option value="" disabled selected>Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-cyan-400 text-sm font-semibold mb-4 uppercase tracking-wider">Academic / Professional</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">College / Company Name</label><input type="text" name="college_company" required placeholder="e.g. IIT Bombay / Intel" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div><label class="block text-xs text-slate-400 mb-1">Branch / Stream</label><input type="text" name="branch" required placeholder="e.g. ECE / EEE" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div><label class="block text-xs text-slate-400 mb-1">Year of Passing</label><input type="text" name="year_passing" required placeholder="e.g. 2024" class="form-input w-full rounded-md p-3 text-white"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-cyan-400 text-sm font-semibold mb-4 uppercase tracking-wider">Address Details</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Residence Address</label><input type="text" name="address" required placeholder="Street Address, Area" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div><label class="block text-xs text-slate-400 mb-1">City</label><input type="text" name="city" required placeholder="e.g. Bangalore" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div><label class="block text-xs text-slate-400 mb-1">State</label><input type="text" name="state" required placeholder="e.g. Karnataka" class="form-input w-full rounded-md p-3 text-white"></div>
+                                    <div class="md:col-span-2"><label class="block text-xs text-slate-400 mb-1">Country</label><input type="text" name="country" required placeholder="e.g. India" class="form-input w-full rounded-md p-3 text-white"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-cyan-400 text-sm font-semibold mb-4 uppercase tracking-wider">Your Objective</h3>
+                                <div><label class="block text-xs text-slate-400 mb-1">Goal to achieve in this course</label><textarea name="goal" rows="3" placeholder="e.g. To get a job in Physical Design..." class="form-input w-full rounded-md p-3 text-white"></textarea></div>
+                            </div>
+
+                            <div class="pt-4 border-t border-slate-700">
+                                <label class="block text-xs text-slate-400 mb-1">Selected Course</label>
+                                <input type="text" id="enroll-course-name-display-page" disabled class="w-full bg-slate-600 border border-slate-500 rounded-md p-3 text-slate-200 cursor-not-allowed font-semibold">
+                                <input type="hidden" name="courseName" id="enroll-course-name-page">
+                            </div>
+
+                            <button type="submit" id="submit-btn-page" class="btn-glass btn-glass-primary w-full text-lg px-8 py-4 rounded-xl shadow-lg flex justify-center items-center">
+                                <span>Submit Enrollment</span>
+                                <svg id="submit-spinner-page" class="animate-spin ml-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Success View (Hidden by default) -->
+                    <div id="enroll-success-view-page" class="hidden p-10 text-center min-h-[500px] flex flex-col items-center justify-center">
+                        <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-4">Successfully Registered!</h3>
+                        <div class="space-y-4 max-w-sm mx-auto">
+                            <p class="text-slate-300 text-lg">
+                                Thank you for choosing Rycene VLSI Technologies. You've taken the first step toward mastering VLSI!
+                            </p>
+                            <div class="p-4 bg-slate-900/50 rounded-lg border border-cyan-500/30">
+                                <p class="text-cyan-400 font-medium">What happens next?</p>
+                                <p class="text-slate-400 text-sm mt-2">
+                                    Our team will review your details and reach out to you shortly via Email with the 
+                                    <span class="text-white font-semibold">payment link</span> and further Discord account and onboarding instructions.
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="switchView('home')" class="mt-8 text-sm text-slate-500 hover:text-white underline">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW: CONTACT FORM ==================== -->
+        <div id="view-contact" class="hidden-view pt-24 pb-12 min-h-screen">
+            <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                <button onclick="switchView('home')" class="mb-8 btn-glass btn-glass-secondary flex items-center font-semibold group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Back to Home
+                </button>
+
+                <div class="rounded-2xl shadow-2xl overflow-hidden border border-white/10 bg-slate-900/95 backdrop-blur-xl" data-aos="fade-up">
+                    <!-- Form Header -->
+                    <div class="p-6 bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl border-b border-white/10">
+                        <h2 class="text-3xl font-bold text-white flex items-center">
+                            <i class="fas fa-envelope text-cyan-400 mr-3"></i>
+                            Contact Us
+                        </h2>
+                        <p class="text-slate-300 mt-2">Have a question? We'd love to hear from you.</p>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <form action="https://formspree.io/f/xjkjkpdr" method="POST" class="p-8 bg-slate-900/50">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Full Name</label>
+                                <input type="text" name="name" required placeholder="John Doe" class="form-input w-full rounded-md p-3 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Email Address</label>
+                                <input type="email" name="email" required placeholder="john@example.com" class="form-input w-full rounded-md p-3 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Your Message</label>
+                                <textarea name="message" rows="6" required placeholder="Tell us what you're thinking..." class="form-input w-full rounded-md p-3 text-white"></textarea>
+                            </div>
+                            <input type="hidden" name="_subject" value="New Rycene Contact">
+                            <input type="hidden" name="_cc" value="yasmeenms0512@gmail.com">
+                            
+                            <button type="submit" class="btn-glass btn-glass-primary w-full text-lg px-8 py-4 rounded-xl shadow-lg">
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- COMPREHENSIVE PROFESSIONAL FOOTER -->
@@ -2474,19 +2676,11 @@
         </div>
 
         <!-- Floating Tech Images -->
-        <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute top-20 left-10 w-16 h-16 image-float opacity-10">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=64&h=64&fit=crop&crop=center" alt="" class="w-full h-full rounded-lg object-cover">
-            </div>
-            <div class="absolute top-40 right-20 w-12 h-12 image-float opacity-10" style="animation-delay: -1s;">
-                <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=48&h=48&fit=crop&crop=center" alt="" class="w-full h-full rounded-lg object-cover">
-            </div>
-            <div class="absolute bottom-40 left-20 w-14 h-14 image-float opacity-10" style="animation-delay: -2s;">
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=56&h=56&fit=crop&crop=center" alt="" class="w-full h-full rounded-lg object-cover">
-            </div>
-            <div class="absolute bottom-20 right-10 w-10 h-10 image-float opacity-10" style="animation-delay: -3s;">
-                <img src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=40&h=40&fit=crop&crop=center" alt="" class="w-full h-full rounded-lg object-cover">
-            </div>
+        <div class="absolute inset-0 pointer-events-none opacity-5">
+            <div class="absolute top-20 left-10 w-16 h-16 bg-cyan-500 rounded-full blur-xl"></div>
+            <div class="absolute top-40 right-20 w-12 h-12 bg-purple-500 rounded-full blur-xl"></div>
+            <div class="absolute bottom-40 left-20 w-14 h-14 bg-orange-500 rounded-full blur-xl"></div>
+            <div class="absolute bottom-20 right-10 w-10 h-10 bg-cyan-500 rounded-full blur-xl"></div>
         </div>
 
         <!-- Main Footer Content -->
@@ -2622,9 +2816,9 @@
     </footer>
 
     <!-- Enrollment Form Modal -->
-    <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
-        <div class="modal-backdrop fixed inset-0 bg-black/80"></div>
-        <div class="modal-container rounded-2xl shadow-2xl w-full max-w-2xl relative z-[201] max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <div id="enroll-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-50">
+        <div class="fixed inset-0 bg-black/80"></div>
+        <div class="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl border border-slate-700 relative z-10 max-h-[90vh] overflow-y-auto custom-scrollbar">
             
             <!-- Default View: Form -->
             <div id="enroll-form-view">
@@ -2705,36 +2899,10 @@
         </div>
     </div>
     
-    <!-- Contact Modal -->
-    <div id="contact-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
-        <div class="modal-backdrop fixed inset-0 bg-black/80"></div>
-        <div class="modal-container rounded-2xl shadow-2xl w-full max-w-md relative z-[201]">
-            <div class="flex justify-between items-center p-5 border-b border-white/10 bg-slate-800/90 backdrop-blur-xl rounded-t-2xl">
-                <h3 class="text-xl font-semibold text-white flex items-center">
-                    <i class="fas fa-envelope text-cyan-400 mr-3"></i>
-                    Contact Us
-                </h3>
-                <button class="modal-close-btn text-slate-400 hover:text-white text-3xl leading-none transition-colors">&times;</button>
-            </div>
-            <form action="https://formspree.io/f/xjkjkpdr" method="POST">
-                <div class="p-6 space-y-4">
-                    <input type="text" name="name" required placeholder="Full Name" class="form-input w-full rounded-md p-3 text-white">
-                    <input type="email" name="email" required placeholder="Email" class="form-input w-full rounded-md p-3 text-white">
-                    <textarea name="message" rows="4" required placeholder="Your Query" class="form-input w-full rounded-md p-3 text-white"></textarea>
-                    <input type="hidden" name="_subject" value="New Rycene Contact">
-                    <input type="hidden" name="_cc" value="yasmeenms0512@gmail.com">
-                </div>
-                <div class="p-5 border-t border-white/10 bg-slate-800/50 backdrop-blur-xl rounded-b-2xl">
-                    <button type="submit" class="btn-glass btn-glass-primary w-full px-5 py-3 rounded-md shadow-lg">Send Message</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Policy Modal -->
-    <div id="policy-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-[200]">
-        <div class="modal-backdrop fixed inset-0 bg-black/80"></div>
-        <div class="modal-container rounded-2xl shadow-2xl w-full max-w-4xl relative z-[201] max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <div id="policy-modal" class="modal hidden fixed inset-0 flex items-center justify-center p-4 z-50">
+        <div class="fixed inset-0 bg-black/80"></div>
+        <div class="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl border border-slate-700 relative z-10 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center p-5 border-b border-white/10 bg-slate-800/90 backdrop-blur-xl rounded-t-2xl sticky top-0 z-10">
                 <h3 id="policy-modal-title" class="text-xl font-semibold text-white flex items-center">
                     <i class="fas fa-file-alt text-cyan-400 mr-3"></i>
@@ -2769,13 +2937,26 @@
         window.switchView = function(viewName) {
             const homeView = document.getElementById('view-home');
             const detailsView = document.getElementById('view-details');
+            const enrollView = document.getElementById('view-enroll');
+            const contactView = document.getElementById('view-contact');
+            
+            // Hide all views first
+            homeView.classList.add('hidden-view');
+            detailsView.classList.add('hidden-view');
+            enrollView.classList.add('hidden-view');
+            contactView.classList.add('hidden-view');
+            
+            // Show the requested view
             if (viewName === 'details') {
-                homeView.classList.add('hidden-view');
                 detailsView.classList.remove('hidden-view');
+            } else if (viewName === 'enroll') {
+                enrollView.classList.remove('hidden-view');
+            } else if (viewName === 'contact') {
+                contactView.classList.remove('hidden-view');
             } else {
-                detailsView.classList.add('hidden-view');
                 homeView.classList.remove('hidden-view');
             }
+            
             window.scrollTo(0, 0);
         };
 
@@ -2838,10 +3019,10 @@
 
                 function initParticles() {
                     particles = [];
-                    // Drastically reduce particle count on mobile
+                    // Significantly increase particle count
                     const isMobile = window.innerWidth <= 768;
-                    const baseCount = isMobile ? 15 : Math.max(25, (bgCanvas.width * bgCanvas.height) / 5000);
-                    let count = Math.min(baseCount, isMobile ? 20 : 100); // Cap particles on mobile
+                    const baseCount = isMobile ? 50 : Math.max(100, (bgCanvas.width * bgCanvas.height) / 3000);
+                    let count = Math.min(baseCount, isMobile ? 80 : 250); // Much higher cap
                     
                     for (let i = 0; i < count; i++) {
                         let size = Math.random() * 3 + 2;
@@ -2920,8 +3101,19 @@
             // --- View Logic ---
             const enrollModal = document.getElementById('enroll-modal');
             const contactModal = document.getElementById('contact-modal');
-            const openModal = (modal) => { if(modal) modal.classList.remove('hidden'); };
-            const closeModal = (modal) => { if(modal) modal.classList.add('hidden'); };
+            
+            const openModal = (modal) => { 
+                if(modal) {
+                    modal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+            const closeModal = (modal) => { 
+                if(modal) {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            };
 
             // Course Details Click Handler
             document.querySelectorAll('.view-details-btn').forEach(btn => {
@@ -2945,14 +3137,12 @@
                         const detailEnrollBtn = document.getElementById('detail-enroll-btn');
                         if (detailEnrollBtn) {
                             detailEnrollBtn.onclick = () => {
-                                document.getElementById('enroll-course-name').value = course.title;
-                                document.getElementById('enroll-course-name-display').value = course.title;
+                                // Set course name in the enrollment page form
+                                document.getElementById('enroll-course-name-page').value = course.title;
+                                document.getElementById('enroll-course-name-display-page').value = course.title;
                                 
-                                // Reset to form view
-                                document.getElementById('enroll-form-view').classList.remove('hidden');
-                                document.getElementById('enroll-success-view').classList.add('hidden');
-                                
-                                openModal(enrollModal);
+                                // Switch to enrollment view
+                                switchView('enroll');
                             };
                         }
                         
@@ -2962,14 +3152,14 @@
             });
 
             // General Modal Listeners
-            document.getElementById('contact-nav-link').addEventListener('click', () => openModal(contactModal));
-            document.getElementById('contact-nav-link-mobile').addEventListener('click', () => openModal(contactModal));
-            document.getElementById('contact-nav-link-mobile2').addEventListener('click', () => openModal(contactModal));
+            document.getElementById('contact-nav-link').addEventListener('click', () => switchView('contact'));
+            document.getElementById('contact-nav-link-mobile').addEventListener('click', () => switchView('contact'));
+            document.getElementById('contact-nav-link-mobile2').addEventListener('click', () => switchView('contact'));
             
             // Hero contact button
             const heroContactBtn = document.getElementById('hero-contact-btn');
             if (heroContactBtn) {
-                heroContactBtn.addEventListener('click', () => openModal(contactModal));
+                heroContactBtn.addEventListener('click', () => switchView('contact'));
             }
             
             document.querySelectorAll('.modal-close-btn, .modal-backdrop').forEach(el => {
@@ -3252,7 +3442,56 @@
             // --- Footer Contact Button ---
             const footerContactBtn = document.getElementById('footer-contact-btn');
             if (footerContactBtn) {
-                footerContactBtn.addEventListener('click', () => openModal(contactModal));
+                footerContactBtn.addEventListener('click', () => switchView('contact'));
+            }
+
+            // --- Enrollment Page Form Submission ---
+            const formPage = document.getElementById('google-sheet-form-page');
+            const submitBtnPage = document.getElementById('submit-btn-page');
+            const submitSpinnerPage = document.getElementById('submit-spinner-page');
+            const formContainerPage = document.getElementById('enroll-form-container-page');
+            const successViewPage = document.getElementById('enroll-success-view-page');
+
+            if (formPage) {
+                formPage.addEventListener('submit', e => {
+                    e.preventDefault();
+                    
+                    // Show Loading State
+                    submitBtnPage.disabled = true;
+                    submitSpinnerPage.classList.remove('hidden');
+                    submitBtnPage.querySelector('span').textContent = 'Submitting...';
+
+                    fetch(scriptURL, { method: 'POST', body: new FormData(formPage)})
+                    .then(response => {
+                        // Hide form header and form
+                        formContainerPage.classList.add('hidden');
+                        formPage.classList.add('hidden');
+                        
+                        // Show success view
+                        successViewPage.classList.remove('hidden');
+                        successViewPage.classList.add('flex');
+                        
+                        // Reset form
+                        formPage.reset();
+                        
+                        // Reset button state
+                        submitBtnPage.disabled = false;
+                        submitSpinnerPage.classList.add('hidden');
+                        submitBtnPage.querySelector('span').textContent = 'Submit Enrollment';
+                        
+                        // Scroll to top to see success message
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        alert("Error submitting form. Please try again.");
+                        
+                        // Reset button state
+                        submitBtnPage.disabled = false;
+                        submitSpinnerPage.classList.add('hidden');
+                        submitBtnPage.querySelector('span').textContent = 'Submit Enrollment';
+                    });
+                });
             }
 
             // --- Scroll to Top Button ---
