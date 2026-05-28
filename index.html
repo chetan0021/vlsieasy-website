@@ -3852,7 +3852,7 @@
             </section>
 
             <div class="w-full h-px bg-gradient-to-r from-cyan-500 via-purple-500 to-orange-500 shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div>
-            <section id="about" class="py-24 relative overflow-hidden bg-black">
+            <section id="about" class="py-24 relative overflow-hidden bg-animated-mesh">
                 <!-- Enhanced Background decorative elements -->
                 <div
                     class="absolute top-0 left-1/2 w-full h-full bg-gradient-to-b from-cyan-900/10 to-transparent -translate-x-1/2 pointer-events-none">
@@ -4194,6 +4194,7 @@
 
                     <!-- Form Content -->
                     <form id="google-sheet-form-page" class="p-8">
+                        <input type="hidden" name="form_type" value="brochure">
                         <div class="space-y-6">
                             <div>
                                 <h3 class="text-cyan-400 text-sm font-semibold mb-4 uppercase tracking-wider">Personal
@@ -4856,7 +4857,7 @@ We believe in the quality of our education and are committed to helping every st
                 <h2 class="text-2xl font-bold text-white mb-8 text-center">Get in Touch &mdash; Semiconductor Design</h2>
                 <div class="glass-card p-8 rounded-sm">
                     <form id="inquiry-semiconductor-design" onsubmit="event.preventDefault(); serviceInquirySubmit('inquiry-semiconductor-design', 'Semiconductor Design')">
-                        <input type="hidden" name="service" value="Semiconductor Design" >
+                        <input type="hidden" name="form_type" value="service_inquiry">`n                        <input type="hidden" name="service" value="Semiconductor Design" >
                         <div class="mb-5">
                             <label for="semiconductor-design-fullName" class="block text-xs text-slate-400 mb-1">Full Name <span class="text-red-400 ml-1">*</span></label>
                             <input type="text" id="semiconductor-design-fullName" name="fullName" required class="form-input w-full rounded-md p-3 text-white" placeholder="Your full name">
@@ -4939,7 +4940,7 @@ We believe in the quality of our education and are committed to helping every st
                 <h2 class="text-2xl font-bold text-white mb-8 text-center">Get in Touch &mdash; Embedded Solutions</h2>
                 <div class="glass-card p-8 rounded-sm">
                     <form id="inquiry-embedded-solutions" onsubmit="event.preventDefault(); serviceInquirySubmit('inquiry-embedded-solutions', 'Embedded Solutions')">
-                        <input type="hidden" name="service" value="Embedded Solutions" >
+                        <input type="hidden" name="form_type" value="service_inquiry">`n                        <input type="hidden" name="service" value="Embedded Solutions" >
                         <div class="mb-5">
                             <label for="embedded-solutions-fullName" class="block text-xs text-slate-400 mb-1">Full Name <span class="text-red-400 ml-1">*</span></label>
                             <input type="text" id="embedded-solutions-fullName" name="fullName" required class="form-input w-full rounded-md p-3 text-white" placeholder="Your full name">
@@ -5001,7 +5002,7 @@ We believe in the quality of our education and are committed to helping every st
                 <h2 class="text-2xl font-bold text-white mb-8 text-center">Get in Touch &mdash; Software Solutions</h2>
                 <div class="glass-card p-8 rounded-sm">
                     <form id="inquiry-software-solutions" onsubmit="event.preventDefault(); serviceInquirySubmit('inquiry-software-solutions', 'Software Solutions')">
-                        <input type="hidden" name="service" value="Software Solutions" >
+                        <input type="hidden" name="form_type" value="service_inquiry">`n                        <input type="hidden" name="service" value="Software Solutions" >
                         <div class="mb-5">
                             <label for="software-solutions-fullName" class="block text-xs text-slate-400 mb-1">Full Name <span class="text-red-400 ml-1">*</span></label>
                             <input type="text" id="software-solutions-fullName" name="fullName" required class="form-input w-full rounded-md p-3 text-white" placeholder="Your full name">
@@ -5091,7 +5092,7 @@ We believe in the quality of our education and are committed to helping every st
                 <h2 class="text-2xl font-bold text-white mb-8 text-center">Get in Touch &mdash; Product Engineering Services</h2>
                 <div class="glass-card p-8 rounded-sm">
                     <form id="inquiry-product-engineering" onsubmit="event.preventDefault(); serviceInquirySubmit('inquiry-product-engineering', 'Product Engineering Services')">
-                        <input type="hidden" name="service" value="Product Engineering Services" >
+                        <input type="hidden" name="form_type" value="service_inquiry">`n                        <input type="hidden" name="service" value="Product Engineering Services" >
                         <div class="mb-5">
                             <label for="product-engineering-fullName" class="block text-xs text-slate-400 mb-1">Full Name <span class="text-red-400 ml-1">*</span></label>
                             <input type="text" id="product-engineering-fullName" name="fullName" required class="form-input w-full rounded-md p-3 text-white" placeholder="Your full name">
@@ -5174,7 +5175,7 @@ We believe in the quality of our education and are committed to helping every st
                 <h2 class="text-2xl font-bold text-white mb-8 text-center">Get in Touch &mdash; Staffing &amp; Resource Augmentation</h2>
                 <div class="glass-card p-8 rounded-sm">
                     <form id="inquiry-staffing-augmentation" onsubmit="event.preventDefault(); serviceInquirySubmit('inquiry-staffing-augmentation', 'Staffing &amp; Resource Augmentation')">
-                        <input type="hidden" name="service" value="Staffing &amp; Resource Augmentation" >
+                        <input type="hidden" name="form_type" value="service_inquiry">`n                        <input type="hidden" name="service" value="Staffing &amp; Resource Augmentation" >
                         <div class="mb-5">
                             <label for="staffing-augmentation-fullName" class="block text-xs text-slate-400 mb-1">Full Name <span class="text-red-400 ml-1">*</span></label>
                             <input type="text" id="staffing-augmentation-fullName" name="fullName" required class="form-input w-full rounded-md p-3 text-white" placeholder="Your full name">
@@ -5264,7 +5265,7 @@ We believe in the quality of our education and are committed to helping every st
                 <h2 class="text-2xl font-bold text-white mb-8 text-center">Get in Touch &mdash; Consulting &amp; Advisory</h2>
                 <div class="glass-card p-8 rounded-sm">
                     <form id="inquiry-consulting-advisory" onsubmit="event.preventDefault(); serviceInquirySubmit('inquiry-consulting-advisory', 'Consulting &amp; Advisory')">
-                        <input type="hidden" name="service" value="Consulting &amp; Advisory" >
+                        <input type="hidden" name="form_type" value="service_inquiry">`n                        <input type="hidden" name="service" value="Consulting &amp; Advisory" >
                         <div class="mb-5">
                             <label for="consulting-advisory-fullName" class="block text-xs text-slate-400 mb-1">Full Name <span class="text-red-400 ml-1">*</span></label>
                             <input type="text" id="consulting-advisory-fullName" name="fullName" required class="form-input w-full rounded-md p-3 text-white" placeholder="Your full name">
@@ -5354,7 +5355,7 @@ We believe in the quality of our education and are committed to helping every st
                 <h2 class="text-2xl font-bold text-white mb-8 text-center">Get in Touch &mdash; Training &amp; Skill Development</h2>
                 <div class="glass-card p-8 rounded-sm">
                     <form id="inquiry-training-development" onsubmit="event.preventDefault(); serviceInquirySubmit('inquiry-training-development', 'Training &amp; Skill Development')">
-                        <input type="hidden" name="service" value="Training &amp; Skill Development" >
+                        <input type="hidden" name="form_type" value="service_inquiry">`n                        <input type="hidden" name="service" value="Training &amp; Skill Development" >
                         <div class="mb-5">
                             <label for="training-development-fullName" class="block text-xs text-slate-400 mb-1">Full Name <span class="text-red-400 ml-1">*</span></label>
                             <input type="text" id="training-development-fullName" name="fullName" required class="form-input w-full rounded-md p-3 text-white" placeholder="Your full name">
@@ -5405,6 +5406,7 @@ We believe in the quality of our education and are committed to helping every st
             </div>
             <div class="glass-card p-8 sm:p-10 relative z-10">
                 <form id="brochure-form" onsubmit="handleBrochureSubmit(event)">
+                    <input type="hidden" name="form_type" value="brochure">
                     <div class="grid grid-cols-1 gap-6 mb-6">
                         <div>
                             <label for="brochure-name" class="block text-sm font-medium text-slate-300 mb-2">Full Name <span class="text-red-400 ml-1">*</span></label>
@@ -5449,6 +5451,7 @@ We believe in the quality of our education and are committed to helping every st
             </div>
             <div class="glass-card p-8 sm:p-10 relative z-10">
                 <form id="consultation-form" onsubmit="handleConsultationSubmit(event)">
+                    <input type="hidden" name="form_type" value="consultation">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label for="consultation-name" class="block text-sm font-medium text-slate-300 mb-2">Full Name <span class="text-red-400 ml-1">*</span></label>
@@ -5690,6 +5693,7 @@ We believe in the quality of our education and are committed to helping every st
                 </div>
 
                 <form id="google-sheet-form">
+                    <input type="hidden" name="form_type" value="brochure">
                     <div class="p-6 space-y-4">
                         <p class="text-slate-300 text-sm">Please fill all details to complete your enrollment.</p>
 
@@ -7496,7 +7500,7 @@ We believe in the quality of our education and are committed to helping every st
                                 <p class="text-slate-400 text-center text-sm mb-8">Interested in <strong class="text-white">${sub.title}</strong>? Fill in the form and our team will reach out within 1–2 business days.</p>
                                 <div class="glass-card p-8 rounded-sm">
                                     <form id="${formId}" onsubmit="event.preventDefault(); serviceInquirySubmit('${formId}', '${sub.title} (${service.title})')">
-                                        <input type="hidden" name="service" value="${sub.title} — ${service.title}">
+                                        <input type="hidden" name="form_type" value="service_inquiry">`n                        <input type="hidden" name="service" value="${sub.title} — ${service.title}">
                                         <div class="mb-5">
                                             <label for="${fieldPrefix}-fullName" class="block text-xs text-slate-400 mb-1">Full Name <span class="text-red-400 ml-1">*</span></label>
                                             <input type="text" id="${fieldPrefix}-fullName" name="fullName" required class="form-input w-full rounded-md p-3 text-white" placeholder="Your full name">
@@ -7844,6 +7848,8 @@ We believe in the quality of our education and are committed to helping every st
 </body>
 
 </html>
+
+
 
 
 
